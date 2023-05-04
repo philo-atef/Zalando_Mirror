@@ -1,6 +1,5 @@
-package net.example.springboot;
+package net.example;
 
-import net.example.springboot.publisher.Sender;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
