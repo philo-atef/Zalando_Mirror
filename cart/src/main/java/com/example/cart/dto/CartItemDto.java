@@ -13,8 +13,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CartItemDto {
-    private UUID carItem_id;
-    private UUID product_id;
+    private UUID carItemID;
+    private UUID productID;
     private Cart cart;
     private Double price;
     private String productName;

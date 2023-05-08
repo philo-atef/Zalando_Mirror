@@ -16,8 +16,8 @@ import java.util.UUID;
 @Data
 public class CartItem {
     @Id
-    private UUID carItem_id;
-    private UUID product_id;
+    private UUID carItemID;
+    private UUID productID;
     private Cart cart;
     private Double price;
     private String productName;
@@ -25,6 +25,38 @@ public class CartItem {
     private String color;
     private String size;
     private Integer quantity;
+
+    public UUID getCarItemID() {
+        return carItemID;
+    }
+
+    public void setCarItemID(UUID carItemID) {
+        this.carItemID = carItemID;
+    }
+
+    public UUID getProductID() {
+        return productID;
+    }
+
+    public void setProductID(UUID productID) {
+        this.productID = productID;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
 
     public String getProductName() {
         return productName;
@@ -56,39 +88,6 @@ public class CartItem {
 
     public void setSize(String size) {
         this.size = size;
-    }
-
-
-    public UUID getCarItem_id() {
-        return carItem_id;
-    }
-
-    public void setCarItem_id(UUID carItem_id) {
-        this.carItem_id = carItem_id;
-    }
-
-    public UUID getProduct_id() {
-        return product_id;
-    }
-
-    public void setProduct_id(UUID product_id) {
-        this.product_id = product_id;
-    }
-
-    public Cart getCart() {
-        return cart;
-    }
-
-    public void setCart(Cart cart) {
-        this.cart = cart;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
     }
 
     public Integer getQuantity() {

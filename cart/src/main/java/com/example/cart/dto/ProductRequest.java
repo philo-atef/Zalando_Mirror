@@ -12,7 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductRequest {
-    private UUID product_id;
+    private UUID productID;
     private Double price;
     private String productName;
     private String description;

@@ -3,12 +3,14 @@ package com.example.cart.model;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Encrypted;
 
 
 @Document(value = "cart")
@@ -20,7 +22,7 @@ public class Cart {
 
     @Id
     private UUID id;
-    private UUID user_id;
+    private UUID userID;
     private Double totalPrice;
     private List<CartItem> cartItemsList;
 
@@ -32,12 +34,12 @@ public class Cart {
         this.id = id;
     }
 
-    public UUID getUser_id() {
-        return user_id;
+    public UUID getUserID() {
+        return userID;
     }
 
-    public void setUser_id(UUID user_id) {
-        this.user_id = user_id;
+    public void setUserID(UUID userID) {
+        this.userID = userID;
     }
 
     public Double getTotalPrice() {
@@ -48,11 +50,11 @@ public class Cart {
         this.totalPrice = totalPrice;
     }
 
-    public List<CartItem> getOrderLineItemsList() {
+    public List<CartItem> getCartItemsList() {
         return cartItemsList;
     }
 
-    public void setOrderLineItemsList(List<CartItem> orderLineItemsList) {
-        this.cartItemsList = orderLineItemsList;
+    public void setCartItemsList(List<CartItem> cartItemsList) {
+        this.cartItemsList = cartItemsList;
     }
 }
