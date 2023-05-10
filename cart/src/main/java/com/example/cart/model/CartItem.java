@@ -26,6 +26,21 @@ public class CartItem {
     private String size;
     private Integer quantity;
 
+    public String toString()
+    {
+        StringBuilder cartItemString = new StringBuilder("");
+        cartItemString.append("ID: "+ carItemID +"/n");
+        cartItemString.append("Product ID: "+ productID +"/n");
+        cartItemString.append("Product Name: "+ productName +"/n");
+        cartItemString.append("Price: "+ price +"/n");
+        cartItemString.append("Description: "+ description +"/n");
+        cartItemString.append("Color: "+ color +"/n");
+        cartItemString.append("Size: "+ size +"/n");
+        cartItemString.append("Quantity: "+ quantity +"/n");
+
+        return cartItemString.toString();
+    }
+
     public UUID getCarItemID() {
         return carItemID;
     }

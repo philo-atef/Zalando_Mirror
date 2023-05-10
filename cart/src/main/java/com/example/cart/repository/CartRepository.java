@@ -8,5 +8,6 @@ import java.util.UUID;
 
 public interface CartRepository extends MongoRepository<Cart, String> {
      public Cart findCartByUserID(UUID userId);
+     public boolean removeCartByUserID(UUID userId);
 
 }

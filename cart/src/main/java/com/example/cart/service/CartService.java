@@ -2,6 +2,7 @@ package com.example.cart.service;
 
 import com.example.cart.dto.CartItemDto;
 import com.example.cart.dto.CartRequest;
+import com.example.cart.dto.OrderResponse;
 import com.example.cart.dto.ProductRequest;
 import com.example.cart.model.Cart;
 import com.example.cart.model.CartItem;
@@ -25,7 +26,6 @@ public class CartService  implements CartServiceInterface{
         this.cartRepository = cartRepository;
     }
 
-
     private CartItem mapToDto(CartItemDto cartItemDto) {
         CartItem cartItem = new CartItem();
         cartItem.setPrice(cartItemDto.getPrice());
@@ -42,7 +42,7 @@ public class CartService  implements CartServiceInterface{
 
     @Override
     public Cart getUserCartById(UUID userId) {
-        return null;
+        return cartRepository.findCartByUserID(userId);
     }
 
     @Override
@@ -66,8 +66,34 @@ public class CartService  implements CartServiceInterface{
     }
 
     @Override
-    public boolean emptyCart(UUID userId) {
-        return false;
+    public boolean emptyCart(OrderResponse orderResponse) {
+        if(orderResponse.isOrdered())
+        {
+            // Empty the users' cart
+            Cart cart = cartRepository.findCartByUserID(orderResponse.getUserID());
+
+            if(cart == null)
+            {
+                // No cart instance for the user
+               System.out.println("Error: Such case can't happen");
+            }
+            else
+            {
+                // Update it to contains nothing
+                cart.setCartItemsList(new ArrayList<>());
+                cart.setTotalPrice(0.0);
+                cartRepository.save(cart);
+
+                System.out.println(cart);
+            }
+
+            return true;
+        }
+        else {
+
+            return false;
+
+        }
     }
 
     @Override
@@ -121,12 +147,68 @@ public class CartService  implements CartServiceInterface{
     }
 
     @Override
-    public Cart removeCartItem(UUID userId, CartItem cartItem) {
-        return null;
-    }
+    public Cart removeCartItem(UUID userId, CartItemDto cartItemDto) {
+        Cart cart = cartRepository.findCartByUserID(userId);
 
+        if(cart == null)
+        {
+            // No cart instance for the user
+            System.out.println("Such Error Can't happen !!!");
+        }
+
+        CartItem cartItem = mapToDto(cartItemDto);
+
+        int i = 0 ;
+        int toBeRemoved = -1 ;
+
+        if(!cart.getCartItemsList().isEmpty())
+        {
+            for (CartItem item : cart.getCartItemsList()) {
+                if(item.getProductID().equals(cartItem.getProductID()))
+                {
+                    toBeRemoved = i ;
+                    break;
+                }
+
+                i++;
+            }
+            cart.getCartItemsList().remove(toBeRemoved);
+        }
+
+        return cartRepository.save(cart);
+    }
     @Override
-    public Cart editCartItem(UUID userId, UUID cartItemId, CartItem edit) {
-        return null;
+    public Cart editCartItem(UUID userId, CartItemDto cartItemDto) {
+        Cart cart = cartRepository.findCartByUserID(userId);
+
+        if(cart == null)
+        {
+            // No cart instance for the user
+            System.out.println("Such Error Can't happen !!!");
+        }
+
+        CartItem cartItem = mapToDto(cartItemDto);
+
+        int i = 0 ;
+        int toBeRemoved = -1 ;
+
+        if(!cart.getCartItemsList().isEmpty())
+        {
+            for (CartItem item : cart.getCartItemsList()) {
+                if(item.getProductID().equals(cartItem.getProductID()))
+                {
+                    cart.setTotalPrice(cart.getTotalPrice()+(cartItem.getQuantity() * cartItem.getPrice()));
+                    cart.setTotalPrice(cart.getTotalPrice()-(item.getQuantity() * item.getPrice()));
+                    toBeRemoved = i ;
+                    break;
+                }
+
+                i++;
+            }
+            cart.getCartItemsList().remove(toBeRemoved);
+            cart.getCartItemsList().add(toBeRemoved,cartItem);
+        }
+
+        return cartRepository.save(cart);
     }
 }
