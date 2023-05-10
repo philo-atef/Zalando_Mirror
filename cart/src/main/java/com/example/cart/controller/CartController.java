@@ -2,6 +2,7 @@ package com.example.cart.controller;
 
 
 import com.example.cart.dto.CartItemDto;
+import com.example.cart.dto.CartItemId;
 import com.example.cart.dto.OrderResponse;
 import com.example.cart.dto.ProductRequest;
 import com.example.cart.model.Cart;
@@ -44,5 +45,9 @@ public class CartController {
     @GetMapping("/{userId}")
     public Cart getUserCart(@PathVariable UUID userId) {
         return cartService.getUserCartById(userId);
+    }
+    @DeleteMapping("/deleteCartItem/{userId}")
+    public Cart deleteCart(@PathVariable UUID userId, CartItemId cartItemId  ) {
+        return cartService.removeCartItem(userId, cartItemId);
     }
 }

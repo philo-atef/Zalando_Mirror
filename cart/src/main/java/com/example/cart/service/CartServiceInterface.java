@@ -1,6 +1,7 @@
 package com.example.cart.service;
 
 import com.example.cart.dto.CartItemDto;
+import com.example.cart.dto.CartItemId;
 import com.example.cart.dto.OrderResponse;
 import com.example.cart.dto.ProductRequest;
 import com.example.cart.model.Cart;
@@ -14,6 +15,6 @@ public interface CartServiceInterface {
     Cart createNewCart(UUID userId);
     boolean emptyCart(OrderResponse orderResponse);
     Cart addCartItem(UUID userId, ProductRequest productRequest);
-    Cart removeCartItem(UUID userId, CartItemDto cartItemDto);
+    Cart removeCartItem(UUID userId, CartItemId cartItemID);
     Cart editCartItem(UUID userId, CartItemDto cartItemDto);
 }

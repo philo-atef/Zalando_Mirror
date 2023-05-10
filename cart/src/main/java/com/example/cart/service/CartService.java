@@ -1,9 +1,6 @@
 package com.example.cart.service;
 
-import com.example.cart.dto.CartItemDto;
-import com.example.cart.dto.CartRequest;
-import com.example.cart.dto.OrderResponse;
-import com.example.cart.dto.ProductRequest;
+import com.example.cart.dto.*;
 import com.example.cart.model.Cart;
 import com.example.cart.model.CartItem;
 import com.example.cart.repository.CartRepository;
@@ -147,7 +144,7 @@ public class CartService  implements CartServiceInterface{
     }
 
     @Override
-    public Cart removeCartItem(UUID userId, CartItemDto cartItemDto) {
+    public Cart removeCartItem(UUID userId, CartItemId cartItemID) {
         Cart cart = cartRepository.findCartByUserID(userId);
 
         if(cart == null)
@@ -156,23 +153,27 @@ public class CartService  implements CartServiceInterface{
             System.out.println("Such Error Can't happen !!!");
         }
 
-        CartItem cartItem = mapToDto(cartItemDto);
-
         int i = 0 ;
         int toBeRemoved = -1 ;
 
         if(!cart.getCartItemsList().isEmpty())
         {
             for (CartItem item : cart.getCartItemsList()) {
-                if(item.getProductID().equals(cartItem.getProductID()))
+                if(item.getProductID().equals(cartItemID.getCartItemId()))
                 {
                     toBeRemoved = i ;
+                    cart.setTotalPrice(cart.getTotalPrice() - (item.getPrice() * item.getQuantity()) );
                     break;
                 }
 
                 i++;
             }
-            cart.getCartItemsList().remove(toBeRemoved);
+
+            if(toBeRemoved != -1)
+            {
+                cart.getCartItemsList().remove(toBeRemoved);
+            }
+
         }
 
         return cartRepository.save(cart);
