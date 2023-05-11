@@ -1,20 +1,20 @@
 package com.example.cart.service;
 
 import com.example.cart.dto.CartItemDto;
-import com.example.cart.dto.CartItemId;
 import com.example.cart.dto.OrderResponse;
 import com.example.cart.dto.ProductRequest;
 import com.example.cart.model.Cart;
-import com.example.cart.model.CartItem;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface CartServiceInterface {
 
     Cart getUserCartById (UUID userId);
+    List<Cart> getAllCarts();
     Cart createNewCart(UUID userId);
-    boolean emptyCart(OrderResponse orderResponse);
+    void emptyCart(UUID userId);
     Cart addCartItem(UUID userId, ProductRequest productRequest);
-    Cart removeCartItem(UUID userId, CartItemId cartItemID);
+    Cart removeCartItem(UUID userId, UUID cartItemID) ;
     Cart editCartItem(UUID userId, CartItemDto cartItemDto);
 }

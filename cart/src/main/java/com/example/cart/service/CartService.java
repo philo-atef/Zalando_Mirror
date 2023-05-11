@@ -1,17 +1,16 @@
 package com.example.cart.service;
 
 import com.example.cart.dto.*;
+import com.example.cart.exception.CartEmptyException;
+import com.example.cart.exception.NoSuchElementFoundException;
 import com.example.cart.model.Cart;
 import com.example.cart.model.CartItem;
 import com.example.cart.repository.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+
+import java.util.*;
 
 @Service
 public class CartService  implements CartServiceInterface{
@@ -23,18 +22,24 @@ public class CartService  implements CartServiceInterface{
         this.cartRepository = cartRepository;
     }
 
+
     private CartItem mapToDto(CartItemDto cartItemDto) {
         CartItem cartItem = new CartItem();
         cartItem.setPrice(cartItemDto.getPrice());
         cartItem.setQuantity(cartItemDto.getQuantity());
         cartItem.setColor(cartItemDto.getColor());
-        cartItem.setDescription(cartItemDto.getDescription());
-        cartItem.setProductName(cartItemDto.getProductName());
+        cartItem.setBrandId(cartItemDto.getBrandId());
+        cartItem.setBrandName(cartItemDto.getBrandName());
         cartItem.setSize(cartItemDto.getSize());
-        cartItem.setCart(cartItemDto.getCart());
+        cartItem.setName(cartItemDto.getName());
         cartItem.setCarItemID(cartItemDto.getCarItemID());
         cartItem.setProductID(cartItemDto.getProductID());
         return cartItem;
+    }
+
+    @Override
+    public List<Cart> getAllCarts() {
+        return cartRepository.findAll();
     }
 
     @Override
@@ -63,34 +68,16 @@ public class CartService  implements CartServiceInterface{
     }
 
     @Override
-    public boolean emptyCart(OrderResponse orderResponse) {
-        if(orderResponse.isOrdered())
+    public void emptyCart(UUID userId) {
+
+        Cart cart = cartRepository.findCartByUserID(userId);
+
+        if(cart != null)
         {
-            // Empty the users' cart
-            Cart cart = cartRepository.findCartByUserID(orderResponse.getUserID());
-
-            if(cart == null)
-            {
-                // No cart instance for the user
-               System.out.println("Error: Such case can't happen");
-            }
-            else
-            {
-                // Update it to contains nothing
-                cart.setCartItemsList(new ArrayList<>());
-                cart.setTotalPrice(0.0);
-                cartRepository.save(cart);
-
-                System.out.println(cart);
-            }
-
-            return true;
+            cart.setCartItemsList(new ArrayList<>());
+            cart.setTotalPrice(0.0);
         }
-        else {
 
-            return false;
-
-        }
     }
 
     @Override
@@ -114,8 +101,9 @@ public class CartService  implements CartServiceInterface{
                 .carItemID(UUID.randomUUID())
                 .productID(productRequest.getProductID())
                 .price(productRequest.getPrice())
-                .productName(productRequest.getProductName())
-                .description(productRequest.getDescription())
+                .brandName(productRequest.getBrandName())
+                .name(productRequest.getName())
+                .brandId(productRequest.getBrandId())
                 .color(productRequest.getColor())
                 .size(productRequest.getSize())
                 .quantity(productRequest.getQuantity())
@@ -125,7 +113,9 @@ public class CartService  implements CartServiceInterface{
         if(!cart.getCartItemsList().isEmpty())
         {
             for (CartItem item : cart.getCartItemsList()) {
-                if(item.getProductID().equals(cartItem.getProductID()))
+                if(item.getProductID().equals(cartItem.getProductID()) &&
+                        item.getColor().equals(cartItem.getColor()) &&
+                        item.getSize().equals(cartItem.getSize()))
                 {
                     item.setQuantity(item.getQuantity()+cartItem.getQuantity());
                     found = true;
@@ -144,37 +134,49 @@ public class CartService  implements CartServiceInterface{
     }
 
     @Override
-    public Cart removeCartItem(UUID userId, CartItemId cartItemID) {
+    public Cart removeCartItem(UUID userId, UUID cartItemID) {
         Cart cart = cartRepository.findCartByUserID(userId);
 
         if(cart == null)
         {
             // No cart instance for the user
-            System.out.println("Such Error Can't happen !!!");
+            throw new NoSuchElementFoundException("No cart instance instantiated for such user !!");
         }
 
-        int i = 0 ;
-        int toBeRemoved = -1 ;
+        boolean found = false;
+
+        ArrayList<CartItem> newList = new ArrayList<>();
 
         if(!cart.getCartItemsList().isEmpty())
         {
             for (CartItem item : cart.getCartItemsList()) {
-                if(item.getProductID().equals(cartItemID.getCartItemId()))
+                if(item.getCarItemID().equals(cartItemID))
                 {
-                    toBeRemoved = i ;
+                    found = true;
                     cart.setTotalPrice(cart.getTotalPrice() - (item.getPrice() * item.getQuantity()) );
-                    break;
+                }
+                else
+                {
+                    newList.add(item);
                 }
 
-                i++;
             }
 
-            if(toBeRemoved != -1)
+            if(found)
             {
-                cart.getCartItemsList().remove(toBeRemoved);
+                cart.setCartItemsList(newList);
+            }
+            else
+            {
+                throw new NoSuchElementFoundException("Cart Item not found !!");
             }
 
         }
+        else
+        {
+            throw new CartEmptyException("Cart Item is empty !!");
+        }
+
 
         return cartRepository.save(cart);
     }
@@ -185,31 +187,46 @@ public class CartService  implements CartServiceInterface{
         if(cart == null)
         {
             // No cart instance for the user
-            System.out.println("Such Error Can't happen !!!");
+            throw new NoSuchElementFoundException("No cart instance instantiated for such user !!");
         }
 
         CartItem cartItem = mapToDto(cartItemDto);
 
         int i = 0 ;
-        int toBeRemoved = -1 ;
+        int toBeEdited = -1 ;
 
         if(!cart.getCartItemsList().isEmpty())
         {
             for (CartItem item : cart.getCartItemsList()) {
-                if(item.getProductID().equals(cartItem.getProductID()))
+                if(item.getProductID().equals(cartItem.getProductID())&&
+                        item.getColor().equals(cartItem.getColor()) &&
+                        item.getSize().equals(cartItem.getSize()) )
                 {
-                    cart.setTotalPrice(cart.getTotalPrice()+(cartItem.getQuantity() * cartItem.getPrice()));
                     cart.setTotalPrice(cart.getTotalPrice()-(item.getQuantity() * item.getPrice()));
-                    toBeRemoved = i ;
+                    cart.setTotalPrice(cart.getTotalPrice()+(cartItem.getQuantity() * cartItem.getPrice()));
+                    toBeEdited = i ;
                     break;
                 }
 
                 i++;
             }
-            cart.getCartItemsList().remove(toBeRemoved);
-            cart.getCartItemsList().add(toBeRemoved,cartItem);
+
+            if(toBeEdited != -1)
+            {
+                cart.getCartItemsList().remove(toBeEdited);
+                cart.getCartItemsList().add(toBeEdited,cartItem);
+            }
+            else
+            {
+                throw new NoSuchElementFoundException("Cart Item not found !!");
+            }
+        }
+        else
+        {
+            throw new CartEmptyException("Cart Item is empty !!");
         }
 
         return cartRepository.save(cart);
     }
+
 }

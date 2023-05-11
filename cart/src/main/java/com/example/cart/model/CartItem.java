@@ -18,22 +18,23 @@ public class CartItem {
     @Id
     private UUID carItemID;
     private UUID productID;
-    private Cart cart;
-    private Double price;
-    private String productName;
-    private String description;
+    private String name;
+    private String brandId;
+    private String brandName;
     private String color;
     private String size;
     private Integer quantity;
+    private Double price;
+
 
     public String toString()
     {
         StringBuilder cartItemString = new StringBuilder("");
         cartItemString.append("ID: "+ carItemID +"/n");
         cartItemString.append("Product ID: "+ productID +"/n");
-        cartItemString.append("Product Name: "+ productName +"/n");
+        cartItemString.append("Product Name: "+ name +"/n");
         cartItemString.append("Price: "+ price +"/n");
-        cartItemString.append("Description: "+ description +"/n");
+        cartItemString.append("Brand Name: "+ brandName +"/n");
         cartItemString.append("Color: "+ color +"/n");
         cartItemString.append("Size: "+ size +"/n");
         cartItemString.append("Quantity: "+ quantity +"/n");
@@ -57,14 +58,6 @@ public class CartItem {
         this.productID = productID;
     }
 
-    public Cart getCart() {
-        return cart;
-    }
-
-    public void setCart(Cart cart) {
-        this.cart = cart;
-    }
-
     public Double getPrice() {
         return price;
     }
@@ -73,20 +66,28 @@ public class CartItem {
         this.price = price;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getName() {
+        return name;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getBrandId() {
+        return brandId;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setBrandId(String brandId) {
+        this.brandId = brandId;
+    }
+
+    public String getBrandName() {
+        return brandName;
+    }
+
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
     }
 
     public String getColor() {

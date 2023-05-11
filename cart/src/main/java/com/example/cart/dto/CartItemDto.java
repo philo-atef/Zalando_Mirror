@@ -15,11 +15,11 @@ import java.util.UUID;
 public class CartItemDto {
     private UUID carItemID;
     private UUID productID;
-    private Cart cart;
-    private Double price;
-    private String productName;
-    private String description;
+    private String name;
+    private String brandId;
+    private String brandName;
     private String color;
     private String size;
     private Integer quantity;
+    private Double price;
 }

@@ -18,5 +18,5 @@ public class CartRequest {
     private UUID id;
     private UUID userID;
     private Double totalPrice;
-    private List<CartItem> cartItemsList;
+    private List<CartItemDto> cartItemsList;
 }
