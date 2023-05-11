@@ -2,7 +2,7 @@ package com.zalando.onp.model;
 
 import jakarta.persistence.*;
 import java.util.*;
-
+import jakarta.validation.constraints.*;
 @Entity
 @Table(name = "Payments")
 public class Payment {
@@ -14,11 +14,14 @@ public class Payment {
     private Long order_id;
 
     @Column(name = "card_holder_name")
+    @Pattern(regexp = "^[A-Za-z ]+$", message = "Card holder name should only contain alphabetic characters")
     private String card_holder_name;
 
-    @Column(name = "card_num_used")
-    private Long card_num_used;
 
+    @Column(name = "card_num_used")
+    @Pattern(regexp = "\\d{16}", message = "Card number used must be a 16-digit number")
+    private String card_num_used;
+    @Pattern(regexp = "^[A-Za-z ]+$", message = "Payment status should only contain alphabetic characters")
     @Column(name = "payment_status")
     private String payment_status;
 
@@ -26,13 +29,14 @@ public class Payment {
     private Date expiration_date;
 
     @Column(name = "cvv")
+    @Pattern(regexp = "\\d{3}", message = "CVV must be a 3-digit number")
     private String cvv;
 
     public Payment() {
         super();
     }
 
-    public Payment(Long order_id, String card_holder_name, Long card_num_used, String payment_status, Date expiration_date, String cvv) {
+    public Payment(Long order_id, String card_holder_name, String card_num_used, String payment_status, Date expiration_date, String cvv) {
         this.order_id = order_id;
         this.card_holder_name = card_holder_name;
         this.card_num_used = card_num_used;
@@ -65,11 +69,11 @@ public class Payment {
         this.card_holder_name = card_holder_name;
     }
 
-    public Long getCard_num_used() {
+    public String getCard_num_used() {
         return card_num_used;
     }
 
-    public void setCard_num_used(Long card_num_used) {
+    public void setCard_num_used(String card_num_used) {
         this.card_num_used = card_num_used;
     }
 

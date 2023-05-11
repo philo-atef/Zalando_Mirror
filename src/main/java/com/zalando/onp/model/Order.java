@@ -3,6 +3,10 @@ package com.zalando.onp.model;
 import java.util.*;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.Type;
 import org.hibernate.type.SqlTypes;
@@ -17,23 +21,29 @@ public class Order{
     private Long customer_id;
     @Column(name = "order_date")
     private Date order_date;
+    @Size(max = 100, message = "Address must not exceed 100 characters")
+    @Pattern(regexp = "[a-zA-Z0-9\\s]+", message = "Address must contain only alphanumeric characters and spaces")
     @Column(name = "shipping_address")
     private String shipping_address;
+    @Pattern(regexp = "\\d{16}", message = "Card number used must be a 16-digit number")
     @Column(name = "card_num_used")
-    private Long card_num_used;
+    private String card_num_used;
+    @DecimalMin(value = "0.01", message = "Price must be greater than or equal to 0.01")
+    @DecimalMax(value = "9999.99", message = "Price must be less than or equal to 9999.99")
     @Column(name = "total_amount")
     private double total_amount;
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "json", name = "products")
     private List<Product> products = new ArrayList<Product>();
+    @Pattern(regexp = "^[A-Za-z ]+$", message = "Order status should only contain alphabetic characters")
     @Column(name = "order_status")
     private String order_status;
 
     public Order() {
         super();
     }
-    public Order(Long customer_id, Date order_date, String shipping_address, Long card_num_used, double total_amount, List<Product> products, String order_status) {
+    public Order(Long customer_id, Date order_date, String shipping_address, String card_num_used, double total_amount, List<Product> products, String order_status) {
         this.customer_id = customer_id;
         this.order_date = order_date;
         this.shipping_address = shipping_address;
@@ -76,11 +86,11 @@ public class Order{
         this.shipping_address = shipping_address;
     }
 
-    public Long getCard_num_used() {
+    public String getCard_num_used() {
         return card_num_used;
     }
 
-    public void setCard_num_used(Long card_num_used) {
+    public void setCard_num_used(String card_num_used) {
         this.card_num_used = card_num_used;
     }
 

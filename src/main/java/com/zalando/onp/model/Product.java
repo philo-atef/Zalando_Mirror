@@ -21,10 +21,7 @@ public class Product {
     private String brandName;
     private String name;
     private Double price;
-    private String material;
-    private List<String> colors;
-    private List<String> sizes;
-    private String gender;
-    private String category;
-    private String subcategory;
+    private String color;
+    private String size;
+    private int quantity;
 }

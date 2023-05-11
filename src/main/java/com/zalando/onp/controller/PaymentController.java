@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.zalando.onp.model.Payment;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +38,7 @@ public class PaymentController {
 
 
     @PostMapping("/payments")
-    public Payment createPayment(@RequestBody Payment payment) {
+    public Payment createPayment(@Valid @RequestBody Payment payment) {
         return paymentRepository.save(payment);
     }
 
@@ -49,7 +51,7 @@ public class PaymentController {
 
 
     @PutMapping("/payments/{id}")
-    public ResponseEntity<Payment> updatePayment(@PathVariable Long id, @RequestBody Payment paymentDetails){
+    public ResponseEntity<Payment> updatePayment(@PathVariable Long id, @Valid @RequestBody Payment paymentDetails){
         Payment payment = paymentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Payment not exist with id :" + id));
 
