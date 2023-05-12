@@ -1,8 +1,6 @@
 package com.example.cart.service;
 
-import com.example.cart.dto.CartItemDto;
-import com.example.cart.dto.OrderResponse;
-import com.example.cart.dto.ProductRequest;
+import com.example.cart.dto.*;
 import com.example.cart.model.Cart;
 
 import java.util.List;
@@ -17,4 +15,5 @@ public interface CartServiceInterface {
     Cart addCartItem(UUID userId, ProductRequest productRequest);
     Cart removeCartItem(UUID userId, UUID cartItemID) ;
     Cart editCartItem(UUID userId, CartItemDto cartItemDto);
+    void updateCart(UUID userId, InventoryItemsRequest inventoryItemsRequest) ;
 }

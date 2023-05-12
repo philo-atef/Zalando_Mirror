@@ -22,7 +22,6 @@ public class CartService  implements CartServiceInterface{
         this.cartRepository = cartRepository;
     }
 
-
     private CartItem mapToDto(CartItemDto cartItemDto) {
         CartItem cartItem = new CartItem();
         cartItem.setPrice(cartItemDto.getPrice());
@@ -44,6 +43,12 @@ public class CartService  implements CartServiceInterface{
 
     @Override
     public Cart getUserCartById(UUID userId) {
+        // To Be Modified as follows:-
+        // Send a Request to the inventory or product service with the cart elements
+        // Receive the inventory elements
+        // call the updateCart method tho update cart
+        // return such updated cart
+        // The current implementation is simply retrieving the cart without any checking with the inventory
         return cartRepository.findCartByUserID(userId);
     }
 
@@ -180,6 +185,7 @@ public class CartService  implements CartServiceInterface{
 
         return cartRepository.save(cart);
     }
+
     @Override
     public Cart editCartItem(UUID userId, CartItemDto cartItemDto) {
         Cart cart = cartRepository.findCartByUserID(userId);
@@ -228,5 +234,13 @@ public class CartService  implements CartServiceInterface{
 
         return cartRepository.save(cart);
     }
+
+    @Override
+    public void updateCart(UUID userId, InventoryItemsRequest inventoryItemsRequest) {
+        // Get The Cart
+        // Loop over the elements from the inventory or product service
+        // update the cart accordingly
+    }
+
 
 }
