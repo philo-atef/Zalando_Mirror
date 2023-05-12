@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4702285-57fc-4279-b1e1-9b5c28e40a29" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/orders-and-payments-service/src/main/java/com/zalando/onp/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/orders-and-payments-service/src/main/java/com/zalando/onp/controller/OrderController.java" afterDir="false" />
-    </list>
+    <list default="true" id="e4702285-57fc-4279-b1e1-9b5c28e40a29" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
