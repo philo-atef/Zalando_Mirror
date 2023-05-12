@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e4702285-57fc-4279-b1e1-9b5c28e40a29" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OrdersAndPaymentsMS/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OrdersAndPaymentsMS/.mvn/wrapper/maven-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OrdersAndPaymentsMS/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OrdersAndPaymentsMS/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OrdersAndPaymentsMS/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OrdersAndPaymentsMS/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OrdersAndPaymentsMS/src/main/java/com/example/demoyt/DemoytApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OrdersAndPaymentsMS/src/main/java/com/example/demoyt/config/RabbitMQConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OrdersAndPaymentsMS/src/main/java/com/example/demoyt/consumer/RabbitMQConsumer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OrdersAndPaymentsMS/src/main/java/com/example/demoyt/consumer/RabbitMQJsonConsumer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OrdersAndPaymentsMS/src/main/java/com/example/demoyt/controller/MessageController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OrdersAndPaymentsMS/src/main/java/com/example/demoyt/controller/MessageJsonController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OrdersAndPaymentsMS/src/main/java/com/example/demoyt/dto/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OrdersAndPaymentsMS/src/main/java/com/example/demoyt/publisher/RabbitMQJsonProducer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OrdersAndPaymentsMS/src/main/java/com/example/demoyt/publisher/RabbitMQProducer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OrdersAndPaymentsMS/src/main/java/com/zalando/onp/SpringbootPostgresql.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OrdersAndPaymentsMS/src/main/java/com/zalando/onp/controller/OrderController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OrdersAndPaymentsMS/src/main/java/com/zalando/onp/controller/PaymentController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OrdersAndPaymentsMS/src/main/java/com/zalando/onp/exception/ErrorDetails.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OrdersAndPaymentsMS/src/main/java/com/zalando/onp/exception/GlobalExceptionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OrdersAndPaymentsMS/src/main/java/com/zalando/onp/exception/ResourceNotFoundException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OrdersAndPaymentsMS/src/main/java/com/zalando/onp/model/Order.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OrdersAndPaymentsMS/src/main/java/com/zalando/onp/model/Payment.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OrdersAndPaymentsMS/src/main/java/com/zalando/onp/model/Product.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OrdersAndPaymentsMS/src/main/java/com/zalando/onp/repository/OrderRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OrdersAndPaymentsMS/src/main/java/com/zalando/onp/repository/PaymentRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OrdersAndPaymentsMS/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OrdersAndPaymentsMS/src/test/java/com/example/demoyt/DemoytApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/springboot-rabbitmq-example/springboot-rabbitmq-example/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/springboot-rabbitmq-example/springboot-rabbitmq-example/.mvn/wrapper/maven-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/springboot-rabbitmq-example/springboot-rabbitmq-example/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/springboot-rabbitmq-example/springboot-rabbitmq-example/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/springboot-rabbitmq-example/springboot-rabbitmq-example/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/springboot-rabbitmq-example/springboot-rabbitmq-example/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/springboot-rabbitmq-example/springboot-rabbitmq-example/src/main/java/net/example/SpringbootRabbitmqExampleApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/springboot-rabbitmq-example/springboot-rabbitmq-example/src/main/java/net/example/mongo/Email.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/springboot-rabbitmq-example/springboot-rabbitmq-example/src/main/java/net/example/mongo/EmailController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/springboot-rabbitmq-example/springboot-rabbitmq-example/src/main/java/net/example/mongo/EmailRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/springboot-rabbitmq-example/springboot-rabbitmq-example/src/main/java/net/example/mongo/EmailService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/springboot-rabbitmq-example/springboot-rabbitmq-example/src/main/java/net/example/springboot/config/RabbitMQconfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/springboot-rabbitmq-example/springboot-rabbitmq-example/src/main/java/net/example/springboot/consumer/Receiver.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/springboot-rabbitmq-example/springboot-rabbitmq-example/src/main/java/net/example/springboot/controller/MessageController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/springboot-rabbitmq-example/springboot-rabbitmq-example/src/main/java/net/example/springboot/publisher/Sender.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/springboot-rabbitmq-example/springboot-rabbitmq-example/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/springboot-rabbitmq-example/springboot-rabbitmq-example/src/test/java/net/example/springboot/SpringbootRabbitmqExampleApplicationTests.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="2PFlFR2KewCAUEcbbtXcXlOWSY1" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Zalando/Zalando_Mirror&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.general&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Zalando\Zalando_Mirror" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="configurationTypes">
+      <set>
+        <option value="Application" />
+      </set>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="ProductsServiceApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="zalando.productsservice.ProductsServiceApplication" />
+      <module name="products-service" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="zalando.productsservice.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.ProductsServiceApplication" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e4702285-57fc-4279-b1e1-9b5c28e40a29" name="Changes" comment="" />
+      <created>1683060606609</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1683060606609</updated>
+    </task>
+    <servers />
+  </component>
+</project>
