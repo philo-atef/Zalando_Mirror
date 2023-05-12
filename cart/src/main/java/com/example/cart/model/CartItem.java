@@ -30,14 +30,14 @@ public class CartItem {
     public String toString()
     {
         StringBuilder cartItemString = new StringBuilder("");
-        cartItemString.append("ID: "+ carItemID +"/n");
-        cartItemString.append("Product ID: "+ productID +"/n");
-        cartItemString.append("Product Name: "+ name +"/n");
-        cartItemString.append("Price: "+ price +"/n");
-        cartItemString.append("Brand Name: "+ brandName +"/n");
-        cartItemString.append("Color: "+ color +"/n");
-        cartItemString.append("Size: "+ size +"/n");
-        cartItemString.append("Quantity: "+ quantity +"/n");
+        cartItemString.append("ID: "+ carItemID +"\n");
+        cartItemString.append("Product ID: "+ productID +"\n");
+        cartItemString.append("Product Name: "+ name +"\n");
+        cartItemString.append("Price: "+ price +"\n");
+        cartItemString.append("Brand Name: "+ brandName +"\n");
+        cartItemString.append("Color: "+ color +"\n");
+        cartItemString.append("Size: "+ size +"\n");
+        cartItemString.append("Quantity: "+ quantity +"\n");
 
         return cartItemString.toString();
     }

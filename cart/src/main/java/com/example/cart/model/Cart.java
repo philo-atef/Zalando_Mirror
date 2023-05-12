@@ -29,10 +29,10 @@ public class Cart {
     public String toString()
     {
         StringBuilder cartString = new StringBuilder("");
-        cartString.append("ID: "+ id +"/n");
-        cartString.append("User ID: "+ userID +"/n");
-        cartString.append("Total Price: "+ totalPrice +"/n");
-        cartString.append("Cart Items: "+ cartItemsList +"/n");
+        cartString.append("ID: "+ id +"\n");
+        cartString.append("User ID: "+ userID +"\n");
+        cartString.append("Total Price: "+ totalPrice +"\n");
+        cartString.append("Cart Items: "+ cartItemsList +"\n");
 
         return cartString.toString();
     }
