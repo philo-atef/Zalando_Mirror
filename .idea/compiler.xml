@@ -17,15 +17,8 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="cart" target="17" />
-      <module name="cart-service" target="17" />
       <module name="demoyt" target="17" />
-      <module name="inventory-service" target="17" />
-      <module name="orders-and-payments-service" target="17" />
-      <module name="products-service" target="17" />
-      <module name="search-service" target="17" />
       <module name="springboot-rabbitmq-example" target="17" />
-      <module name="users-service" target="17" />
-      <module name="zalando-mirror" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
