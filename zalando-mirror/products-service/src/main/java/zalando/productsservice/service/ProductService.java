@@ -3,16 +3,23 @@ package zalando.productsservice.service;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 import zalando.productsservice.dto.ProductRequest;
+import zalando.productsservice.exception.ProductNotFoundException;
 import zalando.productsservice.model.Product;
 import zalando.productsservice.repository.ProductRepository;
 
+
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
 
 @Service
 @RequiredArgsConstructor
@@ -20,8 +27,9 @@ import java.util.Optional;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final Validator validator;
 
-    public void createProduct(ProductRequest productRequest){
+    public Product createProduct(ProductRequest productRequest){
         Product product = Product.builder()
                 .brandId(productRequest.getBrandId())
                 .brandName(productRequest.getBrandName())
@@ -35,8 +43,14 @@ public class ProductService {
                 .subcategory(productRequest.getSubcategory())
                 .build();
 
-        productRepository.save(product);
+        Set<ConstraintViolation<Product>> violations = validator.validate(product);
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
+
+        return productRepository.save(product);
     }
+
 
     public List<Product> getAllProducts(){
         return productRepository.findAll();
@@ -58,8 +72,7 @@ public class ProductService {
                 throw new IllegalArgumentException("Invalid product request", e);
             }
         } else {
-            // Throw ProductNotFoundException
-            return null;
+            throw new ProductNotFoundException("No Product found with id: " + id);
         }
     }
 
