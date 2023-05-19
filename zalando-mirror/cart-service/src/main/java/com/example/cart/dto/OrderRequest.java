@@ -1,7 +1,5 @@
 package com.example.cart.dto;
 
-import com.example.cart.model.Cart;
-import com.example.cart.model.CartItem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +12,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CartRequest {
+public class OrderRequest {
     private UUID id;
     private UUID userID;
     private Double totalPrice;

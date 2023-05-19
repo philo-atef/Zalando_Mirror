@@ -2,7 +2,7 @@ package com.example.cart.controller;
 
 
 import com.example.cart.dto.CartItemDto;
-import com.example.cart.dto.ProductRequest;
+import com.example.cart.dto.SearchRequest;
 import com.example.cart.exception.CartEmptyException;
 import com.example.cart.exception.ErrorResponse;
 import com.example.cart.exception.NoSuchElementFoundException;
@@ -29,7 +29,7 @@ public class CartController {
     }
 
     @PutMapping("/addItem/{userId}")
-    public Cart addNewItem(@PathVariable UUID userId, ProductRequest product) {
+    public Cart addNewItem(@PathVariable UUID userId, SearchRequest product) {
         return cartService.addCartItem(userId, product);
     }
 
