@@ -5,6 +5,8 @@ import com.example.cart.exception.CartEmptyException;
 import com.example.cart.exception.NoSuchElementFoundException;
 import com.example.cart.model.Cart;
 import com.example.cart.model.CartItem;
+import com.example.cart.rabbitmq.publisher.inventoryProducer;
+import com.example.cart.rabbitmq.publisher.orderAndPaymentProducer;
 import com.example.cart.repository.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +18,14 @@ import java.util.*;
 public class CartService  implements CartServiceInterface{
 
     private final CartRepository cartRepository;
+    private final inventoryProducer inventoryProducer;
+    private final orderAndPaymentProducer orderAndPaymentProducer;
 
     @Autowired
-    public CartService(CartRepository cartRepository) {
+    public CartService(CartRepository cartRepository, inventoryProducer inventoryProducer, orderAndPaymentProducer orderAndPaymentProducer) {
         this.cartRepository = cartRepository;
+        this.inventoryProducer = inventoryProducer;
+        this.orderAndPaymentProducer = orderAndPaymentProducer;
     }
 
     private CartItem mapToDto(CartItemDto cartItemDto) {
@@ -36,6 +42,73 @@ public class CartService  implements CartServiceInterface{
         return cartItem;
     }
 
+    public List<InventoryItemRequest> formatInventoryRequest(Cart cart) {
+
+        ArrayList<InventoryItemRequest> listOfItems = new ArrayList<>();
+
+        for (CartItem c: cart.getCartItemsList()) {
+
+            InventoryItemRequest item = new InventoryItemRequest();
+            item.setColor(c.getColor());
+            item.setSize(c.getSize());
+            item.setQuantity(c.getQuantity());
+            item.setProductID(c.getProductID());
+
+            listOfItems.add(item);
+
+        }
+
+        return listOfItems;
+    }
+
+    public OrderRequest formatOrderRequest(Cart cart) {
+
+        ArrayList<CartItemDto> listOfItems = new ArrayList<>();
+
+        for (CartItem c: cart.getCartItemsList()) {
+
+            CartItemDto item = new CartItemDto();
+            item.setColor(c.getColor());
+            item.setSize(c.getSize());
+            item.setQuantity(c.getQuantity());
+            item.setProductID(c.getProductID());
+
+            listOfItems.add(item);
+        }
+
+        OrderRequest request = new OrderRequest(cart.getId(),cart.getUserID(),cart.getTotalPrice(),listOfItems);
+
+        return request;
+    }
+
+    public SearchResponse formatSearchResponse(Cart cart, SearchRequest searchRequest) {
+
+        SearchResponse response = new SearchResponse();
+
+        boolean added = false ;
+
+        for (CartItem c: cart.getCartItemsList()) {
+
+            if(c.getProductID().equals(searchRequest.getProductID())
+            && c.getSize().equals(searchRequest.getSize())
+            && c.getColor().equals(searchRequest.getColor())
+            && c.getQuantity() >= searchRequest.getQuantity())
+            {
+                added = true ;
+                break;
+            }
+
+        }
+
+        response.setAdded(added);
+        response.setSize(searchRequest.getSize());
+        response.setColor(searchRequest.getColor());
+        response.setProductID(searchRequest.getProductID());
+        response.setQuantity(searchRequest.getQuantity());
+
+        return response;
+    }
+
     @Override
     public List<Cart> getAllCarts() {
         return cartRepository.findAll();
@@ -43,17 +116,19 @@ public class CartService  implements CartServiceInterface{
 
     @Override
     public Cart getUserCartById(UUID userId) {
-        // To Be Modified as follows:-
-        // Send a Request to the inventory or product service with the cart elements
-        // Receive the inventory elements
-        // call the updateCart method tho update cart
-        // return such updated cart
-        // The current implementation is simply retrieving the cart without any checking with the inventory
-        return cartRepository.findCartByUserID(userId);
+
+        //Check user is logged in
+
+        Cart userCart = cartRepository.findCartByUserID(userId);
+
+        return  updateCart(userCart);
     }
 
     @Override
     public Cart createNewCart(UUID userId) {
+
+        // Check user is logged in
+
         Cart cart = cartRepository.findCartByUserID(userId);
 
         if(cart == null)
@@ -73,7 +148,7 @@ public class CartService  implements CartServiceInterface{
     }
 
     @Override
-    public void emptyCart(UUID userId) {
+    public Cart emptyCart(UUID userId) {
 
         Cart cart = cartRepository.findCartByUserID(userId);
 
@@ -83,10 +158,13 @@ public class CartService  implements CartServiceInterface{
             cart.setTotalPrice(0.0);
         }
 
+        return cartRepository.save(cart);
     }
 
     @Override
-    public Cart addCartItem(UUID userId, ProductRequest productRequest) {
+    public Cart addCartItem(UUID userId, SearchRequest searchRequest) {
+
+        // Check if the user is logged
 
         Cart cart = cartRepository.findCartByUserID(userId);
 
@@ -104,14 +182,14 @@ public class CartService  implements CartServiceInterface{
 
         CartItem cartItem = CartItem.builder()
                 .carItemID(UUID.randomUUID())
-                .productID(productRequest.getProductID())
-                .price(productRequest.getPrice())
-                .brandName(productRequest.getBrandName())
-                .name(productRequest.getName())
-                .brandId(productRequest.getBrandId())
-                .color(productRequest.getColor())
-                .size(productRequest.getSize())
-                .quantity(productRequest.getQuantity())
+                .productID(searchRequest.getProductID())
+                .price(searchRequest.getPrice())
+                .brandName(searchRequest.getBrandName())
+                .name(searchRequest.getName())
+                .brandId(searchRequest.getBrandId())
+                .color(searchRequest.getColor())
+                .size(searchRequest.getSize())
+                .quantity(searchRequest.getQuantity())
                 .build();
 
         boolean found = false ;
@@ -140,6 +218,10 @@ public class CartService  implements CartServiceInterface{
 
     @Override
     public Cart removeCartItem(UUID userId, UUID cartItemID) {
+
+        // Check if the user is logged
+
+
         Cart cart = cartRepository.findCartByUserID(userId);
 
         if(cart == null)
@@ -188,6 +270,10 @@ public class CartService  implements CartServiceInterface{
 
     @Override
     public Cart editCartItem(UUID userId, CartItemDto cartItemDto) {
+
+        // Check if the user is logged
+
+
         Cart cart = cartRepository.findCartByUserID(userId);
 
         if(cart == null)
@@ -236,10 +322,83 @@ public class CartService  implements CartServiceInterface{
     }
 
     @Override
-    public void updateCart(UUID userId, InventoryItemsRequest inventoryItemsRequest) {
-        // Get The Cart
-        // Loop over the elements from the inventory or product service
-        // update the cart accordingly
+    public Cart updateCart(Cart cart) {
+
+        List<InventoryItemRequest> items =  formatInventoryRequest(cart);
+        InventoryItemsRequest request = new InventoryItemsRequest(items);
+
+        InventoryResponse response = inventoryProducer.sendMessage(request);
+
+        if(response != null && response.getItemsNotFound().isEmpty())
+        {
+            return cartRepository.save(cart) ;
+        }
+
+        ArrayList<CartItem> newList = new ArrayList<>();
+        Double total = 0.0 ;
+
+        for (CartItem item: cart.getCartItemsList()) {
+
+            boolean found = false ;
+
+            for (InventoryItem product: response.getItemsNotFound()) {
+
+                // Needs an update
+                if(product.getProductId().equals(item.getProductID()) &&
+                     product.getSize().equals(item.getSize()) &&
+                      product.getColor().equals(item.getColor()))
+                {
+                    if(product.getQuantity() > 0)
+                    {
+                        item.setQuantity(product.getQuantity());
+                        newList.add(item);
+
+                        total+= item.getPrice() * item.getQuantity() ;
+                    }
+                }
+
+            }
+
+            if(!found)
+            {
+                newList.add(item);
+                total+= item.getPrice() * item.getQuantity() ;
+            }
+
+        }
+
+        cart.setCartItemsList(newList);
+        cart.setTotalPrice(total);
+
+        return cartRepository.save(cart) ;
+    }
+
+    @Override
+    public Cart placeOrder(UUID userID) {
+        // Check if the user is logged
+
+        // Get the Cart
+        Cart cart = cartRepository.findCartByUserID(userID);
+
+        // Format the message
+        OrderRequest request = formatOrderRequest(cart);
+
+        OrderResponse response = orderAndPaymentProducer.sendMessage(request);
+
+        if(response != null)
+        {
+            if(response.isOrdered())
+            {
+                return emptyCart(userID);
+            }
+            else
+            {
+                 return updateCart(cart);
+            }
+        }
+
+        return cart;
+
     }
 
 

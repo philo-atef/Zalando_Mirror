@@ -1,5 +1,6 @@
 package com.example.cart.dto;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,13 +12,10 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductRequest {
+public class SearchResponse {
     private UUID productID;
-    private String name;
-    private String brandId;
-    private String brandName;
     private String color;
     private String size;
     private Integer quantity;
-    private Double price;
+    private boolean added;
 }

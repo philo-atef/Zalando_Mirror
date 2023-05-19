@@ -11,9 +11,11 @@ public interface CartServiceInterface {
     Cart getUserCartById (UUID userId);
     List<Cart> getAllCarts();
     Cart createNewCart(UUID userId);
-    void emptyCart(UUID userId);
-    Cart addCartItem(UUID userId, ProductRequest productRequest);
+    Cart emptyCart(UUID userId);
+    Cart addCartItem(UUID userId, SearchRequest searchRequest);
     Cart removeCartItem(UUID userId, UUID cartItemID) ;
     Cart editCartItem(UUID userId, CartItemDto cartItemDto);
-    void updateCart(UUID userId, InventoryItemsRequest inventoryItemsRequest) ;
+    Cart updateCart(Cart cart) ;
+
+    Cart placeOrder (UUID userID);
 }
