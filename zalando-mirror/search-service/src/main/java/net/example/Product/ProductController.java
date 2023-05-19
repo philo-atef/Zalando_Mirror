@@ -6,6 +6,7 @@ package net.example.Product;
 import net.example.Product.Product;
 import net.example.Product.ProductRepository;
 import net.example.dto.InventoryItem;
+import net.example.dto.SearchRequest;
 import net.example.rabbitmq.MessageWrapper;
 import net.example.rabbitmq.RabbitMQProducer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,11 +50,22 @@ public class ProductController {
         return productRepository.save(product);
     }
     @GetMapping("/getProduct")
-    public List<InventoryItem> getProductInvItems (@RequestParam(defaultValue = "") String productId){
+    public void getProductInvItems (@RequestBody SearchRequest product){
+        rabbitMQProducer.sendMessagetoQueue(new MessageWrapper("getProductInvItems",product),
+                "cartServiceExchange","getProductInventoryRoutingKey");
+
+    }
+
+
+    @GetMapping("/addProductToCart")
+    public List<InventoryItem> addProductToCart (@RequestParam(defaultValue = "") String productId){
         return (ArrayList<InventoryItem>)rabbitMQProducer.sendMessagetoQueueAndRecieve(new MessageWrapper("getProductInvItems",productId),
                 "inventoryServiceExchange","getProductInventoryRoutingKey");
 
     }
+
+
+
     @GetMapping("/searchproducts")
     public List<Product> search (@RequestParam(defaultValue = "") String searchQuery,
                                  @RequestParam(defaultValue = "0") int page,
