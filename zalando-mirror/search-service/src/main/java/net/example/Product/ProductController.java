@@ -50,7 +50,8 @@ public class ProductController {
     }
     @GetMapping("/getProduct")
     public List<InventoryItem> getProductInvItems (@RequestParam(defaultValue = "") String productId){
-        return rabbitMQProducer.getProductItems(new MessageWrapper("getProductInvItems",productId));
+        return (ArrayList<InventoryItem>)rabbitMQProducer.sendMessagetoQueueAndRecieve(new MessageWrapper("getProductInvItems",productId),
+                "inventoryServiceExchange","getProductInventoryRoutingKey");
 
     }
     @GetMapping("/searchproducts")

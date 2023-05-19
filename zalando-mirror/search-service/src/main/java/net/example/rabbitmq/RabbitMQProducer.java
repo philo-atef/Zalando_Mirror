@@ -27,10 +27,10 @@ public class RabbitMQProducer {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-        public ArrayList<InventoryItem> getProductItems(MessageWrapper message){
+        public Object sendMessagetoQueueAndRecieve(MessageWrapper message ,String exchange,String routingKey){
             LOGGER.info(String.format("Json message sent -> %s", message.toString()));
           //rabbitTemplate.convertAndSend(exchange, jsonRoutingKey, message);
-            Object response = rabbitTemplate.convertSendAndReceive(exchange, jsonRoutingKey, message);
+            Object response = rabbitTemplate.convertSendAndReceive(exchange, routingKey, message);
             if (response instanceof LinkedHashMap) {
                 LinkedHashMap<String, Object> responseMap = (LinkedHashMap<String, Object>) response;
                 MessageWrapper responseWrapper = new MessageWrapper();
@@ -38,12 +38,19 @@ public class RabbitMQProducer {
                 responseWrapper.setPayload(responseMap.get("payload"));
                 response = responseWrapper;
                 LOGGER.info(String.format("Producer received response -> %s", response));
-                return ((ArrayList<InventoryItem>)responseWrapper.getPayload());
+                return (responseWrapper.getPayload());
             }
 
             LOGGER.info(String.format("Producer received response -> %s", response));
             return null;
             }
+    public void sendMessagetoQueue(MessageWrapper message ,String exchange,String routingKey){
+        LOGGER.info(String.format("Json message sent -> %s", message.toString()));
+        //rabbitTemplate.convertAndSend(exchange, jsonRoutingKey, message);
+         rabbitTemplate.convertAndSend(exchange, routingKey, message);
 
+
+
+    }
 
 }
