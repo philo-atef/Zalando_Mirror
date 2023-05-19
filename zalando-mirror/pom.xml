@@ -21,7 +21,8 @@
 		<module>orders-and-payments-service</module>
 		<module>users-service</module>
 		<module>search-service</module>
-	</modules>
+        <module>controller</module>
+    </modules>
 	<properties>
 		<java.version>17</java.version>
 	</properties>

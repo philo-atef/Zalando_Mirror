@@ -5,6 +5,7 @@ package net.example.Product;
 
 import net.example.Product.Product;
 import net.example.Product.ProductRepository;
+import net.example.rabbitmq.RabbitMQProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,9 +32,14 @@ public class ProductController {
     //private ProductService productService;
     private ProductRepository productRepository;
 
+    private RabbitMQProducer rabbitMQProducer;
+    public ProductController(RabbitMQProducer rabbitMQProducer) {
+        this.rabbitMQProducer = rabbitMQProducer;
+    }
 
     @GetMapping("/getAllProducts")
     public List<Product> getAllUser(){
+        rabbitMQProducer.sendJsonMessage("Hello, inventory service !!");
         return productRepository.findAll();
     }
     @PostMapping("/addProduct")
