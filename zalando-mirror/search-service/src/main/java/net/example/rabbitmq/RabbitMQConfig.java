@@ -1,37 +1,44 @@
-package zalando.controller.rabbitmq;
+package net.example.rabbitmq;
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
-
-    @Value("${rabbitmq.getProductInventory.queue.name}")
-    private String getProductInventoryQueue;
-
-    @Value("${rabbitmq.inventory-service.exchange.name}")
-    private String inventoryServiceExchange;
-
-    @Value("${rabbitmq.getProductInventory.routing_key.name}")
-    private String getProductInventoryRoutingKey;
-
-
+//    @Autowired
+//    private ConnectionFactory connectionFactory;
+//
+//    @Value("${rabbitmq.getProductInventory.queue.name}")
+//    private String getProductInventoryQueue;
+//
+//    @Value("${rabbitmq.inventory-service.exchange.name}")
+//    private String inventoryServiceExchange;
+//
+//    @Value("${rabbitmq.getProductInventory.routing_key.name}")
+//    private String getProductInventoryRoutingKey;
+//
+//    @Bean
+//    public RabbitAdmin rabbitAdmin() {
+//        return new RabbitAdmin(connectionFactory);
+//    }
     // spring bean for rabbitmq queues
     @Bean
     public Queue queue(){
-        return new Queue(getProductInventoryQueue);
+        return new Queue("productInvQueue");
     }
 
     // spring bean for rabbitmq exchanges
     @Bean
     public TopicExchange exchange(){
-        return new TopicExchange(inventoryServiceExchange);
+        return new TopicExchange("inventoryServiceExchange");
     }
 
     // Binding between Queues and Exchanges using routing keys
@@ -40,7 +47,7 @@ public class RabbitMQConfig {
         return BindingBuilder
                 .bind(queue())
                 .to(exchange())
-                .with(getProductInventoryRoutingKey);
+                .with("getProductInventoryRoutingKey");
     }
 
 
