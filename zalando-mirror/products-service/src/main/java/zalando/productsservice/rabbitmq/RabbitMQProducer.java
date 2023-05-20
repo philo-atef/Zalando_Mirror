@@ -29,8 +29,8 @@ public class RabbitMQProducer {
         rabbitTemplate.convertAndSend(exchange, routingKey, message);
     }
 
-    public void sendJsonMessage(Product product){
-        LOGGER.info(String.format("Json message sent -> %s", product.toString()));
-        rabbitTemplate.convertAndSend(exchange, routingKey, product);
+    public void bulkCreateInventoryItems(MessageWrapper message){
+        LOGGER.info(String.format("Json message sent -> %s", message.toString()));
+        rabbitTemplate.convertAndSend(exchange, routingKey, message);
     }
 }
