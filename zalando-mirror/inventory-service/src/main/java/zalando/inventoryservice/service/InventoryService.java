@@ -43,6 +43,26 @@ public class InventoryService {
         return inventoryRepository.save(inventoryItem);
     }
 
+    @Transactional
+    public List<InventoryItem> bulkCreateInventoryItem(List<CreateItemDto> createItemDtos){
+        List<InventoryItem> toBeCreatedItems = new ArrayList<InventoryItem>();
+        for(CreateItemDto createItemDto : createItemDtos){
+            InventoryItem inventoryItem = InventoryItem.builder()
+                    .sku(generateSkuCode(createItemDto.getProductId(), createItemDto.getColor(), createItemDto.getSize()))
+                    .productId(createItemDto.getProductId())
+                    .color(createItemDto.getColor())
+                    .size(createItemDto.getSize())
+                    .quantity(createItemDto.getQuantity())
+                    .build();
+
+            toBeCreatedItems.add(inventoryItem);
+        }
+
+        return inventoryRepository.saveAll(toBeCreatedItems);
+    }
+
+
+
     @Transactional(readOnly = true)
     public List<InventoryItem> getProductInventory(String productId){
         Optional<List<InventoryItem>> itemsOptional = inventoryRepository.findByProductId(productId);
