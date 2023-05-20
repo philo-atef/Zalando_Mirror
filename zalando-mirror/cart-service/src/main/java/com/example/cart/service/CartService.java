@@ -329,7 +329,13 @@ public class CartService  implements CartServiceInterface{
 
         InventoryResponse response = inventoryProducer.sendMessage(request);
 
-        if(response != null && response.getItemsNotFound().isEmpty())
+        if(response == null)
+        {
+            System.out.println("Received null response !!");
+            return null ;
+        }
+
+        if(response.getItemsNotFound().isEmpty())
         {
             return cartRepository.save(cart) ;
         }
@@ -396,8 +402,11 @@ public class CartService  implements CartServiceInterface{
                  return updateCart(cart);
             }
         }
-
-        return cart;
+        else
+        {
+            System.out.println("Received null response from orders service !!");
+            return null ;
+        }
 
     }
 

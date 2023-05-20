@@ -12,6 +12,8 @@ import zalando.inventoryservice.service.InventoryService;
 public class RabbitMQConsumer {
     private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMQConsumer.class);
     private final InventoryService inventoryService;
+
+
     @RabbitListener(queues = "productInvQueue")
     public Object  consumeJsonMessage(MessageWrapper message){
 

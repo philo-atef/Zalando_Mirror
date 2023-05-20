@@ -1,4 +1,4 @@
-package com.example.cart.rabbitmq.consumer;
+package com.example.cart.rabbitmq.config;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

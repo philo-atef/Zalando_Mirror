@@ -12,54 +12,46 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
-//    @Value("${rabbitmq.orderAndPayment.queue.name}")
-//    private String orderAndPaymentQueue;
-//    @Value("${rabbitmq.inventory.queue.name}")
-//    private String inventoryQueue;
-//    @Value("${rabbitmq.cart.exchange.name}")
-//    private String exchange;
-//    @Value("${rabbitmq.orderAndPayment.queue.key}")
-//    private String orderAndPaymentKey;
-//    @Value("${rabbitmq.inventory.queue.key}")
-//    private String inventoryKey;
-//
-//    @Value("${rabbitmq.search.queue.key}")
-//    private String searchKey;
-//    @Value("${rabbitmq.search.queue.name}")
-//    private String searchQueue;
-//
-//
-//    @Bean
-//    public Queue jsonQueue(String queue){
-//        return new Queue(queue);
-//    }
-//    @Bean
-//    public TopicExchange exchange(String exchange){
-//        return new TopicExchange(exchange);
-//    }
-//
-//    @Bean
-//    public Binding orderAndPaymentBinding(){
-//        return BindingBuilder
-//                .bind(jsonQueue(orderAndPaymentQueue))
-//                .to(exchange(exchange))
-//                .with(orderAndPaymentKey);
-//    }
-//
-//    @Bean
-//    public Binding inventoryBinding(){
-//        return BindingBuilder
-//                .bind(jsonQueue(inventoryQueue))
-//                .to(exchange(exchange))
-//                .with(inventoryKey);
-//    }
-  //  @Bean
-//    public Binding searchBinding(){
-//        return BindingBuilder
-//                .bind(jsonQueue(searchQueue))
-//                .to(exchange(exchange))
-//                .with(searchKey);
-//    }
+    @Value("${rabbitmq.orderAndPayment.queue.name}")
+    private String orderAndPaymentQueue;
+    @Value("${rabbitmq.inventory.queue.name}")
+    private String inventoryQueue;
+    @Value("${rabbitmq.cart.exchange.name}")
+    private String exchange;
+    @Value("${rabbitmq.orderAndPayment.queue.key}")
+    private String orderAndPaymentKey;
+    @Value("${rabbitmq.inventory.queue.key}")
+    private String inventoryKey;
+
+    @Bean
+    public Queue inventoryQueue(){
+        return new Queue(inventoryQueue);
+    }
+
+    @Bean
+    public Queue ordersQueue(){
+        return new Queue(orderAndPaymentQueue);
+    }
+    @Bean
+    public TopicExchange exchange(){
+        return new TopicExchange(exchange);
+    }
+
+    @Bean
+    public Binding orderAndPaymentBinding(){
+        return BindingBuilder
+                .bind(ordersQueue())
+                .to(exchange())
+                .with(orderAndPaymentKey);
+    }
+
+    @Bean
+    public Binding inventoryBinding(){
+        return BindingBuilder
+                .bind(inventoryQueue())
+                .to(exchange())
+                .with(inventoryKey);
+    }
   @Bean
   public MessageConverter converter(){
       return new Jackson2JsonMessageConverter();
