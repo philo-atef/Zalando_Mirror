@@ -34,13 +34,21 @@ public class RabbitMQConfig {
     public Queue queue(){
         return new Queue("productInvQueue");
     }
-
+    @Bean
+    public Queue queue2(){
+        return new Queue("SearchCart");
+    }
     // spring bean for rabbitmq exchanges
     @Bean
     public TopicExchange exchange(){
         return new TopicExchange("inventoryServiceExchange");
     }
-
+    @Value("${rabbitmq.search.queue.key}")
+    private String searchKey;
+    @Value("${rabbitmq.search.queue.name}")
+    private String searchQueue;
+    @Value("${rabbitmq.cart.exchange.name}")
+    private String exchange;
     // Binding between Queues and Exchanges using routing keys
     @Bean
     public Binding binding(){
@@ -50,7 +58,20 @@ public class RabbitMQConfig {
                 .with("getProductInventoryRoutingKey");
     }
 
-
+    @Bean
+    public Binding searchBinding(){
+        return BindingBuilder
+                .bind(queue2())
+                .to(exchange2(exchange))
+                .with("keySearchCart");
+    }
+    public Queue jsonQueue(String queue){
+        return new Queue(queue);
+    }
+    @Bean
+    public TopicExchange exchange2(String exchange){
+        return new TopicExchange(exchange);
+    }
     @Bean
     public MessageConverter converter(){
         return new Jackson2JsonMessageConverter();

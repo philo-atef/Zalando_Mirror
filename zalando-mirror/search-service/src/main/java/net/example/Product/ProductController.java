@@ -7,6 +7,7 @@ import net.example.Product.Product;
 import net.example.Product.ProductRepository;
 import net.example.dto.InventoryItem;
 import net.example.dto.SearchRequest;
+import net.example.dto.SearchResponse;
 import net.example.rabbitmq.MessageWrapper;
 import net.example.rabbitmq.RabbitMQProducer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,16 +50,16 @@ public class ProductController {
     public Product addUser(@RequestBody Product product) {
         return productRepository.save(product);
     }
-    @GetMapping("/getProduct")
-    public void getProductInvItems (@RequestBody SearchRequest product){
-        rabbitMQProducer.sendMessagetoQueue(new MessageWrapper("getProductInvItems",product),
-                "cartServiceExchange","getProductInventoryRoutingKey");
+    @PostMapping("/addProductToCart")
+    public SearchResponse addProductToCart (@RequestBody SearchRequest product){
+        return (SearchResponse) rabbitMQProducer.addToCart(product,
+                "cart_exchange","keySearchCart");
 
     }
 
 
-    @GetMapping("/addProductToCart")
-    public List<InventoryItem> addProductToCart (@RequestParam(defaultValue = "") String productId){
+    @GetMapping("/getProductInv")
+    public List<InventoryItem> getProductInv (@RequestParam(defaultValue = "") String productId){
         return (ArrayList<InventoryItem>)rabbitMQProducer.sendMessagetoQueueAndRecieve(new MessageWrapper("getProductInvItems",productId),
                 "inventoryServiceExchange","getProductInventoryRoutingKey");
 
