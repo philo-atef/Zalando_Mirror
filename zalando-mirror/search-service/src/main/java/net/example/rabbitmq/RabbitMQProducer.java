@@ -2,6 +2,7 @@ package net.example.rabbitmq;
 
 import net.example.dto.InventoryItem;
 import net.example.dto.SearchRequest;
+import net.example.dto.SearchResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.UUID;
 
 @Service
 public class RabbitMQProducer {
@@ -50,15 +52,21 @@ public class RabbitMQProducer {
         LOGGER.info(String.format("Json message sent -> %s", message.toString()));
         //rabbitTemplate.convertAndSend(exchange, jsonRoutingKey, message);
         Object response = rabbitTemplate.convertSendAndReceive(exchange, routingKey, message);
-//        if (response instanceof LinkedHashMap) {
-//            LinkedHashMap<String, Object> responseMap = (LinkedHashMap<String, Object>) response;
-//            MessageWrapper responseWrapper = new MessageWrapper();
-//            responseWrapper.setType((String) responseMap.get("type"));
-//            responseWrapper.setPayload(responseMap.get("payload"));
-//            response = responseWrapper;
-//            LOGGER.info(String.format("Producer received response -> %s", response));
-//            return (responseWrapper.getPayload());
-//        }
+        if(response==null)
+            return null;
+        if (response instanceof LinkedHashMap) {
+            LinkedHashMap<String, Object> responseMap = (LinkedHashMap<String, Object>) response;
+            SearchResponse responseWrapper = new SearchResponse();
+            responseWrapper.setProductID((String) responseMap.get("productID"));
+            responseWrapper.setColor((String) responseMap.get("color"));
+            responseWrapper.setSize((String) responseMap.get("size"));
+            responseWrapper.setQuantity((Integer) responseMap.get("quantity"));
+            responseWrapper.setAdded((boolean) responseMap.get("added"));
+
+            response = responseWrapper;
+            LOGGER.info(String.format("Producer received response -> %s", response));
+            return responseWrapper;
+        }
 
         LOGGER.info(String.format("Producer received response -> %s", response));
         LOGGER.info(String.format("Producer received response -> %s", response.getClass()));

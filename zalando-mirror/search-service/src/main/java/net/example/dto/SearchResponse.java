@@ -13,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SearchResponse {
-    private UUID productID;
+    private String productID;
     private String color;
     private String size;
     private Integer quantity;
