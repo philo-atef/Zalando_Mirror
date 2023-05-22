@@ -1,5 +1,4 @@
-package com.example.cart.dto;
-
+package zalando.inventoryservice.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +11,6 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class InventoryResponse {
-    private List<InventoryItem> itemsNotFound;
+public class InventoryItemsRequest {
+    private List<CartItemDto> inventoryItemRequestList;
 }

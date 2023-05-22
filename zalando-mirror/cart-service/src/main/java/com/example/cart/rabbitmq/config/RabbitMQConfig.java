@@ -30,11 +30,11 @@ public class RabbitMQConfig {
 
     @Bean
     public Queue ordersQueue(){
-        return new Queue(orderAndPaymentQueue);
+        return new Queue("cartInventoryQueue");
     }
     @Bean
     public TopicExchange exchange(){
-        return new TopicExchange(exchange);
+        return new TopicExchange("cart_exchange");
     }
 
     @Bean
@@ -50,7 +50,7 @@ public class RabbitMQConfig {
         return BindingBuilder
                 .bind(inventoryQueue())
                 .to(exchange())
-                .with(inventoryKey);
+                .with("cartInventoryKey");
     }
   @Bean
   public MessageConverter converter(){

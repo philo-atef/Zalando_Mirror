@@ -6,6 +6,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.UUID;
 
 public interface CartRepository extends MongoRepository<Cart, String> {
-     public Cart findCartByUserID(UUID userId);
+     public Cart findCartByUserID(String userId);
 
 }

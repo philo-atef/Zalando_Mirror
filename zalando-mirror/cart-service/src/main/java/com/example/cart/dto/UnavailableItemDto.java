@@ -9,19 +9,10 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class InventoryItem {
-
-    private String sku;
-
-
+public class UnavailableItemDto {
     private String productId;
-
-
     private String color;
-
-
     private String size;
-
-
-    private int quantity;
+    private int availableQuantity;
+    private int requestedQuantity;
 }
