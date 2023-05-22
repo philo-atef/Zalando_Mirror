@@ -30,7 +30,7 @@ public class RabbitMQConfig {
 
     @Bean
     public Queue ordersQueue(){
-        return new Queue("cartInventoryQueue");
+        return new Queue(orderAndPaymentQueue);
     }
     @Bean
     public TopicExchange exchange(){

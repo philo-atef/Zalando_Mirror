@@ -74,6 +74,10 @@ public class CartService  implements CartServiceInterface{
             item.setSize(c.getSize());
             item.setQuantity(c.getQuantity());
             item.setProductID(c.getProductID());
+            item.setBrandName(c.getBrandName());
+            item.setBrandId(c.getBrandId());
+            item.setName(c.getName());
+            item.setPrice(c.getPrice());
 
             listOfItems.add(item);
         }

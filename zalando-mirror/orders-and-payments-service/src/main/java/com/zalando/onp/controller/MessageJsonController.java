@@ -1,6 +1,7 @@
 package com.zalando.onp.controller;
 
 import com.zalando.onp.dto.Cart;
+import com.zalando.onp.dto.OrderResponse;
 import com.zalando.onp.publisher.RabbitMQJsonProducer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,8 +19,8 @@ public class MessageJsonController {
     }
 
     @PostMapping("/publish")
-    public ResponseEntity<String> sendJsonMessage(@RequestBody Cart cart){
-        jsonProducer.sendJsonMessage(cart);
+    public ResponseEntity<String> sendJsonMessage(@RequestBody OrderResponse orderResponse){
+        jsonProducer.sendJsonMessage(orderResponse);
         return ResponseEntity.ok("Json message sent to RabbitMQ ...");
     }
 }

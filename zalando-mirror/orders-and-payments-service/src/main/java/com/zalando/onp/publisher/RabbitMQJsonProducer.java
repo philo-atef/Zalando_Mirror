@@ -1,6 +1,7 @@
 package com.zalando.onp.publisher;
 
 import com.zalando.onp.dto.Cart;
+import com.zalando.onp.dto.OrderResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -22,9 +23,9 @@ public class RabbitMQJsonProducer {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void sendJsonMessage(Cart cart){
-        LOGGER.info(String.format("Json message sent -> %s", cart.toString()));
-        rabbitTemplate.convertAndSend(exchange, routingJsonKey, cart);
+    public void sendJsonMessage(OrderResponse orderResponse){
+        LOGGER.info(String.format("Json message sent -> %s", orderResponse.toString()));
+        rabbitTemplate.convertAndSend(exchange, routingJsonKey, orderResponse);
     }
 
 }

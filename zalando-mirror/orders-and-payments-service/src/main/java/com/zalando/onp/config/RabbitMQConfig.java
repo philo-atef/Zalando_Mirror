@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig {
     @Value("${rabbitmq.queue.name}")
     private String queue;
-    @Value("${rabbitmq.queue.json.name}")
+    @Value("${rabbitmq.queue.cartResponse.json.name}")
     private String jsonQueue;
     @Value("${rabbitmq.exchange.name}")
     private String exchange;
@@ -42,7 +42,6 @@ public class RabbitMQConfig {
                  .to(exchange())
                  .with(routingKey);
     }
-
     @Bean
     public Binding jsonBinding(){
         return BindingBuilder
