@@ -11,8 +11,8 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductRequest {
-    private UUID productID;
+public class SearchRequest {
+    private String productID;
     private String name;
     private String brandId;
     private String brandName;

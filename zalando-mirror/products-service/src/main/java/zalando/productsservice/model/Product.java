@@ -20,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @CompoundIndexes({
-        @CompoundIndex(name = "search_index", def = "{ 'brandName': 'text', 'name': 'text' ,'material': 'text' ,'colors': 'text' ,'gender': 'text' ,'category': 'text' ,'subcategory': 'text' ,'sizes': 'text' }")
+        @CompoundIndex(name = "search_index", def = "{ 'brandName': 'text', 'name': 'text' ,'material': 'text' ,'colors': 'text' ,'gender': 'text' ,'category': 'text' ,'subcategory': 'text' ,'sizes':'text'}")
 })
 public class Product {
     @Id

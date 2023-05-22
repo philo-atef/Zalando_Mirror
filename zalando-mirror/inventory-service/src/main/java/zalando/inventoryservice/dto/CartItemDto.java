@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CartItemDto {
-    private String skuCode;
+    private String productId;
+    private String color;
+    private String size;
     private int quantity;
 }

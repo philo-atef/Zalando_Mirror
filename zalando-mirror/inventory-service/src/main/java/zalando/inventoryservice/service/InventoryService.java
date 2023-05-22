@@ -26,14 +26,14 @@ public class InventoryService {
 
     private final InventoryRepository inventoryRepository;
 
-    private String generateSkuCode(String productId, String color, String size, String brandName) {
-        return productId.substring(0, 4) + "-" + color.substring(0, 2) + "-" + size.charAt(0) + "-" + brandName.substring(0, 3);
+    private String generateSkuCode(String productId, String color, String size) {
+        return productId + "-" + color + "-" + size;
     }
 
     @Transactional
     public InventoryItem createInventoryItem(CreateItemDto createItemDto){
         InventoryItem inventoryItem = InventoryItem.builder()
-                .sku(generateSkuCode(createItemDto.getProductId(), createItemDto.getColor(), createItemDto.getSize(), createItemDto.getBrandName()))
+                .sku(generateSkuCode(createItemDto.getProductId(), createItemDto.getColor(), createItemDto.getSize()))
                 .productId(createItemDto.getProductId())
                 .color(createItemDto.getColor())
                 .size(createItemDto.getSize())
@@ -42,6 +42,26 @@ public class InventoryService {
 
         return inventoryRepository.save(inventoryItem);
     }
+
+    @Transactional
+    public List<InventoryItem> bulkCreateInventoryItem(List<CreateItemDto> createItemDtos){
+        List<InventoryItem> toBeCreatedItems = new ArrayList<InventoryItem>();
+        for(CreateItemDto createItemDto : createItemDtos){
+            InventoryItem inventoryItem = InventoryItem.builder()
+                    .sku(generateSkuCode(createItemDto.getProductId(), createItemDto.getColor(), createItemDto.getSize()))
+                    .productId(createItemDto.getProductId())
+                    .color(createItemDto.getColor())
+                    .size(createItemDto.getSize())
+                    .quantity(createItemDto.getQuantity())
+                    .build();
+
+            toBeCreatedItems.add(inventoryItem);
+        }
+
+        return inventoryRepository.saveAll(toBeCreatedItems);
+    }
+
+
 
     @Transactional(readOnly = true)
     public List<InventoryItem> getProductInventory(String productId){
@@ -72,7 +92,7 @@ public class InventoryService {
     public void changeQuantityBy(List<CartItemDto> cartItems) {
         List<InventoryItem> updatedItems = new ArrayList<InventoryItem>();
         for(CartItemDto cartItem : cartItems){
-            String skuCode = cartItem.getSkuCode();
+            String skuCode = generateSkuCode(cartItem.getProductId(), cartItem.getColor(), cartItem.getSize());
             int changeAmount = cartItem.getQuantity();
 
             Optional<InventoryItem> itemOptional = inventoryRepository.findBySkuCode(skuCode);
@@ -97,7 +117,7 @@ public class InventoryService {
         List<UnavailableItemDto> unavailableItems = new ArrayList<>();
 
         for (CartItemDto cartItem : cartItems) {
-            String skuCode = cartItem.getSkuCode();
+            String skuCode = generateSkuCode(cartItem.getProductId(), cartItem.getColor(), cartItem.getSize());
             int requestedQuantity = cartItem.getQuantity();
 
             Optional<InventoryItem> itemOptional = inventoryRepository.findBySkuCode(skuCode);
@@ -106,7 +126,9 @@ public class InventoryService {
                 int availableQuantity = item.getQuantity();
                 if (requestedQuantity > availableQuantity) {
                     unavailableItems.add(UnavailableItemDto.builder()
-                            .skuCode(skuCode)
+                            .productId(cartItem.getProductId())
+                            .color(cartItem.getColor())
+                            .size(cartItem.getSize())
                             .availableQuantity(availableQuantity)
                             .requestedQuantity(requestedQuantity)
                             .build());
