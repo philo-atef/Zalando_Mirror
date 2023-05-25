@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 import zalando.inventoryservice.dto.CreateItemDto;
+import zalando.inventoryservice.model.InventoryItem;
 import zalando.inventoryservice.service.InventoryService;
 
 import java.util.ArrayList;
@@ -21,13 +22,13 @@ public class RabbitMQConsumer {
     @RabbitListener(queues = "productInvQueue")
     public Object  consumeJsonMessage(MessageWrapper message){
 
-            Object result =inventoryService.getProductInventory((String) message.getPayload());
+            Object result = inventoryService.getProductInventory((String) message.getPayload());
             LOGGER.info(String.format("Received User -> %s", message.toString()));
             return ( new MessageWrapper("5od",result));
     }
 
     @RabbitListener(queues = "bulkCreateInvItems")
-    public void  createInventoryItem(MessageWrapper message){
+    public Object createInventoryItem(MessageWrapper message){
         LOGGER.info(String.format("Received Inventory items -> %s", message.toString()));
 
         List<LinkedHashMap<String, Object>> payload = (List<LinkedHashMap<String, Object>>) message.getPayload();
@@ -46,6 +47,10 @@ public class RabbitMQConsumer {
             createItemDtos.add(itemDto);
         }
 
-        inventoryService.bulkCreateInventoryItem(createItemDtos);
+        Object createdInventoryItems = inventoryService.bulkCreateInventoryItem(createItemDtos);
+
+        MessageWrapper responseMessage = new MessageWrapper("bulkCreateInvItems_response", createdInventoryItems);
+        LOGGER.info(responseMessage.toString());
+        return createdInventoryItems;
     }
 }
