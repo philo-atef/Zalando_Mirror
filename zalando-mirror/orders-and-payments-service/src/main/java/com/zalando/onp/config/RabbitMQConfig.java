@@ -21,10 +21,18 @@ public class RabbitMQConfig {
     private String routingKey;
     @Value("${rabbitmq.routing.json.key}")
     private String routingJsonKey;
+    @Value("${rabbitmq.auth.queue.name}")
+    private String authQueue;
+    @Value("${rabbitmq.auth.routing.key}")
+    private String authRoutingKey;
 
     @Bean
     public Queue queue(){
         return new Queue(queue);
+    }
+    @Bean
+    public Queue authQueue(){
+        return new Queue(authQueue);
     }
     @Bean
     public Queue jsonQueue(){
@@ -48,6 +56,13 @@ public class RabbitMQConfig {
                 .bind(jsonQueue())
                 .to(exchange())
                 .with(routingJsonKey);
+    }
+    @Bean
+    public Binding authBinding(){
+        return BindingBuilder
+                .bind(authQueue())
+                .to(exchange())
+                .with(authRoutingKey);
     }
     @Bean
     public MessageConverter converter(){

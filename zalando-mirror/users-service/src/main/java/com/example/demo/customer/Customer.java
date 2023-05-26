@@ -87,7 +87,8 @@ public class Customer {
                 ", lastName='" + lastName + '\'' +
                 ", address='" + address + '\'' +
                 ", telephoneNumber='" + telephoneNumber + '\'' +
-                ", dateOfBirth=" + dateOfBirth +
+                ", dateOfBirth=" + dateOfBirth +'\'' +
+                ", creditCardNumber=" + creditCardNumber  +
                 '}';
     }
 }
