@@ -27,4 +27,6 @@ public class CustomerRegisterRequest {
     private String telephoneNumber;
     @NotNull
     private LocalDate dateOfBirth;
+    @NotNull
+    private String creditCardNumber;
 }
