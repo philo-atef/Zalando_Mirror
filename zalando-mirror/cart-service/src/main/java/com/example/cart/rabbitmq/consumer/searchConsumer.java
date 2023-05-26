@@ -48,7 +48,7 @@ public class searchConsumer {
 //            LOGGER.info(String.format("Producer received response -> %s", response));
 ////            return (responseWrapper.getPayload());
 //        }
-        Cart newCart = cartService.addCartItem(userId,searchRequest );
+        Cart newCart = cartService.addCartItem(userId.toString(),searchRequest );
 
         LOGGER.info(String.format("Received message -> %s", searchRequest.toString()));
 
