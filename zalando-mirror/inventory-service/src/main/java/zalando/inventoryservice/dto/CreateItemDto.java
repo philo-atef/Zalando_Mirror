@@ -14,5 +14,4 @@ public class CreateItemDto {
     private String color;
     private String size;
     private int quantity;
-    private String brandName;
 }

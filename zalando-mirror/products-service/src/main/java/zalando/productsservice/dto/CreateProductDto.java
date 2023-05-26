@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductRequest {
+public class CreateProductDto {
 
     private String brandId;
     private String brandName;
@@ -24,4 +24,16 @@ public class ProductRequest {
     private String category;
     private String subcategory;
 
+    private List<ProductInventoryDto> inventory;
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ProductInventoryDto {
+        private String productId;
+        private String color;
+        private String size;
+        private int quantity;
+    }
 }
