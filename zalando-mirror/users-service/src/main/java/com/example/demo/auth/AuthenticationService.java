@@ -54,6 +54,7 @@ public class AuthenticationService {
         customer.setAddress(request.getAddress());
         customer.setDateOfBirth(request.getDateOfBirth());
         customer.setTelephoneNumber(request.getTelephoneNumber());
+        customer.setCreditCardNumber(request.getCreditCardNumber());
         customer.setUserDetails1(user);
         customerRepository.save(customer);
 

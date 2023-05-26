@@ -98,7 +98,10 @@ public class CustomerService {
 
     public UserDetails getCustomerByID(Long ID) {
         var customer= customerRepository.findCustomerById(ID);
+        System.out.println("Customer Service");
+        System.out.println(ID);
         UserDetails UD =new UserDetails();
+        System.out.println(customer.toString());
         UD.setAddress(customer.get().getAddress());
         UD.setId(customer.get().getId());
         UD.setCreditCardNumber(customer.get().getCreditCardNumber());
