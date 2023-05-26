@@ -12,7 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SearchRequest {
-    private UUID productID;
+    private String productID;
     private String name;
     private String brandId;
     private String brandName;
