@@ -7,6 +7,7 @@ import com.example.demo.customer.CustomerRepository;
 import com.example.demo.merchant.Merchant;
 import com.example.demo.merchant.MerchantRegisterRequest;
 import com.example.demo.merchant.MerchantRepository;
+import com.example.demo.redis.RedisService;
 import com.example.demo.token.Token;
 import com.example.demo.token.TokenRepository;
 import com.example.demo.token.TokenType;
@@ -28,6 +29,7 @@ public class AuthenticationService {
     private final UserRepository userRepository;
     private final CustomerRepository customerRepository;
     private final MerchantRepository merchantRepository;
+    private final RedisService redisService;
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -58,7 +60,8 @@ public class AuthenticationService {
         var savedUser = userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
-        saveUserToken(savedUser, jwtToken);
+        Token token = saveUserToken(savedUser, jwtToken);
+        redisService.createSession(token);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
@@ -89,7 +92,8 @@ public class AuthenticationService {
         var savedUser = userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
-        saveUserToken(savedUser, jwtToken);
+        Token token = saveUserToken(savedUser, jwtToken);
+        redisService.createSession(token);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
@@ -110,7 +114,8 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
-        saveUserToken(user, jwtToken);
+        Token token = saveUserToken(user, jwtToken);
+        redisService.createSession(token);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
@@ -130,7 +135,8 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
-        saveUserToken(user, jwtToken);
+        Token token = saveUserToken(user, jwtToken);
+        redisService.createSession(token);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
@@ -138,7 +144,7 @@ public class AuthenticationService {
                 .build();
     }
 
-    private void saveUserToken(User user, String jwtToken) {
+    private Token saveUserToken(User user, String jwtToken) {
         var token = Token.builder()
                 .user(user)
                 .token(jwtToken)
@@ -147,6 +153,7 @@ public class AuthenticationService {
                 .revoked(false)
                 .build();
         tokenRepository.save(token);
+        return token;
     }
     private void revokeAllUserTokens(User user) {
         var validUserTokens = tokenRepository.findAllValidTokensByUser(user.getId());
@@ -157,5 +164,11 @@ public class AuthenticationService {
             token.setRevoked(true);
         });
         tokenRepository.saveAll(validUserTokens);
+
+        validUserTokens.forEach(token -> {
+            redisService.deleteSession(token);
+        });
     }
+
+
 }

@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import com.example.demo.redis.RedisService;
 import com.example.demo.token.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {
     private final TokenRepository tokenRepository;
+    private final RedisService redisService;
     @Override
     public void logout(
             HttpServletRequest request,
@@ -27,11 +29,15 @@ public class LogoutService implements LogoutHandler {
         jwt = authHeader.substring(7);
         var storedToken = tokenRepository.findByToken(jwt)
                 .orElse(null);
-        if (storedToken != null) {
+        if (storedToken != null && !storedToken.isExpired() && !storedToken.isRevoked()) {
             storedToken.setExpired(true);
             storedToken.setRevoked(true);
             tokenRepository.save(storedToken);
+            redisService.deleteSession(storedToken);
             SecurityContextHolder.clearContext();
+        }
+        else{
+            throw new IllegalStateException("Invalid token");
         }
     }
 }

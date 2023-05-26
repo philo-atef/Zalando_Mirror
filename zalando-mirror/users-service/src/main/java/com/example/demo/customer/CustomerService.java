@@ -1,5 +1,6 @@
 package com.example.demo.customer;
 
+import com.example.demo.redis.RedisService;
 import com.example.demo.token.Token;
 import com.example.demo.token.TokenRepository;
 import com.example.demo.user.User;
@@ -21,6 +22,7 @@ public class CustomerService {
     private final TokenRepository tokenRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RedisService redisService;
     @GetMapping
     public List<Customer> getCustomers(){
         return customerRepository.findAll();
@@ -67,6 +69,9 @@ public class CustomerService {
             if(customerEditRequest.getDateOfBirth() != null){
                 customerToBeEdited.get().setDateOfBirth(customerEditRequest.getDateOfBirth());
             }
+            if(customerEditRequest.getCreditCardNumber() != null){
+                customerToBeEdited.get().setCreditCardNumber(customerEditRequest.getCreditCardNumber());
+            }
             customerRepository.save(customerToBeEdited.get());
         }
     }
@@ -83,6 +88,7 @@ public class CustomerService {
         if (storedToken != null) {
             var userIDToBeDeleted = storedToken.getUser().getId();
             List<Token> tokensToBeDeleted = tokenRepository.findAllTokensByUserID(userIDToBeDeleted);
+            redisService.deleteSession(storedToken);
             tokenRepository.deleteAll(tokensToBeDeleted);
             customerRepository.deleteById(userIDToBeDeleted);
             userRepository.deleteById(userIDToBeDeleted);

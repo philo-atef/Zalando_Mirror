@@ -22,6 +22,7 @@ public class Customer {
     private String address;
     private String telephoneNumber;
     private LocalDate dateOfBirth;
+    private String creditCardNumber;
 
     @OneToOne(cascade = CascadeType.ALL)
     @MapsId
@@ -68,6 +69,14 @@ public class Customer {
     }
     public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getCreditCardNumber() {
+        return creditCardNumber;
+    }
+
+    public void setCreditCardNumber(String creditCardNumber) {
+        this.creditCardNumber = creditCardNumber;
     }
 
     @Override
