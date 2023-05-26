@@ -1,5 +1,6 @@
 package com.example.demo.customer;
 
+import com.example.demo.dto.UserDetails;
 import com.example.demo.redis.RedisService;
 import com.example.demo.token.Token;
 import com.example.demo.token.TokenRepository;
@@ -94,4 +95,14 @@ public class CustomerService {
             userRepository.deleteById(userIDToBeDeleted);
         }
     }
+
+    public UserDetails getCustomerByID(Long ID) {
+        var customer= customerRepository.findCustomerById(ID);
+        UserDetails UD =new UserDetails();
+        UD.setAddress(customer.get().getAddress());
+        UD.setId(customer.get().getId());
+        UD.setCreditCardNumber(customer.get().getCreditCardNumber());
+        return UD;
+    }
+
 }
