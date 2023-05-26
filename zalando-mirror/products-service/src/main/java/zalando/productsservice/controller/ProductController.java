@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import zalando.productsservice.dto.ErrorResponse;
-import zalando.productsservice.dto.ProductRequest;
+import zalando.productsservice.dto.CreateProductDto;
 import zalando.productsservice.exception.ProductNotFoundException;
 import zalando.productsservice.model.Product;
 import zalando.productsservice.rabbitmq.RabbitMQProducer;
@@ -29,8 +29,8 @@ public class ProductController {
 
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody ProductRequest productRequest){
-        Product product = productService.createProduct(productRequest);
+    public ResponseEntity<Product> createProduct(@RequestBody CreateProductDto createProductDto){
+        Product product = productService.createProduct(createProductDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
 
@@ -49,8 +49,8 @@ public class ProductController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Product> updateProduct(@PathVariable String id, @RequestBody ProductRequest productRequest){
-        Product product = productService.updateProduct(id, productRequest);
+    public ResponseEntity<Product> updateProduct(@PathVariable String id, @RequestBody CreateProductDto createProductDto){
+        Product product = productService.updateProduct(id, createProductDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
 

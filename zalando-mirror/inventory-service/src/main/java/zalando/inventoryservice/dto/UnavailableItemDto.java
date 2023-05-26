@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UnavailableItemDto {
-    private String skuCode;
+    private String productId;
+    private String color;
+    private String size;
     private int availableQuantity;
     private int requestedQuantity;
 }
