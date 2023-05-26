@@ -1,5 +1,4 @@
-package com.example.cart.dto;
-
+package com.zalando.onp.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +11,9 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class InventoryResponse {
-    private List<InventoryItem> itemsNotFound;
+public class Cart {
+    private String userID;
+    private List<CartItem> cartItemsList;
+    private String id;
+    private double totalPrice;
 }

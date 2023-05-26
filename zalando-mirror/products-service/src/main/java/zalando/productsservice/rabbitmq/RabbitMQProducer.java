@@ -33,6 +33,7 @@ public class RabbitMQProducer {
         rabbitTemplate.convertAndSend(exchange, routingKey, message);
     }
 
+
     public Object bulkCreateInventoryItems(MessageWrapper message){
         LOGGER.info(String.format("Json message sent -> %s", message.toString()));
         Object response = rabbitTemplate.convertSendAndReceive(exchange, routingKey, message);
@@ -45,5 +46,6 @@ public class RabbitMQProducer {
         }
 
         return response;
+
     }
 }

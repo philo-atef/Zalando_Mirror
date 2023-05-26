@@ -16,6 +16,6 @@ import java.util.UUID;
 public class InventoryItemRequest {
     private String color;
     private String size;
-    private UUID productID;
+    private String productId;
     private Integer quantity;
 }

@@ -16,8 +16,8 @@ import java.util.UUID;
 @Data
 public class CartItem {
     @Id
-    private UUID carItemID;
-    private UUID productID;
+    private String carItemID;
+    private String productId;
     private String name;
     private String brandId;
     private String brandName;
@@ -31,7 +31,7 @@ public class CartItem {
     {
         StringBuilder cartItemString = new StringBuilder("");
         cartItemString.append("ID: "+ carItemID +"\n");
-        cartItemString.append("Product ID: "+ productID +"\n");
+        cartItemString.append("Product ID: "+ productId +"\n");
         cartItemString.append("Product Name: "+ name +"\n");
         cartItemString.append("Price: "+ price +"\n");
         cartItemString.append("Brand Name: "+ brandName +"\n");
@@ -42,20 +42,20 @@ public class CartItem {
         return cartItemString.toString();
     }
 
-    public UUID getCarItemID() {
+    public String getCarItemID() {
         return carItemID;
     }
 
-    public void setCarItemID(UUID carItemID) {
+    public void setCarItemID(String carItemID) {
         this.carItemID = carItemID;
     }
 
-    public UUID getProductID() {
-        return productID;
+    public String getProductID() {
+        return productId;
     }
 
-    public void setProductID(UUID productID) {
-        this.productID = productID;
+    public void setProductID(String productID) {
+        this.productId = productID;
     }
 
     public Double getPrice() {

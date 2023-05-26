@@ -52,7 +52,9 @@ public class CartService  implements CartServiceInterface{
             item.setColor(c.getColor());
             item.setSize(c.getSize());
             item.setQuantity(c.getQuantity());
-            item.setProductID(c.getProductID());
+            item.setProductId(c.getProductID());
+
+            System.out.println(c.getProductID());
 
             listOfItems.add(item);
 
@@ -72,6 +74,10 @@ public class CartService  implements CartServiceInterface{
             item.setSize(c.getSize());
             item.setQuantity(c.getQuantity());
             item.setProductID(c.getProductID());
+            item.setBrandName(c.getBrandName());
+            item.setBrandId(c.getBrandId());
+            item.setName(c.getName());
+            item.setPrice(c.getPrice());
 
             listOfItems.add(item);
         }
@@ -115,7 +121,7 @@ public class CartService  implements CartServiceInterface{
     }
 
     @Override
-    public Cart getUserCartById(UUID userId) {
+    public Cart getUserCartById(String userId) {
 
         //Check user is logged in
 
@@ -125,7 +131,7 @@ public class CartService  implements CartServiceInterface{
     }
 
     @Override
-    public Cart createNewCart(UUID userId) {
+    public Cart createNewCart(String userId) {
 
         // Check user is logged in
 
@@ -136,7 +142,7 @@ public class CartService  implements CartServiceInterface{
             // No cart instance for the user
             // create a cart instance first
             cart = Cart.builder()
-                    .id(UUID.randomUUID())
+                    .id(UUID.randomUUID().toString())
                     .userID(userId)
                     .totalPrice(0.0)
                     .cartItemsList(new ArrayList<CartItem>())
@@ -148,7 +154,7 @@ public class CartService  implements CartServiceInterface{
     }
 
     @Override
-    public Cart emptyCart(UUID userId) {
+    public Cart emptyCart(String userId) {
 
         Cart cart = cartRepository.findCartByUserID(userId);
 
@@ -162,7 +168,7 @@ public class CartService  implements CartServiceInterface{
     }
 
     @Override
-    public Cart addCartItem(UUID userId, SearchRequest searchRequest) {
+    public Cart addCartItem(String userId, SearchRequest searchRequest) {
 
         // Check if the user is logged
 
@@ -173,7 +179,7 @@ public class CartService  implements CartServiceInterface{
             // No cart instance for the user
             // create a cart instance first
              cart = Cart.builder()
-                    .id(UUID.randomUUID())
+                    .id(UUID.randomUUID().toString())
                     .userID(userId)
                     .totalPrice(0.0)
                     .cartItemsList(new ArrayList<CartItem>())
@@ -181,8 +187,8 @@ public class CartService  implements CartServiceInterface{
         }
 
         CartItem cartItem = CartItem.builder()
-                .carItemID(UUID.randomUUID())
-                .productID(searchRequest.getProductID())
+                .carItemID(UUID.randomUUID().toString())
+                .productId(searchRequest.getProductID())
                 .price(searchRequest.getPrice())
                 .brandName(searchRequest.getBrandName())
                 .name(searchRequest.getName())
@@ -217,7 +223,7 @@ public class CartService  implements CartServiceInterface{
     }
 
     @Override
-    public Cart removeCartItem(UUID userId, UUID cartItemID) {
+    public Cart removeCartItem(String userId, String cartItemID) {
 
         // Check if the user is logged
 
@@ -269,7 +275,7 @@ public class CartService  implements CartServiceInterface{
     }
 
     @Override
-    public Cart editCartItem(UUID userId, CartItemDto cartItemDto) {
+    public Cart editCartItem(String userId, CartItemDto cartItemDto) {
 
         // Check if the user is logged
 
@@ -327,10 +333,23 @@ public class CartService  implements CartServiceInterface{
         List<InventoryItemRequest> items =  formatInventoryRequest(cart);
         InventoryItemsRequest request = new InventoryItemsRequest(items);
 
-        InventoryResponse response = inventoryProducer.sendMessage(request);
+        List<UnavailableItemDto> response = inventoryProducer.sendMessage(request);
 
-        if(response != null && response.getItemsNotFound().isEmpty())
+        System.out.println("Response in cart ?");
+        System.out.println(response);
+
+        System.out.println(response.getClass());
+        System.out.println(response.get(0).getClass());
+
+        if(response == null)
         {
+            System.out.println("Received null response !!");
+            return null ;
+        }
+
+        if(response.isEmpty())
+        {
+            System.out.println("Successful");
             return cartRepository.save(cart) ;
         }
 
@@ -341,16 +360,16 @@ public class CartService  implements CartServiceInterface{
 
             boolean found = false ;
 
-            for (InventoryItem product: response.getItemsNotFound()) {
+            for (UnavailableItemDto product: response) {
 
                 // Needs an update
                 if(product.getProductId().equals(item.getProductID()) &&
                      product.getSize().equals(item.getSize()) &&
                       product.getColor().equals(item.getColor()))
                 {
-                    if(product.getQuantity() > 0)
+                    if(product.getAvailableQuantity() > 0)
                     {
-                        item.setQuantity(product.getQuantity());
+                        item.setQuantity(product.getAvailableQuantity());
                         newList.add(item);
 
                         total+= item.getPrice() * item.getQuantity() ;
@@ -374,7 +393,7 @@ public class CartService  implements CartServiceInterface{
     }
 
     @Override
-    public Cart placeOrder(UUID userID) {
+    public Cart placeOrder(String userID) {
         // Check if the user is logged
 
         // Get the Cart
@@ -396,8 +415,11 @@ public class CartService  implements CartServiceInterface{
                  return updateCart(cart);
             }
         }
-
-        return cart;
+        else
+        {
+            System.out.println("Received null response from orders service !!");
+            return null ;
+        }
 
     }
 

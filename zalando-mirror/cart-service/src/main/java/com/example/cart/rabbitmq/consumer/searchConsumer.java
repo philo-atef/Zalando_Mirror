@@ -1,3 +1,4 @@
+
 package com.example.cart.rabbitmq.consumer;
 
 import com.example.cart.dto.SearchRequest;
@@ -64,3 +65,4 @@ public class searchConsumer {
     }
 
 }
+
