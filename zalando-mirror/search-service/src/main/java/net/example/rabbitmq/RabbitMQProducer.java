@@ -1,8 +1,7 @@
 package net.example.rabbitmq;
 
-import net.example.dto.InventoryItem;
-import net.example.dto.SearchRequest;
-import net.example.dto.SearchResponse;
+import com.shared.dto.search.*;
+import com.shared.dto.inventory.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
