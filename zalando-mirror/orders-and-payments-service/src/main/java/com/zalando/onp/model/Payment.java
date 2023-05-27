@@ -26,7 +26,7 @@ public class Payment {
     private String payment_status;
 
     @Column(name = "expiration_date")
-    private Date expiration_date;
+    private String expiration_date;
 
     @Column(name = "cvv")
     @Pattern(regexp = "\\d{3}", message = "CVV must be a 3-digit number")
@@ -36,7 +36,7 @@ public class Payment {
         super();
     }
 
-    public Payment(Long order_id, String card_holder_name, String card_num_used, String payment_status, Date expiration_date, String cvv) {
+    public Payment(Long order_id, String card_holder_name, String card_num_used, String payment_status, String expiration_date, String cvv) {
         this.order_id = order_id;
         this.card_holder_name = card_holder_name;
         this.card_num_used = card_num_used;
@@ -85,11 +85,11 @@ public class Payment {
         this.payment_status = payment_status;
     }
 
-    public Date getExpiration_date() {
+    public String getExpiration_date() {
         return expiration_date;
     }
 
-    public void setExpiration_date(Date expiration_date) {
+    public void setExpiration_date(String expiration_date) {
         this.expiration_date = expiration_date;
     }
 

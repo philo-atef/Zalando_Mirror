@@ -62,10 +62,18 @@
             <version>7.0.2.Final</version>
         </dependency>
 
+
         <!-- Eureka client dependency --> <!--Copy this-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+           </dependency>
+
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>sharedLib</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+
         </dependency>
     </dependencies>
 

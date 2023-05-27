@@ -1,4 +1,4 @@
-package net.example.dto;
+package com.shared.dto.inventory;
 
 
 import lombok.*;
