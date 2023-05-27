@@ -14,6 +14,8 @@ public class RabbitMQJsonProducer {
     private String exchange;
     @Value("${rabbitmq.routing.json.key}")
     private String routingJsonKey;
+    @Value("${rabbitmq.auth.routing.key}")
+    private String authRoutingKey;
 
     private static final Logger LOGGER= LoggerFactory.getLogger(RabbitMQJsonProducer.class);
 
@@ -26,6 +28,11 @@ public class RabbitMQJsonProducer {
     public void sendJsonMessage(OrderResponse orderResponse){
         LOGGER.info(String.format("Json message sent -> %s", orderResponse.toString()));
         rabbitTemplate.convertAndSend(exchange, routingJsonKey, orderResponse);
+    }
+
+    public Object sendAuthRequest(String userId){
+        LOGGER.info(String.format("Json message sent -> %s", userId));
+        return rabbitTemplate.convertSendAndReceive(exchange, authRoutingKey, userId);
     }
 
 }
