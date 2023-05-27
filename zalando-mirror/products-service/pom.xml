@@ -61,7 +61,11 @@
             <version>7.0.2.Final</version>
         </dependency>
 
-
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>sharedLib</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>
