@@ -1,18 +1,17 @@
-package com.example.cart.dto;
+package com.zalando.onp.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductRequest {
-    private UUID productID;
+public class CartItem {
+
+    private String productID;
     private String name;
     private String brandId;
     private String brandName;

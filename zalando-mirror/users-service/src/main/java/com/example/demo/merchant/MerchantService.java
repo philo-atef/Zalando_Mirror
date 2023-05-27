@@ -1,5 +1,6 @@
 package com.example.demo.merchant;
 
+import com.example.demo.redis.RedisService;
 import com.example.demo.token.Token;
 import com.example.demo.token.TokenRepository;
 import com.example.demo.user.User;
@@ -21,6 +22,7 @@ public class MerchantService {
     private final TokenRepository tokenRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RedisService redisService;
 
     @GetMapping
     public List<Merchant> getMerchants(){
@@ -75,6 +77,7 @@ public class MerchantService {
         if (storedToken != null) {
             var userIDToBeDeleted = storedToken.getUser().getId();
             List<Token> tokensToBeDeleted = tokenRepository.findAllTokensByUserID(userIDToBeDeleted);
+            redisService.deleteSession(storedToken);
             tokenRepository.deleteAll(tokensToBeDeleted);
             merchantRepository.deleteById(userIDToBeDeleted);
             userRepository.deleteById(userIDToBeDeleted);

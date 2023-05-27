@@ -21,8 +21,8 @@ import org.springframework.data.mongodb.core.mapping.Encrypted;
 public class Cart {
 
     @Id
-    private UUID id;
-    private UUID userID;
+    private String id;
+    private String userID;
     private Double totalPrice;
     private List<CartItem> cartItemsList;
 
@@ -37,19 +37,19 @@ public class Cart {
         return cartString.toString();
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public UUID getUserID() {
+    public String getUserID() {
         return userID;
     }
 
-    public void setUserID(UUID userID) {
+    public void setUserID(String userID) {
         this.userID = userID;
     }
 

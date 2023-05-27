@@ -19,5 +19,6 @@ public class CustomerEditRequest {
     private String address;
     private String telephoneNumber;
     private LocalDate dateOfBirth;
+    private String creditCardNumber;
 
 }

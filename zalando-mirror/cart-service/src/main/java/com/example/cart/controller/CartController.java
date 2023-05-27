@@ -2,7 +2,7 @@ package com.example.cart.controller;
 
 
 import com.example.cart.dto.CartItemDto;
-import com.example.cart.dto.ProductRequest;
+import com.example.cart.dto.SearchRequest;
 import com.example.cart.exception.CartEmptyException;
 import com.example.cart.exception.ErrorResponse;
 import com.example.cart.exception.NoSuchElementFoundException;
@@ -29,32 +29,32 @@ public class CartController {
     }
 
     @PutMapping("/addItem/{userId}")
-    public Cart addNewItem(@PathVariable UUID userId, ProductRequest product) {
+    public Cart addNewItem(@PathVariable String userId,@RequestBody SearchRequest product) {
         return cartService.addCartItem(userId, product);
     }
 
     @PostMapping("/createCart/{userId}")
-    public Cart createCart(@PathVariable UUID userId) {
+    public Cart createCart(@PathVariable String userId) {
         return cartService.createNewCart(userId);
     }
 
-//    @PostMapping("/orderPlaced")
-//    public boolean orderPlace(OrderResponse orderResponse) {
-//        return cartService.emptyCart(orderResponse);
-//    }
+    @PostMapping("/placeOrder/{userId}")
+    public Cart orderPlace(@PathVariable String userId) {
+        return cartService.placeOrder(userId);
+    }
 
     @PutMapping("/editCartItem/{userId}")
-    public Cart editItem(@PathVariable UUID userId, CartItemDto cartItemDto) {
+    public Cart editItem(@PathVariable String userId,@RequestBody CartItemDto cartItemDto) {
         return cartService.editCartItem(userId,cartItemDto);
     }
 
     @GetMapping("/{userId}")
-    public Cart getUserCart(@PathVariable UUID userId) {
+    public Cart getUserCart(@PathVariable String userId) {
         return cartService.getUserCartById(userId);
     }
 
     @DeleteMapping("/deleteCartItem/{userId}/{cartItemId}")
-    public Cart removeCartItem(@PathVariable UUID userId, @PathVariable UUID cartItemId ){
+    public Cart removeCartItem(@PathVariable String userId, @PathVariable String cartItemId ){
         return cartService.removeCartItem(userId, cartItemId);
     }
 

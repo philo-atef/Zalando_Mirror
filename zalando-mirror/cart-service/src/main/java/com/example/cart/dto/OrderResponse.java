@@ -12,6 +12,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class OrderResponse {
-    private UUID userID;
+    private String userID;
     private boolean ordered;
 }

@@ -8,12 +8,14 @@ import java.util.UUID;
 
 public interface CartServiceInterface {
 
-    Cart getUserCartById (UUID userId);
+    Cart getUserCartById (String userId);
     List<Cart> getAllCarts();
-    Cart createNewCart(UUID userId);
-    void emptyCart(UUID userId);
-    Cart addCartItem(UUID userId, ProductRequest productRequest);
-    Cart removeCartItem(UUID userId, UUID cartItemID) ;
-    Cart editCartItem(UUID userId, CartItemDto cartItemDto);
-    void updateCart(UUID userId, InventoryItemsRequest inventoryItemsRequest) ;
+    Cart createNewCart(String userId);
+    Cart emptyCart(String userId);
+    Cart addCartItem(String userId, SearchRequest searchRequest);
+    Cart removeCartItem(String userId, String cartItemID) ;
+    Cart editCartItem(String userId, CartItemDto cartItemDto);
+    Cart updateCart(Cart cart) ;
+
+    Cart placeOrder (String userID);
 }
