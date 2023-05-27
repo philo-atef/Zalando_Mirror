@@ -117,4 +117,14 @@ public class OrderController {
         response.put("deleted", Boolean.TRUE);
         return ResponseEntity.ok(response);
     }
+
+    public void confirmOrder(Long id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Order does not exist with id :" + id));
+        order.setOrder_status("confirmed");
+
+        Order updatedOrder = orderRepository.save(order);
+        System.out.println("order confirmed");
+    }
+
 }
