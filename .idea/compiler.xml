@@ -9,27 +9,35 @@
         <outputRelativeToContentRoot value="true" />
         <module name="cart-service" />
         <module name="products-service" />
+        <module name="controller" />
         <module name="orders-and-payments-service" />
         <module name="inventory-service" />
-        <module name="users-service" />
         <module name="search-service" />
+        <module name="api-gateway" />
+        <module name="demo" />
+        <module name="service-registry" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="cart" target="17" />
       <module name="demoyt" target="17" />
       <module name="springboot-rabbitmq-example" target="17" />
+      <module name="users-service" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="api-gateway" options="-parameters" />
       <module name="cart" options="-parameters" />
       <module name="cart-service" options="-parameters" />
+      <module name="controller" options="-parameters" />
+      <module name="demo" options="-parameters" />
       <module name="demoyt" options="-parameters" />
       <module name="inventory-service" options="-parameters" />
       <module name="orders-and-payments-service" options="-parameters" />
       <module name="products-service" options="-parameters" />
       <module name="search-service" options="-parameters" />
+      <module name="service-registry" options="-parameters" />
       <module name="springboot-rabbitmq-example" options="-parameters" />
       <module name="users-service" options="-parameters" />
     </option>
