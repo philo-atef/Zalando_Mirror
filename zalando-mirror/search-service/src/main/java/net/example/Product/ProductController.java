@@ -3,11 +3,11 @@ package net.example.Product;
 //public class ProductController {
 //}
 
+
 import net.example.Product.Product;
 import net.example.Product.ProductRepository;
-import net.example.dto.InventoryItem;
-import net.example.dto.SearchRequest;
-import net.example.dto.SearchResponse;
+import com.shared.dto.search.*;
+import com.shared.dto.inventory.*;
 import net.example.rabbitmq.MessageWrapper;
 import net.example.rabbitmq.RabbitMQProducer;
 import org.springframework.beans.factory.annotation.Autowired;

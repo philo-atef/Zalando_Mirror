@@ -22,8 +22,12 @@
 		<module>users-service</module>
 		<module>search-service</module>
         <module>controller</module>
+
 		<module>api-gateway</module>
         <module>service-registry</module>
+
+        <module>sharedLib</module>
+
     </modules>
 	<properties>
 		<java.version>17</java.version>
