@@ -22,6 +22,8 @@
 		<module>users-service</module>
 		<module>search-service</module>
         <module>controller</module>
+		<module>api-gateway</module>
+        <module>service-registry</module>
     </modules>
 	<properties>
 		<java.version>17</java.version>
@@ -52,6 +54,10 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
