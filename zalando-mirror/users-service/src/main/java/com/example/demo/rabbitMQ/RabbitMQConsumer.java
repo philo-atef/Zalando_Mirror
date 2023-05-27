@@ -14,11 +14,10 @@ public class RabbitMQConsumer {
     private final CustomerService customerService;
 
     @RabbitListener(queues = "userDetailsQueue")
-    public Object  getUserID(String userID){
-        LOGGER.info(String.format("Received User ID-> %s",userID));
-        System.out.println(userID);
-        Object result = customerService.getCustomerByID(Long.parseLong(userID));
-        LOGGER.info(String.format("Received User -> %s",result.toString()));
+    public Object getCustomerDetails(String userID){
+        LOGGER.info(String.format("Received User ID -> %s", userID));
+        Object result = customerService.getCustomerDetailsByID(Long.parseLong(userID));
+        LOGGER.info(String.format("Received User Details -> %s", result.toString()));
         return (result);
     }
 }

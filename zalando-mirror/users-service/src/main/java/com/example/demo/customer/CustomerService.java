@@ -1,6 +1,6 @@
 package com.example.demo.customer;
 
-import com.example.demo.dto.UserDetails;
+import com.example.demo.dto.CustomerDetails;
 import com.example.demo.redis.RedisService;
 import com.example.demo.token.Token;
 import com.example.demo.token.TokenRepository;
@@ -96,16 +96,13 @@ public class CustomerService {
         }
     }
 
-    public UserDetails getCustomerByID(Long ID) {
-        var customer= customerRepository.findCustomerById(ID);
-        System.out.println("Customer Service");
-        System.out.println(ID);
-        UserDetails UD =new UserDetails();
-        System.out.println(customer.toString());
-        UD.setAddress(customer.get().getAddress());
-        UD.setId(customer.get().getId());
-        UD.setCreditCardNumber(customer.get().getCreditCardNumber());
-        return UD;
+    public CustomerDetails getCustomerDetailsByID(Long ID) {
+        var customer = customerRepository.findCustomerById(ID);
+        CustomerDetails customerDetails = new CustomerDetails();
+        customerDetails.setAddress(customer.get().getAddress());
+        customerDetails.setId(customer.get().getId());
+        customerDetails.setCreditCardNumber(customer.get().getCreditCardNumber());
+        return customerDetails;
     }
 
 }
