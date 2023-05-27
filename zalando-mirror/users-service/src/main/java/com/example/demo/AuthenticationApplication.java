@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @SpringBootApplication
 @RequestMapping("/api/v1/demo-controller")
-public class DemoApplication {
+public class AuthenticationApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+		SpringApplication.run(AuthenticationApplication.class, args);
 	}
 
 	@GetMapping
