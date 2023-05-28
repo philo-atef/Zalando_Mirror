@@ -1,21 +1,18 @@
 
 package com.example.cart.rabbitmq.consumer;
 
-import com.example.cart.dto.SearchRequest;
-import com.example.cart.dto.SearchResponse;
+import com.shared.dto.search.*;
+import com.shared.dto.cart.*;
+import com.shared.dto.inventory.*;
 import com.example.cart.model.Cart;
 import com.example.cart.service.CartService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 //import org.springframework.data.redis.core.RedisTemplate;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.UUID;
 @Service
 public class searchConsumer {
@@ -56,8 +53,8 @@ public class searchConsumer {
         ArrayList<SearchResponse> res= new ArrayList<SearchResponse>();
 
 //        Object c= res.get(1);
-//        res.add(response2);
-        return response2 ;}
+       res.add(response2);
+        return res ;}
     catch (Exception e){
         return new SearchResponse(null,null,null,null,false);
     }
