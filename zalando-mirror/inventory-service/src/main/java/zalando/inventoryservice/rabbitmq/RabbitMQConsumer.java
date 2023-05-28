@@ -2,7 +2,8 @@ package zalando.inventoryservice.rabbitmq;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.CollectionType;
+import com.shared.dto.inventory.CreateInventoryItemRequest;
+import com.shared.dto.inventory.InventoryItemResponse;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,12 +19,12 @@ import zalando.inventoryservice.service.InventoryService;
 
 
 import zalando.inventoryservice.model.InventoryItem;
-import zalando.inventoryservice.service.InventoryService;
 
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -58,37 +59,37 @@ public class RabbitMQConsumer {
 
     @RabbitListener(queues = "productInvQueue")
     public Object  getProductInvItems(MessageWrapper message){
+            LOGGER.info(String.format("Received message -> %s", message.toString()));
 
-            Object result = inventoryService.getProductInventory((String) message.getPayload());
-            LOGGER.info(String.format("Received User -> %s", message.toString()));
-            return ( new MessageWrapper("5od",result));
+            List<InventoryItem> result = inventoryService.getProductInventory((String) message.getPayload());
+            List<InventoryItemResponse> response = result.stream()
+                    .map(item -> InventoryItemResponse.builder()
+                            .sku(item.getSku())
+                            .productId(item.getProductId())
+                            .color(item.getColor())
+                            .size(item.getSize())
+                            .quantity(item.getQuantity())
+                            .build())
+                    .collect(Collectors.toList());
+
+            return ( new MessageWrapper("5od",response));
     }
 
     @RabbitListener(queues = "bulkCreateInvItems")
-    public Object createInventoryItem(MessageWrapper message){
+    public Object createInventoryItem(List<CreateInventoryItemRequest> message){
         LOGGER.info(String.format("Received Inventory items -> %s", message.toString()));
+        List<InventoryItem> createdInventoryItems = inventoryService.bulkCreateInventoryItem(message);
 
-        List<LinkedHashMap<String, Object>> payload = (List<LinkedHashMap<String, Object>>) message.getPayload();
-        List<CreateItemDto> createItemDtos = new ArrayList<CreateItemDto>();
+        List<InventoryItemResponse> response = createdInventoryItems.stream()
+                .map(item -> InventoryItemResponse.builder()
+                        .sku(item.getSku())
+                        .productId(item.getProductId())
+                        .color(item.getColor())
+                        .size(item.getSize())
+                        .quantity(item.getQuantity())
+                        .build())
+                .collect(Collectors.toList());
 
-        for (LinkedHashMap<String, Object> itemData : payload) {
-            CreateItemDto itemDto = new CreateItemDto();
-
-            // Extract the data from the LinkedHashMap and set it in the CreateItemDto object
-            itemDto.setProductId((String) itemData.get("productId"));
-            itemDto.setColor((String) itemData.get("color"));
-            itemDto.setSize((String) itemData.get("size"));
-            itemDto.setQuantity((int) itemData.get("quantity"));
-
-            // Add the CreateItemDto object to the list
-            createItemDtos.add(itemDto);
-        }
-
-        Object createdInventoryItems = inventoryService.bulkCreateInventoryItem(createItemDtos);
-
-        MessageWrapper responseMessage = new MessageWrapper("bulkCreateInvItems_response", createdInventoryItems);
-        LOGGER.info(responseMessage.toString());
-        return createdInventoryItems;
+        return response;
     }
-
 }

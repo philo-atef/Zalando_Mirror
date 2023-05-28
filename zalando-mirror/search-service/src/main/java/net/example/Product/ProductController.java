@@ -4,8 +4,6 @@ package net.example.Product;
 //}
 
 
-import net.example.Product.Product;
-import net.example.Product.ProductRepository;
 import com.shared.dto.search.*;
 import com.shared.dto.inventory.*;
 import net.example.rabbitmq.MessageWrapper;
@@ -13,19 +11,15 @@ import net.example.rabbitmq.RabbitMQProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.data.mongodb.core.query.TextQuery;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 
@@ -59,8 +53,8 @@ public class ProductController {
 
 
     @GetMapping("/getProductInv")
-    public List<InventoryItem> getProductInv (@RequestParam(defaultValue = "") String productId){
-        return (ArrayList<InventoryItem>)rabbitMQProducer.sendMessagetoQueueAndRecieve(new MessageWrapper("getProductInvItems",productId),
+    public List<InventoryItemResponse> getProductInv (@RequestParam(defaultValue = "") String productId){
+        return (ArrayList<InventoryItemResponse>)rabbitMQProducer.sendMessagetoQueueAndRecieve(new MessageWrapper("getProductInvItems",productId),
                 "inventoryServiceExchange","getProductInventoryRoutingKey");
 
     }
