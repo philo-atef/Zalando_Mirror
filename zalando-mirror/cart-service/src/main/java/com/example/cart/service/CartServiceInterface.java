@@ -1,10 +1,10 @@
 package com.example.cart.service;
 
-import com.example.cart.dto.*;
 import com.example.cart.model.Cart;
+import com.shared.dto.cart.CartItemDto;
+import com.shared.dto.search.SearchRequest;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface CartServiceInterface {
 

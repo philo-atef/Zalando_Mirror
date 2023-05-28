@@ -1,8 +1,8 @@
 package com.example.cart.controller;
 
 
-import com.example.cart.dto.CartItemDto;
-import com.example.cart.dto.SearchRequest;
+import com.shared.dto.cart.CartItemDto;
+import com.shared.dto.search.SearchRequest;
 import com.example.cart.exception.CartEmptyException;
 import com.example.cart.exception.ErrorResponse;
 import com.example.cart.exception.NoSuchElementFoundException;
@@ -15,8 +15,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
-
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/carts")

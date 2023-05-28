@@ -1,15 +1,15 @@
 package com.example.cart.rabbitmq.publisher;
 
-import com.example.cart.dto.InventoryItemsRequest;
-import com.example.cart.dto.UnavailableItemDto;
-import com.example.cart.dto.UnavailableItemsResponse;
+import com.shared.dto.search.*;
+import com.shared.dto.cart.*;
+import com.shared.dto.inventory.*;
+import com.shared.dto.inventory.UnavailableItemDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

@@ -1,6 +1,5 @@
 package com.example.cart.service;
 
-import com.example.cart.dto.*;
 import com.example.cart.exception.CartEmptyException;
 import com.example.cart.exception.NoSuchElementFoundException;
 import com.example.cart.model.Cart;
@@ -8,9 +7,16 @@ import com.example.cart.model.CartItem;
 import com.example.cart.rabbitmq.publisher.inventoryProducer;
 import com.example.cart.rabbitmq.publisher.orderAndPaymentProducer;
 import com.example.cart.repository.CartRepository;
+import com.shared.dto.cart.*;
+import com.shared.dto.inventory.InventoryItemRequest;
+import com.shared.dto.inventory.UnavailableItemDto;
+import com.shared.dto.order.OrderRequest;
+import com.shared.dto.order.OrderResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.shared.dto.search.*;
+import com.shared.dto.cart.*;
+import com.shared.dto.inventory.*;
 
 import java.util.*;
 
