@@ -1,6 +1,7 @@
 package zalando.inventoryservice.service;
 
 
+import com.shared.dto.inventory.CreateInventoryItemRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -44,9 +45,9 @@ public class InventoryService {
     }
 
     @Transactional
-    public List<InventoryItem> bulkCreateInventoryItem(List<CreateItemDto> createItemDtos){
+    public List<InventoryItem> bulkCreateInventoryItem(List<CreateInventoryItemRequest> createItemDtos){
         List<InventoryItem> toBeCreatedItems = new ArrayList<InventoryItem>();
-        for(CreateItemDto createItemDto : createItemDtos){
+        for(CreateInventoryItemRequest createItemDto : createItemDtos){
             InventoryItem inventoryItem = InventoryItem.builder()
                     .sku(generateSkuCode(createItemDto.getProductId(), createItemDto.getColor(), createItemDto.getSize()))
                     .productId(createItemDto.getProductId())

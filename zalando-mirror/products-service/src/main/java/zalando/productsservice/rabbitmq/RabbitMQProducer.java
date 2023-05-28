@@ -1,5 +1,7 @@
 package zalando.productsservice.rabbitmq;
 
+import com.shared.dto.inventory.CreateInventoryItemRequest;
+import com.shared.dto.inventory.InventoryItemResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
@@ -15,10 +17,10 @@ import java.util.List;
 public class RabbitMQProducer {
 
     @Value("${rabbitmq.exchange.name}")
-    private String exchange;
+    private String inventoryServiceExchange;
 
     @Value("${rabbitmq.routing_key.name}")
-    private String routingKey;
+    private String bulkCreateRoutingKey;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RabbitTemplate.class);
 
@@ -28,24 +30,17 @@ public class RabbitMQProducer {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void sendMessage(String message ){
-        LOGGER.info(String.format("Message sent -> %s", message));
-        rabbitTemplate.convertAndSend(exchange, routingKey, message);
-    }
+//    public void sendMessage(String message ){
+//        LOGGER.info(String.format("Message sent -> %s", message));
+//        rabbitTemplate.convertAndSend(exchange, routingKey, message);
+//    }
 
 
-    public Object bulkCreateInventoryItems(MessageWrapper message){
-        LOGGER.info(String.format("Json message sent -> %s", message.toString()));
-        Object response = rabbitTemplate.convertSendAndReceive(exchange, routingKey, message);
-
-        if(response instanceof List){
-            List<LinkedHashMap<String, Object>> createdInvItems = (List) response;
-            for(LinkedHashMap<String, Object> invItem : createdInvItems){
-                LOGGER.info(String.format("Inventory Service: Created Inventory item => %s", invItem.toString()));
-            }
-        }
+    public List<InventoryItemResponse> bulkCreateInventoryItems(List<CreateInventoryItemRequest> requestMessage){
+        LOGGER.info(String.format("Json message sent -> %s", requestMessage.toString()));
+        List<InventoryItemResponse> response = (List<InventoryItemResponse>) rabbitTemplate.convertSendAndReceive(inventoryServiceExchange, bulkCreateRoutingKey, requestMessage);
 
         return response;
-
     }
 }
+
