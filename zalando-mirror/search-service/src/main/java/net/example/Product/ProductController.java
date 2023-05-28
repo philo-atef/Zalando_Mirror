@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-
+@RequestMapping("/api/search")
 public class ProductController {
     @Autowired
     MongoTemplate mongoTemplate;
@@ -54,7 +54,7 @@ public class ProductController {
 
     @GetMapping("/getProductInv")
     public List<InventoryItemResponse> getProductInv (@RequestParam(defaultValue = "") String productId){
-        return (ArrayList<InventoryItemResponse>)rabbitMQProducer.sendMessagetoQueueAndRecieve(new MessageWrapper("getProductInvItems",productId),
+        return (ArrayList<InventoryItemResponse>)rabbitMQProducer.sendToInventory(productId,
                 "inventoryServiceExchange","getProductInventoryRoutingKey");
 
     }

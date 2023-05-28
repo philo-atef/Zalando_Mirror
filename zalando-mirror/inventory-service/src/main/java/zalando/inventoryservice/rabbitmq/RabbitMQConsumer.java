@@ -58,10 +58,10 @@ public class RabbitMQConsumer {
     }
 
     @RabbitListener(queues = "productInvQueue")
-    public Object  getProductInvItems(MessageWrapper message){
-            LOGGER.info(String.format("Received message -> %s", message.toString()));
+    public Object  getProductInvItems(String message){
+            LOGGER.info(String.format("Received message -> %s", message));
 
-            List<InventoryItem> result = inventoryService.getProductInventory((String) message.getPayload());
+            List<InventoryItem> result = inventoryService.getProductInventory((String) message);
             List<InventoryItemResponse> response = result.stream()
                     .map(item -> InventoryItemResponse.builder()
                             .sku(item.getSku())
@@ -72,24 +72,24 @@ public class RabbitMQConsumer {
                             .build())
                     .collect(Collectors.toList());
 
-            return ( new MessageWrapper("5od",response));
+            return response;
     }
 
-    @RabbitListener(queues = "bulkCreateInvItems")
-    public Object createInventoryItem(List<CreateInventoryItemRequest> message){
-        LOGGER.info(String.format("Received Inventory items -> %s", message.toString()));
-        List<InventoryItem> createdInventoryItems = inventoryService.bulkCreateInventoryItem(message);
-
-        List<InventoryItemResponse> response = createdInventoryItems.stream()
-                .map(item -> InventoryItemResponse.builder()
-                        .sku(item.getSku())
-                        .productId(item.getProductId())
-                        .color(item.getColor())
-                        .size(item.getSize())
-                        .quantity(item.getQuantity())
-                        .build())
-                .collect(Collectors.toList());
-
-        return response;
-    }
+//    @RabbitListener(queues = "bulkCreateInvItems")
+//    public Object createInventoryItem(List<CreateInventoryItemRequest> message){
+//        LOGGER.info(String.format("Received Inventory items -> %s", message.toString()));
+//        List<InventoryItem> createdInventoryItems = inventoryService.bulkCreateInventoryItem(message);
+//
+//        List<InventoryItemResponse> response = createdInventoryItems.stream()
+//                .map(item -> InventoryItemResponse.builder()
+//                        .sku(item.getSku())
+//                        .productId(item.getProductId())
+//                        .color(item.getColor())
+//                        .size(item.getSize())
+//                        .quantity(item.getQuantity())
+//                        .build())
+//                .collect(Collectors.toList());
+//
+//        return response;
+//    }
 }
