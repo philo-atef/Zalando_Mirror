@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zalando.onp.model.Order;
 import com.zalando.onp.model.Payment;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,24 +26,26 @@ import com.zalando.onp.repository.PaymentRepository;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api/v1/")
+//@RequestMapping("/api/v1/")
+@RequestMapping("/api/payments")
+
 public class PaymentController {
 
     @Autowired
     private PaymentRepository paymentRepository;
 
-    @GetMapping("/payments")
+    @GetMapping
     public List<Payment> getAllPayments(){
         return paymentRepository.findAll();
     }
 
 
-    @PostMapping("/payments")
-    public Payment createPayment(@Valid @RequestBody Payment payment) {
-        return paymentRepository.save(payment);
-    }
+//    @PostMapping
+//    public Payment createPayment(@Valid @RequestBody Payment payment) {
+//        return paymentRepository.save(payment);
+//    }
 
-    @GetMapping("/payment/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Payment> getPaymentById(@PathVariable Long id) {
         Payment payment = paymentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Payment does not exist with id :" + id));
@@ -50,7 +53,7 @@ public class PaymentController {
     }
 
 
-    @PutMapping("/payments/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Payment> updatePayment(@PathVariable Long id, @Valid @RequestBody Payment paymentDetails){
         Payment payment = paymentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Payment not exist with id :" + id));
@@ -100,7 +103,7 @@ public class PaymentController {
         return ResponseEntity.ok(updatedPayment);
     }
 
-    @DeleteMapping("/payments/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, Boolean>> deletePayment(@PathVariable Long id){
         Payment payment = paymentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Payment not exist with id :" + id));
@@ -109,5 +112,28 @@ public class PaymentController {
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return ResponseEntity.ok(response);
+    }
+
+    public void confirmPayment(Long id) {
+        Payment payment = paymentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Payment does not exist with id :" + id));
+        payment.setPayment_status("confirmed");
+
+        Payment updatedPayment = paymentRepository.save(payment);
+        System.out.println("payment confirmed");
+    }
+
+    public void declinePayment(Long id) {
+        Payment payment = paymentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Payment does not exist with id :" + id));
+        payment.setPayment_status("declined");
+
+        Payment updatedPayment = paymentRepository.save(payment);
+        System.out.println("payment declined");
+    }
+
+    public Payment createPayment(Long orderId, String name, String number, String status, String expiration_date, String cvv) {
+        Payment payment = new Payment(orderId , name , number , status , expiration_date, cvv);
+        return paymentRepository.save(payment);
     }
 }

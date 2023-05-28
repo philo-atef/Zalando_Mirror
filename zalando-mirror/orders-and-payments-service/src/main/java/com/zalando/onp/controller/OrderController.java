@@ -1,11 +1,17 @@
 package com.zalando.onp.controller;
 
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zalando.onp.dto.Cart;
+import com.zalando.onp.model.Payment;
+import com.zalando.onp.model.Product;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,29 +26,39 @@ import org.springframework.web.bind.annotation.RestController;
 import com.zalando.onp.exception.ResourceNotFoundException;
 import com.zalando.onp.model.Order;
 import com.zalando.onp.repository.OrderRepository;
+import java.time.LocalDate;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api/v1/")
+//@RequestMapping("/api/v1/")
+@RequestMapping("/api/orders")
+
 public class OrderController {
 
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private PaymentController paymentController;
+
+    @Autowired
+    private CardController cardController;
+
+
     // get all orders
-    @GetMapping("/orders")
+    @GetMapping
     public List<Order> getAllOrders(){
         return orderRepository.findAll();
     }
 
     // create order rest api
-    @PostMapping("/orders")
+    @PostMapping
     public Order createOrder(@Valid @RequestBody Order order) {
         return orderRepository.save(order);
     }
 
     // get order by id rest api
-    @GetMapping("/orders/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order does not exist with id :" + id));
@@ -51,7 +67,7 @@ public class OrderController {
 
     // update order rest api
 
-    @PutMapping("/orders/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Order> updateOrder(@PathVariable Long id, @Valid @RequestBody Order orderDetails){
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not exist with id :" + id));
@@ -107,7 +123,7 @@ public class OrderController {
     }
 
     // delete order rest api
-    @DeleteMapping("/orders/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, Boolean>> deleteOrder(@PathVariable Long id){
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not exist with id :" + id));
@@ -125,6 +141,48 @@ public class OrderController {
 
         Order updatedOrder = orderRepository.save(order);
         System.out.println("order confirmed");
+    }
+
+    public void declineOrder(Long id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Order does not exist with id :" + id));
+        order.setOrder_status("declined");
+
+        Order updatedOrder = orderRepository.save(order);
+        System.out.println("order declined");
+    }
+
+
+    @PostMapping("/create")
+    public ResponseEntity<String> everythingOrderRelated (@RequestBody Cart cart){
+
+        Double total = cart.getTotalPrice();
+        LocalDate currentDate = LocalDate.now();
+        Date order_date = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        System.out.println("order date: "+ order_date);
+        System.out.println("user ID: "+cart.getUserID());
+
+        Order order = new Order(Long.parseLong(cart.getUserID()), order_date, "address" , "1234123412341234", total, cart.getCartItemsList(), "pending");
+        orderRepository.save(order);
+        System.out.println("order ID: "+order.getOrder_id());
+
+        Payment payment = paymentController.createPayment(order.getOrder_id(), "xxx" , "1234123412341234" , "pending" , "12/25" , "123");
+        System.out.println("payment ID: "+payment.getPayment_id());
+
+        boolean valid = cardController.checkPaymentValidity("1234123412341234" , total , order.getOrder_id(), payment.getPayment_id());
+        if(valid){
+            confirmOrder(order.getOrder_id());
+            paymentController.confirmPayment(payment.getPayment_id());
+            cardController.deductOrderAmount("1234123412341234",total);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Order Created Successfully!");
+        }
+        else{
+            declineOrder(order.getOrder_id());
+            paymentController.declinePayment(payment.getPayment_id());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Order Could Not Be Created...");
+        }
+
     }
 
 }
