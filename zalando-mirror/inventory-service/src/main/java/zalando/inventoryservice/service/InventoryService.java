@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import zalando.inventoryservice.dto.CartItemDto;
 import zalando.inventoryservice.dto.CreateItemDto;
-import zalando.inventoryservice.dto.UnavailableItemDto;
 import zalando.inventoryservice.exceptions.NotFoundException;
 import zalando.inventoryservice.exceptions.OutOfStockException;
 import zalando.inventoryservice.model.InventoryItem;
@@ -113,10 +112,10 @@ public class InventoryService {
     }
 
     @Transactional
-    public List<UnavailableItemDto> validateCartContent(List<CartItemDto> cartItems) {
+    public List<UnavailableItemDto> validateCartContent(List<InventoryItemRequest> cartItems) {
         List<UnavailableItemDto> unavailableItems = new ArrayList<>();
 
-        for (CartItemDto cartItem : cartItems) {
+        for (InventoryItemRequest cartItem : cartItems) {
             String skuCode = generateSkuCode(cartItem.getProductId(), cartItem.getColor(), cartItem.getSize());
             int requestedQuantity = cartItem.getQuantity();
 

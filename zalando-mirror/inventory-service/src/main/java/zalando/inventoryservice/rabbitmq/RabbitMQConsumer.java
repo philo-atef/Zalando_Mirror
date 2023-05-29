@@ -1,16 +1,19 @@
 package zalando.inventoryservice.rabbitmq;
 
+
 import com.shared.dto.inventory.CreateInventoryItemRequest;
 import com.shared.dto.inventory.InventoryItemRequest;
 import com.shared.dto.inventory.InventoryItemResponse;
 
 import com.shared.dto.inventory.UnavailableItemResponse;
+
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 import zalando.inventoryservice.dto.*;
+
 
 import zalando.inventoryservice.service.InventoryService;
 
@@ -52,6 +55,7 @@ public class RabbitMQConsumer {
 
         return unavailableItemResponses;
     }
+
 
     @RabbitListener(queues = "productInvQueue")
     public Object  getProductInvItems(String message){

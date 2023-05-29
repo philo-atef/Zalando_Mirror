@@ -336,8 +336,9 @@ public class CartService  implements CartServiceInterface{
 
         List<InventoryItemRequest> requests =  formatInventoryRequest(cart);
 
-        List<UnavailableItemResponse> response = (List<UnavailableItemResponse>) inventoryProducer.sendMessage(requests);
 
+        List<UnavailableItemResponse> response = (List<UnavailableItemResponse>) inventoryProducer.sendMessage(requests);
+        
         System.out.println("Response in cart ?");
         System.out.println(response);
 

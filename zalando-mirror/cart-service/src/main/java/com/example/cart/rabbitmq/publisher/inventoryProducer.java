@@ -27,6 +27,7 @@ public class inventoryProducer {
         this.rabbitTemplate = rabbitTemplate;
     }
 
+
     public List<UnavailableItemResponse> sendMessage(List<InventoryItemRequest> inventoryItemsRequest)
     {
         LOGGER.info(String.format("Inventory Items in Json was sent -> %s", inventoryItemsRequest.toString()));
