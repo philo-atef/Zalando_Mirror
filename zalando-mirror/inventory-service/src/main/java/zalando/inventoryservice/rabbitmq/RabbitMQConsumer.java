@@ -2,8 +2,7 @@ package zalando.inventoryservice.rabbitmq;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shared.dto.inventory.CreateInventoryItemRequest;
-import com.shared.dto.inventory.InventoryItemResponse;
+import com.shared.dto.inventory.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,8 +11,6 @@ import org.springframework.stereotype.Service;
 import zalando.inventoryservice.dto.CreateItemDto;
 
 import zalando.inventoryservice.dto.InventoryItemsRequest;
-import zalando.inventoryservice.dto.UnavailableItemDto;
-import zalando.inventoryservice.dto.UnavailableItemsResponse;
 import zalando.inventoryservice.service.InventoryService;
 
 
@@ -34,25 +31,29 @@ public class RabbitMQConsumer {
 
 
     @RabbitListener(queues = "cartInventoryQueue")
-    public Object  validateCartInvItems(InventoryItemsRequest message){
+    public List<UnavailableItemDto>  validateCartInvItems(List<InventoryItemRequest> message){
 
-        System.out.println(message.getClass());
-        System.out.println(message.getInventoryItemRequestList().get(0).getSize());
-        System.out.println(message.getInventoryItemRequestList().get(0).getColor());
-        System.out.println(message.getInventoryItemRequestList().get(0).getProductId());
+//        System.out.println(message.getClass());
+//        System.out.println(message.getInventoryItemRequestList().get(0).getSize());
+//        System.out.println(message.getInventoryItemRequestList().get(0).getColor());
+//        System.out.println(message.getInventoryItemRequestList().get(0).getProductId());
 
-        List<UnavailableItemDto> result = inventoryService.validateCartContent(message.getInventoryItemRequestList());
+        List<UnavailableItemDto> result = inventoryService.validateCartContent(message);
 
         LOGGER.info(String.format("Received User -> %s", result));
 
+        ArrayList<UnavailableItemsResponse> response = new ArrayList<>();
+
         UnavailableItemsResponse r = new UnavailableItemsResponse(result);
 
-        ObjectMapper mapper = new ObjectMapper();
+//        ObjectMapper mapper = new ObjectMapper();
+//
+//        mapper.convertValue(
+//                result,
+//                new TypeReference<List<UnavailableItemDto>>(){}
+//        );
 
-        mapper.convertValue(
-                result,
-                new TypeReference<List<UnavailableItemDto>>(){}
-        );
+        response.add(r);
 
         return result;
     }

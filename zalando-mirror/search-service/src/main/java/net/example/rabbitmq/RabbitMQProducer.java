@@ -54,9 +54,10 @@ public class RabbitMQProducer {
         LOGGER.info(String.format("Json message sent -> %s", message.toString()));
         //rabbitTemplate.convertAndSend(exchange, jsonRoutingKey, message);\
 
-        List<SearchResponse> response =  (List<SearchResponse>)rabbitTemplate.convertSendAndReceive(exchange, routingKey, message);
+        SearchResponse response =  (SearchResponse)rabbitTemplate.convertSendAndReceive(exchange, routingKey, message);
         LOGGER.info(String.format("Producer received response -> %s", response.getClass()));
         LOGGER.info(String.format("Producer received response -> %s", response));
+
         if(response==null)
             return null;
 //        if (response instanceof LinkedHashMap) {
