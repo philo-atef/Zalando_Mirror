@@ -114,10 +114,10 @@ public class InventoryService {
     }
 
     @Transactional
-    public List<UnavailableItemDto> validateCartContent(List<InventoryItemRequest> cartItems) {
+    public List<UnavailableItemDto> validateCartContent(List<CartItemDto> cartItems) {
         List<UnavailableItemDto> unavailableItems = new ArrayList<>();
 
-        for (InventoryItemRequest cartItem : cartItems) {
+        for (CartItemDto cartItem : cartItems) {
             String skuCode = generateSkuCode(cartItem.getProductId(), cartItem.getColor(), cartItem.getSize());
             int requestedQuantity = cartItem.getQuantity();
 

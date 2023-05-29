@@ -1,5 +1,6 @@
 package zalando.inventoryservice.controller;
 
+import com.shared.dto.inventory.InventoryItemRequest;
 import com.shared.dto.inventory.UnavailableItemResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import zalando.inventoryservice.dto.CartItemDto;
 import zalando.inventoryservice.dto.CreateItemDto;
+import zalando.inventoryservice.dto.UnavailableItemDto;
 import zalando.inventoryservice.exceptions.NotFoundException;
 import zalando.inventoryservice.exceptions.OutOfStockException;
 import zalando.inventoryservice.model.InventoryItem;
@@ -78,7 +80,7 @@ public class InventoryController {
 
 
     @PostMapping("/validate-cart")
-    public ResponseEntity<?> validateCart(@RequestBody List<InventoryItemRequest> cartItems) {
+    public ResponseEntity<?> validateCart(@RequestBody List<CartItemDto> cartItems) {
         try{
             List<UnavailableItemDto> unavailableItems = inventoryService.validateCartContent(cartItems);
             if (unavailableItems.isEmpty()) {
