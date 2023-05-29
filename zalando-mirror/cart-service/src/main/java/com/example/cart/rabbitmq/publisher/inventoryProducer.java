@@ -29,7 +29,7 @@ public class inventoryProducer {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public List<UnavailableItemDto> sendMessage(InventoryItemsRequest inventoryItemsRequest)
+    public List<UnavailableItemDto> sendMessage(List<InventoryItemRequest> inventoryItemsRequest)
     {
         LOGGER.info(String.format("Inventory Items in Json was sent -> %s", inventoryItemsRequest.toString()));
         return (List<UnavailableItemDto>) rabbitTemplate.convertSendAndReceive(exchange, routingKey, inventoryItemsRequest);

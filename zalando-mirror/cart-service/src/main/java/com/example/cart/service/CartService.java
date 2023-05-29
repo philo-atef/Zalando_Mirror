@@ -336,16 +336,12 @@ public class CartService  implements CartServiceInterface{
     @Override
     public Cart updateCart(Cart cart) {
 
-        List<InventoryItemRequest> items =  formatInventoryRequest(cart);
-        InventoryItemsRequest request = new InventoryItemsRequest(items);
+        List<InventoryItemRequest> requests =  formatInventoryRequest(cart);
 
-        List<UnavailableItemDto> response = inventoryProducer.sendMessage(request);
+        List<UnavailableItemDto> response = (List<UnavailableItemDto>) inventoryProducer.sendMessage(requests);
 
         System.out.println("Response in cart ?");
         System.out.println(response);
-
-        System.out.println(response.getClass());
-        System.out.println(response.get(0).getClass());
 
         if(response == null)
         {
@@ -379,6 +375,8 @@ public class CartService  implements CartServiceInterface{
                         newList.add(item);
 
                         total+= item.getPrice() * item.getQuantity() ;
+
+                        found = true ;
                     }
                 }
 

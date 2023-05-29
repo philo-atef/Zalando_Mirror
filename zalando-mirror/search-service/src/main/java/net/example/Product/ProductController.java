@@ -45,12 +45,11 @@ public class ProductController {
         return productRepository.save(product);
     }
     @PostMapping("/addProductToCart")
-    public List<SearchResponse> addProductToCart (@RequestBody SearchRequest product){
-        return (List<SearchResponse>) rabbitMQProducer.addToCart(product,
+    public SearchResponse addProductToCart (@RequestBody SearchRequest product){
+        return (SearchResponse) rabbitMQProducer.addToCart(product,
                 "cart_exchange","keySearchCart");
 
     }
-
 
     @GetMapping("/getProductInv")
     public List<InventoryItemResponse> getProductInv (@RequestParam(defaultValue = "") String productId){

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 @RestController
-@RequestMapping("/carts")
+@RequestMapping("/api/cart")
 public class CartController {
 
     private final CartService cartService;
