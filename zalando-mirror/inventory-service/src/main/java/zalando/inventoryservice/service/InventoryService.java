@@ -1,5 +1,6 @@
 package zalando.inventoryservice.service;
 
+import com.shared.dto.inventory.InventoryItemRequest;
 import com.shared.dto.inventory.UnavailableItemResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import zalando.inventoryservice.dto.CartItemDto;
 import zalando.inventoryservice.dto.CreateItemDto;
+import zalando.inventoryservice.dto.UnavailableItemDto;
 import zalando.inventoryservice.exceptions.NotFoundException;
 import zalando.inventoryservice.exceptions.OutOfStockException;
 import zalando.inventoryservice.model.InventoryItem;
