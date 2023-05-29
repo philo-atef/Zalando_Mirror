@@ -1,11 +1,9 @@
 package zalando.inventoryservice.service;
 
+import com.shared.dto.inventory.UnavailableItemResponse;
 
-import com.shared.dto.inventory.CreateInventoryItemRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import zalando.inventoryservice.dto.CartItemDto;
@@ -45,15 +43,15 @@ public class InventoryService {
     }
 
     @Transactional
-    public List<InventoryItem> bulkCreateInventoryItem(List<CreateInventoryItemRequest> createItemDtos){
+    public List<InventoryItem> bulkCreateInventoryItem(List<CreateItemDto> createItemDtos){
         List<InventoryItem> toBeCreatedItems = new ArrayList<InventoryItem>();
-        for(CreateInventoryItemRequest createItemDto : createItemDtos){
+        for(CreateItemDto item : createItemDtos){
             InventoryItem inventoryItem = InventoryItem.builder()
-                    .sku(generateSkuCode(createItemDto.getProductId(), createItemDto.getColor(), createItemDto.getSize()))
-                    .productId(createItemDto.getProductId())
-                    .color(createItemDto.getColor())
-                    .size(createItemDto.getSize())
-                    .quantity(createItemDto.getQuantity())
+                    .sku(generateSkuCode(item.getProductId(), item.getColor(), item.getSize()))
+                    .productId(item.getProductId())
+                    .color(item.getColor())
+                    .size(item.getSize())
+                    .quantity(item.getQuantity())
                     .build();
 
             toBeCreatedItems.add(inventoryItem);
@@ -90,7 +88,7 @@ public class InventoryService {
     }
 
     @Transactional
-    public void changeQuantityBy(List<CartItemDto> cartItems) {
+    public List<InventoryItem> changeQuantityBy(List<CartItemDto> cartItems) {
         List<InventoryItem> updatedItems = new ArrayList<InventoryItem>();
         for(CartItemDto cartItem : cartItems){
             String skuCode = generateSkuCode(cartItem.getProductId(), cartItem.getColor(), cartItem.getSize());
@@ -111,6 +109,7 @@ public class InventoryService {
         }
 
         inventoryRepository.saveAll(updatedItems);
+        return updatedItems;
     }
 
     @Transactional

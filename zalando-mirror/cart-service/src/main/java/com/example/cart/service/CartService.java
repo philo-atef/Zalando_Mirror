@@ -9,14 +9,12 @@ import com.example.cart.rabbitmq.publisher.orderAndPaymentProducer;
 import com.example.cart.repository.CartRepository;
 import com.shared.dto.cart.*;
 import com.shared.dto.inventory.InventoryItemRequest;
-import com.shared.dto.inventory.UnavailableItemDto;
+import com.shared.dto.inventory.UnavailableItemResponse;
 import com.shared.dto.order.OrderRequest;
 import com.shared.dto.order.OrderResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.shared.dto.search.*;
-import com.shared.dto.cart.*;
-import com.shared.dto.inventory.*;
 
 import java.util.*;
 
@@ -336,16 +334,12 @@ public class CartService  implements CartServiceInterface{
     @Override
     public Cart updateCart(Cart cart) {
 
-        List<InventoryItemRequest> items =  formatInventoryRequest(cart);
-        InventoryItemsRequest request = new InventoryItemsRequest(items);
+        List<InventoryItemRequest> requests =  formatInventoryRequest(cart);
 
-        List<UnavailableItemDto> response = inventoryProducer.sendMessage(request);
+        List<UnavailableItemResponse> response = (List<UnavailableItemResponse>) inventoryProducer.sendMessage(requests);
 
         System.out.println("Response in cart ?");
         System.out.println(response);
-
-        System.out.println(response.getClass());
-        System.out.println(response.get(0).getClass());
 
         if(response == null)
         {
@@ -366,7 +360,7 @@ public class CartService  implements CartServiceInterface{
 
             boolean found = false ;
 
-            for (UnavailableItemDto product: response) {
+            for (UnavailableItemResponse product: response) {
 
                 // Needs an update
                 if(product.getProductId().equals(item.getProductID()) &&
@@ -379,6 +373,8 @@ public class CartService  implements CartServiceInterface{
                         newList.add(item);
 
                         total+= item.getPrice() * item.getQuantity() ;
+
+                        found = true ;
                     }
                 }
 
