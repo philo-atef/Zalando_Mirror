@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class RedisService {
-    @Cacheable(cacheNames = "sessions", key = "#token.getId()")
+    @Cacheable(cacheNames = "sessions", key = "#token.getUser().getId()")
     public Session createSession(Token token){
         User user = token.getUser();
         Session session = new Session();
