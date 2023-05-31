@@ -26,20 +26,21 @@ public class RabbitMQJsonConsumer {
     private static final Logger LOGGER= LoggerFactory.getLogger(RabbitMQJsonConsumer.class);
     private RabbitMQJsonProducer jsonProducer;
     //UNCOMMENT THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-/*    public RabbitMQJsonConsumer(RabbitMQJsonProducer jsonProducer) {
-        this.jsonProducer = jsonProducer;
-    }*/
+//    public RabbitMQJsonConsumer(RabbitMQJsonProducer jsonProducer) {
+//        this.jsonProducer = jsonProducer;
+//    }
     @RabbitListener(queues = {"${rabbitmq.queue.json.name}"})
     public OrderResponse consumeJsonMessage(Cart cart){
         LOGGER.info(String.format("Received JSON message -> %s", cart.toString()));
 
+        orderController.cartToOrder(cart, null, null);
         //cartToOrder(cart);
-        List<AuthResponse> authResponses = (List<AuthResponse>) (jsonProducer.sendAuthRequest(cart.getUserID()));
-        AuthResponse userDetails = authResponses.get(0);
-        String shipAdd =userDetails.getAddress();
-        String creditNum = userDetails.getCreditCardNumber();
+//        List<AuthResponse> authResponses = (List<AuthResponse>) (jsonProducer.sendAuthRequest(cart.getUserID()));
+//        AuthResponse userDetails = authResponses.get(0);
+//        String shipAdd =userDetails.getAddress();
+//        String creditNum = userDetails.getCreditCardNumber();
         //orderRepository.save(receivedOrder);
-        orderController.everythingOrderRelated(cart,shipAdd,creditNum);
+//        orderController.everythingOrderRelated(cart,shipAdd,creditNum);
         return null ;
     }
 

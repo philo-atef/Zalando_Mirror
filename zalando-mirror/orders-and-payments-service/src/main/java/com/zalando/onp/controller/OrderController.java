@@ -7,9 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zalando.onp.dto.AuthResponse;
 import com.zalando.onp.dto.Cart;
+import com.zalando.onp.dto.OrderRequest;
+import com.zalando.onp.dto.ValidateCard;
 import com.zalando.onp.model.Payment;
-import com.zalando.onp.model.Product;
+import com.zalando.onp.publisher.RabbitMQJsonProducer;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,13 +41,16 @@ public class OrderController {
 
     @Autowired
     private OrderRepository orderRepository;
-
+    private RabbitMQJsonProducer jsonProducer;
     @Autowired
     private PaymentController paymentController;
 
     @Autowired
     private CardController cardController;
 
+    public OrderController(RabbitMQJsonProducer jsonProducer) {
+        this.jsonProducer = jsonProducer;
+    }
 
     // get all orders
     @GetMapping
@@ -153,38 +159,78 @@ public class OrderController {
         System.out.println("order declined");
     }
 
+    @PostMapping("/confirm")
+    public ResponseEntity<String> confirmPayment(@RequestBody ValidateCard validateCard){
+
+        Order order = orderRepository.findById(validateCard.getOrder_id())
+                .orElseThrow(() -> new ResourceNotFoundException("Order does not exist with id :" + validateCard.getOrder_id()));
+        System.out.println("Order: "+order.getOrder_id()+ order.getCard_num_used());
+        boolean valid = cardController.checkPaymentValidity(order.getCard_num_used(), order.getTotal_amount(),
+                order.getOrder_id(), validateCard.getPayment_id());
+
+        System.out.println("Valid?: "+valid);
+
+        if(valid){
+            confirmOrder(order.getOrder_id());
+            paymentController.confirmPayment(validateCard.getPayment_id());
+            cardController.deductOrderAmount(order.getCard_num_used(), order.getTotal_amount());
+            return ResponseEntity.status(HttpStatus.CREATED).body("Payment Confirmed!");
+        }
+        else{
+            declineOrder(order.getOrder_id());
+            paymentController.declinePayment(validateCard.getPayment_id());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Payment failed...");
+        }
+    }
 
     @PostMapping("/create")
-    public ResponseEntity<String> everythingOrderRelated (Cart cart, String shipAdd, String creditNum){
+    public ResponseEntity<Order> everythingOrderRelated (@RequestBody OrderRequest orderRequest){
 
-        Double total = cart.getTotalPrice();
+        Double total = orderRequest.getCart().getTotalPrice();
         LocalDate currentDate = LocalDate.now();
         Date order_date = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
         System.out.println("order date: "+ order_date);
-        System.out.println("user ID: "+cart.getUserID());
-
-        Order order = new Order(Long.parseLong(cart.getUserID()), order_date, shipAdd , creditNum, total, cart.getCartItemsList(), "pending");
-        System.out.println("user ID: "+Long.parseLong(cart.getUserID()));
-        orderRepository.save(order);
-        System.out.println("order ID: "+order.getOrder_id());
-        Timestamp timestamp = Timestamp.valueOf("2023-06-31 00:00:00");
-        Payment payment = paymentController.createPayment(order.getOrder_id(), "xxx" , "1234123412341234" , "pending" , timestamp , "123");
-        System.out.println("payment ID: "+payment.getPayment_id());
-
-        boolean valid = cardController.checkPaymentValidity("1234123412341234" , total , order.getOrder_id(), payment.getPayment_id());
-        if(valid){
-            confirmOrder(order.getOrder_id());
-            paymentController.confirmPayment(payment.getPayment_id());
-            cardController.deductOrderAmount("1234123412341234",total);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Order Created Successfully!");
+        System.out.println("user ID: "+orderRequest.getCart().getUserID());
+        Order order;
+        if(orderRequest.getShipAdd()==null || orderRequest.getCreditNum()==null){
+            order = cartToOrder(orderRequest.getCart(), orderRequest.getShipAdd(), orderRequest.getCreditNum());
+        }else {
+            order = new Order(Long.parseLong(orderRequest.getCart().getUserID()), order_date,
+                    orderRequest.getShipAdd() , orderRequest.getCreditNum(),
+                    total, orderRequest.getCart().getCartItemsList(), "pending");
+            orderRepository.save(order);
+            Timestamp timestamp = Timestamp.valueOf("2023-06-31 00:00:00");
+            Payment payment = paymentController.createPayment(order.getOrder_id(), "xxx" , orderRequest.getCreditNum(),
+                    "pending" , timestamp , "123"); // CHANGE cvv, name ,expdate
         }
-        else{
-            declineOrder(order.getOrder_id());
-            paymentController.declinePayment(payment.getPayment_id());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Order Could Not Be Created...");
-        }
-
+        return ResponseEntity.ok(order);
     }
 
+    public Order cartToOrder(Cart cart, String shipAddress, String creditNumber) {
+        Double total = cart.getTotalPrice();
+        LocalDate currentDate = LocalDate.now();
+        Date order_date = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        List<AuthResponse> authResponses = (List<AuthResponse>) (jsonProducer.sendAuthRequest(cart.getUserID()));
+        AuthResponse userDetails = authResponses.get(0);
+
+        String shipAdd = shipAddress;
+        String creditNum = creditNumber;
+        if(shipAddress==null)
+            shipAdd =userDetails.getAddress();
+
+        if(creditNum==null)
+            creditNum = userDetails.getCreditCardNumber();
+
+        Order order = new Order(Long.parseLong(cart.getUserID()), order_date, shipAdd , creditNum,
+                total, cart.getCartItemsList(), "pending");
+
+        orderRepository.save(order);
+
+        Timestamp timestamp = Timestamp.valueOf("2023-06-31 00:00:00"); // add name, time stamp, cvv
+        Payment payment = paymentController.createPayment(order.getOrder_id(), "xxx" , creditNum , "pending" , timestamp , "123");
+
+        return order;
+    }
 }
