@@ -30,6 +30,7 @@ public class RabbitMQConsumer {
     private final InventoryService inventoryService;
 
 
+/*
     @RabbitListener(queues = "cartInventoryQueue")
     public List<UnavailableItemDto>  validateCartInvItems(List<InventoryItemRequest> message){
 
@@ -75,22 +76,23 @@ public class RabbitMQConsumer {
 
             return response;
     }
+*/
 
-//    @RabbitListener(queues = "bulkCreateInvItems")
-//    public Object createInventoryItem(List<CreateInventoryItemRequest> message){
-//        LOGGER.info(String.format("Received Inventory items -> %s", message.toString()));
-//        List<InventoryItem> createdInventoryItems = inventoryService.bulkCreateInventoryItem(message);
-//
-//        List<InventoryItemResponse> response = createdInventoryItems.stream()
-//                .map(item -> InventoryItemResponse.builder()
-//                        .sku(item.getSku())
-//                        .productId(item.getProductId())
-//                        .color(item.getColor())
-//                        .size(item.getSize())
-//                        .quantity(item.getQuantity())
-//                        .build())
-//                .collect(Collectors.toList());
-//
-//        return response;
-//    }
+    @RabbitListener(queues = "bulkCreateInvItems")
+    public Object createInventoryItem(List<CreateInventoryItemRequest> message){
+        LOGGER.info(String.format("Received Inventory items -> %s", message.toString()));
+        List<InventoryItem> createdInventoryItems = inventoryService.bulkCreateInventoryItem(message);
+
+        List<InventoryItemResponse> response = createdInventoryItems.stream()
+                .map(item -> InventoryItemResponse.builder()
+                        .sku(item.getSku())
+                        .productId(item.getProductId())
+                        .color(item.getColor())
+                        .size(item.getSize())
+                        .quantity(item.getQuantity())
+                        .build())
+                .collect(Collectors.toList());
+
+        return response;
+    }
 }

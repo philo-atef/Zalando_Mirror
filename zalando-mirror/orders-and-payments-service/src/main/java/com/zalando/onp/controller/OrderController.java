@@ -1,5 +1,6 @@
 package com.zalando.onp.controller;
 
+import java.sql.Timestamp;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
@@ -154,7 +155,7 @@ public class OrderController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<String> everythingOrderRelated (@RequestBody Cart cart){
+    public ResponseEntity<String> everythingOrderRelated (Cart cart, String shipAdd, String creditNum){
 
         Double total = cart.getTotalPrice();
         LocalDate currentDate = LocalDate.now();
@@ -163,11 +164,12 @@ public class OrderController {
         System.out.println("order date: "+ order_date);
         System.out.println("user ID: "+cart.getUserID());
 
-        Order order = new Order(Long.parseLong(cart.getUserID()), order_date, "address" , "1234123412341234", total, cart.getCartItemsList(), "pending");
+        Order order = new Order(Long.parseLong(cart.getUserID()), order_date, shipAdd , creditNum, total, cart.getCartItemsList(), "pending");
+        System.out.println("user ID: "+Long.parseLong(cart.getUserID()));
         orderRepository.save(order);
         System.out.println("order ID: "+order.getOrder_id());
-
-        Payment payment = paymentController.createPayment(order.getOrder_id(), "xxx" , "1234123412341234" , "pending" , "12/25" , "123");
+        Timestamp timestamp = Timestamp.valueOf("2023-06-31 00:00:00");
+        Payment payment = paymentController.createPayment(order.getOrder_id(), "xxx" , "1234123412341234" , "pending" , timestamp , "123");
         System.out.println("payment ID: "+payment.getPayment_id());
 
         boolean valid = cardController.checkPaymentValidity("1234123412341234" , total , order.getOrder_id(), payment.getPayment_id());

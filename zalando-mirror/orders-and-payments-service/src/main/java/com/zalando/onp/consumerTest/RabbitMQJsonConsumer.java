@@ -1,10 +1,8 @@
 package com.zalando.onp.consumerTest;
 
-import com.zalando.onp.dto.AuthResponse;
+import com.zalando.onp.controller.OrderController;
+import com.zalando.onp.dto.*;
 
-import com.zalando.onp.dto.Cart;
-import com.zalando.onp.dto.CartItem;
-import com.zalando.onp.dto.UserDetails;
 import com.zalando.onp.model.Order;
 import com.zalando.onp.publisher.RabbitMQJsonProducer;
 import com.zalando.onp.repository.OrderRepository;
@@ -22,25 +20,31 @@ public class RabbitMQJsonConsumer {
     Order receivedOrder;
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private OrderController orderController;
     private static final Logger LOGGER= LoggerFactory.getLogger(RabbitMQJsonConsumer.class);
     private RabbitMQJsonProducer jsonProducer;
+    //UNCOMMENT THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+/*    public RabbitMQJsonConsumer(RabbitMQJsonProducer jsonProducer) {
+        this.jsonProducer = jsonProducer;
+    }*/
     @RabbitListener(queues = {"${rabbitmq.queue.json.name}"})
     public OrderResponse consumeJsonMessage(Cart cart){
         LOGGER.info(String.format("Received JSON message -> %s", cart.toString()));
 
-        cartToOrder(cart);
+        //cartToOrder(cart);
         List<AuthResponse> authResponses = (List<AuthResponse>) (jsonProducer.sendAuthRequest(cart.getUserID()));
         AuthResponse userDetails = authResponses.get(0);
-        receivedOrder.setShipping_address(userDetails.getAddress());
-        receivedOrder.setCard_num_used(userDetails.getCreditCardNumber());
-        orderRepository.save(receivedOrder);
+        String shipAdd =userDetails.getAddress();
+        String creditNum = userDetails.getCreditCardNumber();
+        //orderRepository.save(receivedOrder);
+        orderController.everythingOrderRelated(cart,shipAdd,creditNum);
+        return null ;
     }
 
     public void cartToOrder(Cart cart){
         receivedOrder = new Order(Long.parseLong(cart.getUserID()), null, null, null, cart.getTotalPrice(), cart.getCartItemsList(), "pending");
-
-
-        //return null ;
 
     }
 
