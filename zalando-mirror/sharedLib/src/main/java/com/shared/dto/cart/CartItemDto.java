@@ -1,5 +1,8 @@
-package com.example.cart.dto;
+package com.shared.dto.cart;
 
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +14,10 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SearchRequest {
+@JsonSerialize
+@JsonDeserialize
+public class CartItemDto {
+    private String carItemID;
     private String productID;
     private String name;
     private String brandId;

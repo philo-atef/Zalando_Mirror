@@ -1,20 +1,17 @@
-package com.example.cart.dto;
+package com.shared.dto.order;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.UUID;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderRequest {
-    private String id;
+@Builder
+public class OrderResponse {
     private String userID;
-    private Double totalPrice;
-    private List<CartItemDto> cartItemsList;
+    private boolean ordered;
 }

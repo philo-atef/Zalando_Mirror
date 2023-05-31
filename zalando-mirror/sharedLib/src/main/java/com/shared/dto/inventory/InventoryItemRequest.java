@@ -1,6 +1,8 @@
-package com.example.cart.dto;
+package com.shared.dto.inventory;
 
-import jakarta.persistence.Id;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +15,8 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonSerialize
+@JsonDeserialize
 public class InventoryItemRequest {
     private String color;
     private String size;

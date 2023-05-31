@@ -1,17 +1,16 @@
-package com.example.cart.dto;
+package com.zalando.onp.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class OrderResponse {
-    private String userID;
-    private boolean ordered;
+public class AuthResponse {
+    private Long id;
+    private String address;
+    private String creditCardNumber;
 }

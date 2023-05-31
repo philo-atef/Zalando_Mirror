@@ -5,6 +5,7 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,6 +23,20 @@ public class RabbitMQConfig {
 //    @Value("${rabbitmq.getProductInventory.routing_key.name}")
 //    private String getProductInventoryRoutingKey;
 //
+
+    private String paymentExchange="javaguides_exchange";
+
+    private String paymentQueue="bulkCreateInvItems";
+
+    private String paymentRoutingJsonKey = "paymentInvKey";
+    @Bean
+    public Queue paymentQueue(){
+        return new Queue(paymentQueue);
+    }
+    @Bean
+    public TopicExchange paymentExchange(){
+        return new TopicExchange(paymentExchange);
+    }
 //    @Bean
 //    public RabbitAdmin rabbitAdmin() {
 //        return new RabbitAdmin(connectionFactory);
@@ -32,6 +47,7 @@ public class RabbitMQConfig {
 //        return new Queue("productInvQueue");
 //    }
 //
+
 //    // spring bean for rabbitmq exchanges
 //    @Bean
 //    public TopicExchange exchange(){
@@ -46,6 +62,14 @@ public class RabbitMQConfig {
 //                .to(exchange())
 //                .with("getProductInventoryRoutingKey");
 //    }
+
+    @Bean
+    public Binding paymentBinding(){
+        return BindingBuilder
+                .bind(paymentQueue())
+                .to(paymentExchange())
+                .with(paymentRoutingJsonKey);
+    }
 
 
     @Bean
