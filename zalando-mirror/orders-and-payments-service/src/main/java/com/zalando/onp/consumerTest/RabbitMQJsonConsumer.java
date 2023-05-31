@@ -1,6 +1,7 @@
 package com.zalando.onp.consumerTest;
 
 import com.zalando.onp.dto.AuthResponse;
+
 import com.zalando.onp.dto.Cart;
 import com.zalando.onp.dto.CartItem;
 import com.zalando.onp.dto.UserDetails;
@@ -24,8 +25,9 @@ public class RabbitMQJsonConsumer {
     private static final Logger LOGGER= LoggerFactory.getLogger(RabbitMQJsonConsumer.class);
     private RabbitMQJsonProducer jsonProducer;
     @RabbitListener(queues = {"${rabbitmq.queue.json.name}"})
-    public void consumeJsonMessage(Cart cart){
+    public OrderResponse consumeJsonMessage(Cart cart){
         LOGGER.info(String.format("Received JSON message -> %s", cart.toString()));
+
         cartToOrder(cart);
         List<AuthResponse> authResponses = (List<AuthResponse>) (jsonProducer.sendAuthRequest(cart.getUserID()));
         AuthResponse userDetails = authResponses.get(0);
@@ -36,6 +38,9 @@ public class RabbitMQJsonConsumer {
 
     public void cartToOrder(Cart cart){
         receivedOrder = new Order(Long.parseLong(cart.getUserID()), null, null, null, cart.getTotalPrice(), cart.getCartItemsList(), "pending");
+
+
+        //return null ;
 
     }
 
