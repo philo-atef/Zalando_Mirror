@@ -14,6 +14,7 @@
         <module name="inventory-service" />
         <module name="search-service" />
         <module name="api-gateway" />
+        <module name="sharedLib" />
         <module name="demo" />
         <module name="service-registry" />
       </profile>
@@ -38,6 +39,7 @@
       <module name="products-service" options="-parameters" />
       <module name="search-service" options="-parameters" />
       <module name="service-registry" options="-parameters" />
+      <module name="sharedLib" options="-parameters" />
       <module name="springboot-rabbitmq-example" options="-parameters" />
       <module name="users-service" options="-parameters" />
     </option>
