@@ -1,5 +1,6 @@
 package com.zalando.onp.publisher;
 
+import com.zalando.onp.dto.AuthResponse;
 import com.zalando.onp.dto.Cart;
 import com.zalando.onp.dto.OrderResponse;
 import org.slf4j.Logger;
@@ -7,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class RabbitMQJsonProducer {
@@ -32,7 +35,11 @@ public class RabbitMQJsonProducer {
 
     public Object sendAuthRequest(String userId){
         LOGGER.info(String.format("Json message sent -> %s", userId));
-        return rabbitTemplate.convertSendAndReceive(exchange, authRoutingKey, userId);
+        List<AuthResponse> response =  (List<AuthResponse>) rabbitTemplate.convertSendAndReceive(exchange, authRoutingKey, userId);
+        if(response==null)
+            return null;
+
+        return response;
     }
 
 }

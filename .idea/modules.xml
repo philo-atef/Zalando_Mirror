@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/Zalando_Mirror.iml" filepath="$PROJECT_DIR$/.idea/Zalando_Mirror.iml" />
+      <module fileurl="file://$PROJECT_DIR$/OrdersAndPaymentsMS/demoyt.iml" filepath="$PROJECT_DIR$/OrdersAndPaymentsMS/demoyt.iml" />
+    </modules>
+  </component>
+</project>
