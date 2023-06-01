@@ -1,6 +1,8 @@
 package com.zalando.onp.model;
 
 import jakarta.persistence.*;
+
+import java.sql.Timestamp;
 import java.util.*;
 import jakarta.validation.constraints.*;
 @Entity
@@ -26,7 +28,7 @@ public class Payment {
     private String payment_status;
 
     @Column(name = "expiration_date")
-    private String expiration_date;
+    private Timestamp expiration_date;
 
     @Column(name = "cvv")
     @Pattern(regexp = "\\d{3}", message = "CVV must be a 3-digit number")
@@ -36,7 +38,7 @@ public class Payment {
         super();
     }
 
-    public Payment(Long order_id, String card_holder_name, String card_num_used, String payment_status, String expiration_date, String cvv) {
+    public Payment(Long order_id, String card_holder_name, String card_num_used, String payment_status, Timestamp expiration_date, String cvv) {
         this.order_id = order_id;
         this.card_holder_name = card_holder_name;
         this.card_num_used = card_num_used;
@@ -85,11 +87,11 @@ public class Payment {
         this.payment_status = payment_status;
     }
 
-    public String getExpiration_date() {
+    public Timestamp getExpiration_date() {
         return expiration_date;
     }
 
-    public void setExpiration_date(String expiration_date) {
+    public void setExpiration_date(Timestamp expiration_date) {
         this.expiration_date = expiration_date;
     }
 
