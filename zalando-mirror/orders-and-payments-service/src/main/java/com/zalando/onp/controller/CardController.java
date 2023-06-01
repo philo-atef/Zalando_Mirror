@@ -1,7 +1,7 @@
 package com.zalando.onp.controller;
 
 
-import com.zalando.onp.dto.ValidateCard;
+//import com.zalando.onp.dto.ValidateCard;
 import com.zalando.onp.exception.ResourceNotFoundException;
 import com.zalando.onp.model.Card;
 import com.zalando.onp.model.Order;

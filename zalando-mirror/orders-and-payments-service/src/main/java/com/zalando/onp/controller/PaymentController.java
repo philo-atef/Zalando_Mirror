@@ -1,13 +1,25 @@
 package com.zalando.onp.controller;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.shared.dto.inventory.InventoryItemRequest;
+import com.shared.dto.inventory.InventoryItemResponse;
+import com.zalando.onp.dto.AuthResponse;
+import com.zalando.onp.dto.CartItem;
 import com.zalando.onp.model.Order;
 import com.zalando.onp.model.Payment;
+import com.zalando.onp.publisher.RabbitMQJsonProducer;
+import com.zalando.onp.repository.OrderRepository;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -30,16 +42,25 @@ import com.zalando.onp.repository.PaymentRepository;
 @RequestMapping("/api/payments")
 
 public class PaymentController {
-
+    private RabbitTemplate rabbitTemplate;
     @Autowired
     private PaymentRepository paymentRepository;
+
+    private RabbitMQJsonProducer jsonProducer;
+    public PaymentController(RabbitMQJsonProducer jsonProducer) {
+        this.jsonProducer = jsonProducer;
+    }
+
+    @Value("${rabbitmq.exchange.name}")
+    private String exchange;
+
 
     @GetMapping
     public List<Payment> getAllPayments(){
         return paymentRepository.findAll();
     }
 
-
+    private static final Logger LOGGER= LoggerFactory.getLogger(RabbitMQJsonProducer.class);
 //    @PostMapping
 //    public Payment createPayment(@Valid @RequestBody Payment payment) {
 //        return paymentRepository.save(payment);
@@ -118,9 +139,11 @@ public class PaymentController {
         Payment payment = paymentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Payment does not exist with id :" + id));
         payment.setPayment_status("confirmed");
-
+        Long orderId= payment.getOrder_id();
         Payment updatedPayment = paymentRepository.save(payment);
+        jsonProducer.sendInvRequest(orderId);
         System.out.println("payment confirmed");
+
     }
 
     public void declinePayment(Long id) {
@@ -132,8 +155,10 @@ public class PaymentController {
         System.out.println("payment declined");
     }
 
-    public Payment createPayment(Long orderId, String name, String number, String status, String expiration_date, String cvv) {
+    public Payment createPayment(Long orderId, String name, String number, String status, Timestamp expiration_date, String cvv) {
         Payment payment = new Payment(orderId , name , number , status , expiration_date, cvv);
+        System.out.println("payment declined");
+
         return paymentRepository.save(payment);
     }
 }

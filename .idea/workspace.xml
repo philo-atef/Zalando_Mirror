@@ -4,13 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4702285-57fc-4279-b1e1-9b5c28e40a29" name="Changes" comment="Sending Cart and receiving check between orders and cart!">
-      <change afterPath="$PROJECT_DIR$/zalando-mirror/orders-and-payments-service/src/main/java/com/zalando/onp/dto/AuthResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="e4702285-57fc-4279-b1e1-9b5c28e40a29" name="Changes" comment="Queues of Ordering with CArt and Auth done waiting for testing to do inventory">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/orders-and-payments-service/src/main/java/com/zalando/onp/consumerTest/RabbitMQJsonConsumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/orders-and-payments-service/src/main/java/com/zalando/onp/consumerTest/RabbitMQJsonConsumer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/orders-and-payments-service/src/main/java/com/zalando/onp/publisher/RabbitMQJsonProducer.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/orders-and-payments-service/src/main/java/com/zalando/onp/publisher/RabbitMQJsonProducer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/zalando-mirror/inventory-service/src/main/java/zalando/inventoryservice/rabbitmq/RabbitMQConsumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/inventory-service/src/main/java/zalando/inventoryservice/rabbitmq/RabbitMQConsumer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/zalando-mirror/orders-and-payments-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/orders-and-payments-service/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -79,7 +75,20 @@
       </set>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.SpringbootPostgresql">
+    <configuration name="ApiGatewayApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="zalando.gateway.ApiGatewayApplication" />
+      <module name="api-gateway" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="zalando.gateway.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ProductsServiceApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="zalando.productsservice.ProductsServiceApplication" />
       <module name="products-service" />
@@ -121,9 +130,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.SpringbootPostgresql" />
+        <item itemvalue="Application.ApiGatewayApplication" />
         <item itemvalue="Application.ServiceRegistryApplication" />
         <item itemvalue="Application.ProductsServiceApplication" />
-        <item itemvalue="Application.SpringbootPostgresql" />
       </list>
     </recent_temporary>
   </component>
@@ -136,6 +146,14 @@
       <option name="presentableId" value="Default" />
       <updated>1683060606609</updated>
     </task>
+    <task id="LOCAL-00001" summary="Queues of Ordering with CArt and Auth done waiting for testing to do inventory">
+      <created>1685309034471</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1685309034471</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -165,5 +183,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Queues of Ordering with CArt and Auth done waiting for testing to do inventory" />
+    <option name="LAST_COMMIT_MESSAGE" value="Queues of Ordering with CArt and Auth done waiting for testing to do inventory" />
   </component>
 </project>
