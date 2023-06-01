@@ -1,4 +1,4 @@
-package com.zalando.onp.dto;
+package com.shared.dto.order;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,10 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class OrderResponse {
-    private String userID;
-    private boolean ordered;
+public class authUserId {
+    String userId;
 }

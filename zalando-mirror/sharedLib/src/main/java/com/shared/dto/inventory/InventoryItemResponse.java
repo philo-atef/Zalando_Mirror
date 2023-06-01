@@ -1,6 +1,8 @@
 package com.shared.dto.inventory;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
 
 
@@ -8,8 +10,10 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonSerialize
+@JsonDeserialize
 @Builder
-public class InventoryItem {
+public class InventoryItemResponse {
 
     private String sku;
 

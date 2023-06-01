@@ -2,6 +2,7 @@ package com.zalando.onp.model;
 
 import java.util.*;
 
+import com.shared.dto.order.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
@@ -35,7 +36,7 @@ public class Order{
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "json", name = "products")
-    private List<Product> products = new ArrayList<Product>();
+    private List<CartItem> products = new ArrayList<CartItem>();
     @Pattern(regexp = "^[A-Za-z ]+$", message = "Order status should only contain alphabetic characters")
     @Column(name = "order_status")
     private String order_status;
@@ -43,7 +44,7 @@ public class Order{
     public Order() {
         super();
     }
-    public Order(Long customer_id, Date order_date, String shipping_address, String card_num_used, double total_amount, List<Product> products, String order_status) {
+    public Order(Long customer_id, Date order_date, String shipping_address, String card_num_used, double total_amount, List<CartItem> products, String order_status) {
         this.customer_id = customer_id;
         this.order_date = order_date;
         this.shipping_address = shipping_address;
@@ -102,11 +103,11 @@ public class Order{
         this.total_amount = total_amount;
     }
 
-    public List<Product> getProducts() {
+    public List<CartItem> getProducts() {
         return products;
     }
 
-    public void setProducts(List<Product> products) {
+    public void setProducts(List<CartItem> products) {
         this.products = products;
     }
 

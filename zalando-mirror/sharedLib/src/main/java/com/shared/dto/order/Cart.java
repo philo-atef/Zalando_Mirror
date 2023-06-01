@@ -1,4 +1,4 @@
-package zalando.inventoryservice.dto;
+package com.shared.dto.order;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +11,9 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class InventoryItemsRequest {
-    private List<CartItemDto> inventoryItemRequestList;
+public class Cart {
+    private String userID;
+    private List<CartItem> cartItemsList;
+    private String id;
+    private double totalPrice;
 }

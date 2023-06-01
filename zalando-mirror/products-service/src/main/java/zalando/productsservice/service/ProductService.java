@@ -3,6 +3,8 @@ package zalando.productsservice.service;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shared.dto.inventory.CreateInventoryItemRequest;
+import com.shared.dto.inventory.InventoryItemResponse;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
@@ -22,6 +24,7 @@ import zalando.productsservice.repository.ProductRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -62,7 +65,17 @@ public class ProductService {
             productInventoryDto.setProductId(createdProduct.getId());
         }
 
-        rabbitMQProducer.bulkCreateInventoryItems(new MessageWrapper("bulkCreate", createProductDto.getInventory()));
+        List<CreateInventoryItemRequest> request =  createProductDto.getInventory().stream()
+                .map(item -> CreateInventoryItemRequest.builder()
+                        .productId(item.getProductId())
+                        .color(item.getColor())
+                        .size(item.getSize())
+                        .quantity(item.getQuantity())
+                        .build())
+                .collect(Collectors.toList());
+
+        List<InventoryItemResponse> response = rabbitMQProducer.bulkCreateInventoryItems(request);
+        log.info(String.format("Inventory Service: Created Inventory items => %s", response.toString()));
 
         return createdProduct;
     }

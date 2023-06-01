@@ -1,4 +1,4 @@
-package com.zalando.onp.dto;
+package com.shared.dto.order;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class authUserId {
-    String userId;
+public class UserDetails {
+    private Long id;
+    private String address;
+    private String creditCardNumber;
 }

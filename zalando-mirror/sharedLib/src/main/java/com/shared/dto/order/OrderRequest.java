@@ -1,5 +1,6 @@
-package com.zalando.onp.dto;
+package com.shared.dto.order;
 
+import com.shared.dto.cart.CartItemDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,9 +12,9 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Cart {
-    private String userID;
-    private List<CartItem> cartItemsList;
+public class OrderRequest {
     private String id;
-    private double totalPrice;
+    private String userID;
+    private Double totalPrice;
+    private List<CartItemDto> cartItemsList;
 }

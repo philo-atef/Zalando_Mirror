@@ -1,11 +1,23 @@
 package com.zalando.onp.controller;
 
+import java.sql.Timestamp;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+import com.shared.dto.order.*;
+
+import com.zalando.onp.consumerTest.RabbitMQJsonConsumer;
+import com.zalando.onp.model.Payment;
+import com.zalando.onp.publisher.RabbitMQJsonProducer;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,29 +32,48 @@ import org.springframework.web.bind.annotation.RestController;
 import com.zalando.onp.exception.ResourceNotFoundException;
 import com.zalando.onp.model.Order;
 import com.zalando.onp.repository.OrderRepository;
+import java.time.LocalDate;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api/orders/")
+
+//@RequestMapping("/api/v1/")
+@RequestMapping("/api/orders")
+
+
 public class OrderController {
 
     @Autowired
     private OrderRepository orderRepository;
+    private RabbitMQJsonProducer jsonProducer;
+    @Autowired
+    private PaymentController paymentController;
+
+    @Autowired
+    private CardController cardController;
+
+
+    private static final Logger LOGGER= LoggerFactory.getLogger(OrderController.class);
+
+
+    public OrderController(RabbitMQJsonProducer jsonProducer) {
+        this.jsonProducer = jsonProducer;
+    }
 
     // get all orders
-    @GetMapping("/orders")
+    @GetMapping
     public List<Order> getAllOrders(){
         return orderRepository.findAll();
     }
 
     // create order rest api
-    @PostMapping("/orders")
+    @PostMapping
     public Order createOrder(@Valid @RequestBody Order order) {
         return orderRepository.save(order);
     }
 
     // get order by id rest api
-    @GetMapping("/orders/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order does not exist with id :" + id));
@@ -51,7 +82,7 @@ public class OrderController {
 
     // update order rest api
 
-    @PutMapping("/orders/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Order> updateOrder(@PathVariable Long id, @Valid @RequestBody Order orderDetails){
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not exist with id :" + id));
@@ -107,7 +138,7 @@ public class OrderController {
     }
 
     // delete order rest api
-    @DeleteMapping("/orders/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, Boolean>> deleteOrder(@PathVariable Long id){
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not exist with id :" + id));
@@ -127,4 +158,98 @@ public class OrderController {
         System.out.println("order confirmed");
     }
 
+    public void declineOrder(Long id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Order does not exist with id :" + id));
+        order.setOrder_status("declined");
+
+        Order updatedOrder = orderRepository.save(order);
+        System.out.println("order declined");
+    }
+
+    @PostMapping("/confirm")
+    public ResponseEntity<String> confirmPayment(@RequestBody ValidateCard validateCard){
+
+        Order order = orderRepository.findById(validateCard.getOrder_id())
+                .orElseThrow(() -> new ResourceNotFoundException("Order does not exist with id :" + validateCard.getOrder_id()));
+        System.out.println("Order: "+order.getOrder_id()+ order.getCard_num_used());
+
+
+        String card_holder_name = validateCard.getCard_holder_name();
+        String expiration_date = validateCard.getExpiration_date();
+        String cvv = validateCard.getCvv();
+
+        boolean valid = cardController.checkPaymentValidity(order.getCard_num_used(), order.getTotal_amount(),
+                order.getOrder_id(), validateCard.getPayment_id(), card_holder_name, expiration_date, cvv);
+
+        System.out.println("Valid?: "+valid);
+
+        if(valid){
+            LOGGER.info(String.format("Payment Confirmed!"));
+            confirmOrder(order.getOrder_id());
+            paymentController.confirmPayment(validateCard.getPayment_id());
+            cardController.deductOrderAmount(order.getCard_num_used(), order.getTotal_amount());
+            return ResponseEntity.status(HttpStatus.CREATED).body("Payment Confirmed!");
+        }
+        else{
+            LOGGER.info(String.format("Payment failed! Please try again."));
+            declineOrder(order.getOrder_id());
+            paymentController.declinePayment(validateCard.getPayment_id());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Payment failed...");
+        }
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<Order> everythingOrderRelated (@RequestBody OrderUserRequest orderRequest){
+
+        Double total = orderRequest.getCart().getTotalPrice();
+        LocalDate currentDate = LocalDate.now();
+        Date order_date = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        System.out.println("order date: "+ order_date);
+        System.out.println("user ID: "+orderRequest.getCart().getUserID());
+        Order order;
+        if(orderRequest.getShipAdd()==null || orderRequest.getCreditNum()==null){
+            order = cartToOrder(orderRequest.getCart(), orderRequest.getShipAdd(), orderRequest.getCreditNum());
+        }else {
+            order = new Order(Long.parseLong(orderRequest.getCart().getUserID()), order_date,
+                    orderRequest.getShipAdd() , orderRequest.getCreditNum(),
+                    total, orderRequest.getCart().getCartItemsList(), "pending");
+            orderRepository.save(order);
+            Timestamp timestamp = Timestamp.valueOf("2023-06-31 00:00:00");
+            Payment payment = paymentController.createPayment(order.getOrder_id(), "xxx" , orderRequest.getCreditNum(),
+                    "pending" , timestamp , "123"); // CHANGE cvv, name ,expdate
+        }
+
+        LOGGER.info(String.format("Order Created Successfully!"));
+
+        return ResponseEntity.ok(order);
+    }
+
+    public Order cartToOrder(Cart cart, String shipAddress, String creditNumber) {
+        Double total = cart.getTotalPrice();
+        LocalDate currentDate = LocalDate.now();
+        Date order_date = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        List<AuthResponse> authResponses = (List<AuthResponse>) (jsonProducer.sendAuthRequest(cart.getUserID()));
+        AuthResponse userDetails = authResponses.get(0);
+
+        String shipAdd = shipAddress;
+        String creditNum = creditNumber;
+        if(shipAddress==null)
+            shipAdd =userDetails.getAddress();
+
+        if(creditNum==null)
+            creditNum = userDetails.getCreditCardNumber();
+
+        Order order = new Order(Long.parseLong(cart.getUserID()), order_date, shipAdd , creditNum,
+                total, cart.getCartItemsList(), "pending");
+
+        orderRepository.save(order);
+
+        Timestamp timestamp = Timestamp.valueOf("2023-06-31 00:00:00"); // add name, time stamp, cvv
+        Payment payment = paymentController.createPayment(order.getOrder_id(), "xxx" , creditNum , "pending" , timestamp , "123");
+
+        return order;
+    }
 }

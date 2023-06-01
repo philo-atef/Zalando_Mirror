@@ -1,15 +1,13 @@
 package com.example.cart.rabbitmq.publisher;
 
-import com.example.cart.dto.InventoryItemsRequest;
-import com.example.cart.dto.UnavailableItemDto;
-import com.example.cart.dto.UnavailableItemsResponse;
+import com.shared.dto.inventory.*;
+import com.shared.dto.inventory.UnavailableItemResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,9 +27,10 @@ public class inventoryProducer {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public List<UnavailableItemDto> sendMessage(InventoryItemsRequest inventoryItemsRequest)
+
+    public List<UnavailableItemResponse> sendMessage(List<InventoryItemRequest> inventoryItemsRequest)
     {
         LOGGER.info(String.format("Inventory Items in Json was sent -> %s", inventoryItemsRequest.toString()));
-        return (List<UnavailableItemDto>) rabbitTemplate.convertSendAndReceive(exchange, routingKey, inventoryItemsRequest);
+        return (List<UnavailableItemResponse>) rabbitTemplate.convertSendAndReceive(exchange, routingKey, inventoryItemsRequest);
     }
 }
