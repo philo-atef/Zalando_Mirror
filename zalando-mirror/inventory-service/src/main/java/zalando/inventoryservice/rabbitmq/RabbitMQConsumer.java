@@ -10,7 +10,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 import zalando.inventoryservice.dto.CreateItemDto;
 
-import zalando.inventoryservice.dto.InventoryItemsRequest;
+//import zalando.inventoryservice.dto.InventoryItemsRequest;
 import zalando.inventoryservice.service.InventoryService;
 
 
