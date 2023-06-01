@@ -12,8 +12,8 @@ import java.util.concurrent.TimeUnit;
 @AllArgsConstructor
 public class RedisUtility {
     private final RedisTemplate<String, Session> redisTemplate;
-    public Session getValue(final String userId) {
-        Session session = redisTemplate.opsForValue().get("sessions::"+userId);
+    public Session getValue(final String userID) {
+        Session session = redisTemplate.opsForValue().get("sessions::" + userID);
         return session;
     }
 }

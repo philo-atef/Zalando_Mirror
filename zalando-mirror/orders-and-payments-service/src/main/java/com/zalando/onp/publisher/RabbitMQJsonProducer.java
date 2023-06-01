@@ -52,11 +52,11 @@ public class RabbitMQJsonProducer {
 
     public Object sendAuthRequest(String userId){
         LOGGER.info(String.format("Json message sent -> %s", userId));
-        List<AuthResponse> response =  (List<AuthResponse>) rabbitTemplate.convertSendAndReceive(exchange, authRoutingKey, userId);
-        if(response==null)
+        UserDetails us = (UserDetails) rabbitTemplate.convertSendAndReceive(exchange, authRoutingKey, userId);
+        System.out.println("Credit Card" + us.getCreditCardNumber());
+        if(us==null)
             return null;
-
-        return response;
+        return us;
     }
 
     public Object sendInvRequest(Long orderId, int deduct){

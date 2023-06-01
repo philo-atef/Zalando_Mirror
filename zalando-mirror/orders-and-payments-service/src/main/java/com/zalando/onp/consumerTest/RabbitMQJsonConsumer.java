@@ -30,20 +30,20 @@ public class RabbitMQJsonConsumer {
 //    public RabbitMQJsonConsumer(RabbitMQJsonProducer jsonProducer) {
 //        this.jsonProducer = jsonProducer;
 //    }
-    @RabbitListener(queues = {"${rabbitmq.queue.json.name}"})
-    public OrderResponse consumeJsonMessage(Cart cart){
-        LOGGER.info(String.format("Received JSON message -> %s", cart.toString()));
-
-        orderController.cartToOrder(cart, null, null);
-        //cartToOrder(cart);
-//        List<AuthResponse> authResponses = (List<AuthResponse>) (jsonProducer.sendAuthRequest(cart.getUserID()));
-//        AuthResponse userDetails = authResponses.get(0);
-//        String shipAdd =userDetails.getAddress();
-//        String creditNum = userDetails.getCreditCardNumber();
-        //orderRepository.save(receivedOrder);
-//        orderController.everythingOrderRelated(cart,shipAdd,creditNum);
-        return null ;
-    }
+//    @RabbitListener(queues = {"${rabbitmq.queue.json.name}"})
+//    public OrderResponse consumeJsonMessage(Cart cart){
+//        LOGGER.info(String.format("Received JSON message -> %s", cart.toString()));
+//
+//        orderController.cartToOrder(cart, null, null);
+//        //cartToOrder(cart);
+////        List<AuthResponse> authResponses = (List<AuthResponse>) (jsonProducer.sendAuthRequest(cart.getUserID()));
+////        AuthResponse userDetails = authResponses.get(0);
+////        String shipAdd =userDetails.getAddress();
+////        String creditNum = userDetails.getCreditCardNumber();
+//        //orderRepository.save(receivedOrder);
+////        orderController.everythingOrderRelated(cart,shipAdd,creditNum);
+//        return null ;
+//    }
 
     public void cartToOrder(Cart cart){
         receivedOrder = new Order(Long.parseLong(cart.getUserID()), null, null, null, cart.getTotalPrice(), cart.getCartItemsList(), "pending");

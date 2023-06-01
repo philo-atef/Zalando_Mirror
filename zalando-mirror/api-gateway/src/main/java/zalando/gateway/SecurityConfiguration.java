@@ -32,13 +32,14 @@ import zalando.gateway.utils.JwtUtil;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
-
     private final AuthenticationFilter jwtAuthFilter;
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-		http    .csrf()
+		http
+                .csrf()
                 .disable();
+        
         return http.build();
     }
 
