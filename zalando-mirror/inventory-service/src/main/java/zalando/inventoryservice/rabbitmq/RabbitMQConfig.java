@@ -47,6 +47,26 @@ public class RabbitMQConfig {
 //                .with("getProductInventoryRoutingKey");
 //    }
 
+    private String paymentExchange="javaguides_exchange";
+
+    private String paymentQueue="bulkCreateInvItems";
+
+    private String paymentRoutingJsonKey = "paymentInvKey";
+    @Bean
+    public Queue paymentQueue(){
+        return new Queue(paymentQueue);
+    }
+    @Bean
+    public TopicExchange paymentExchange(){
+        return new TopicExchange(paymentExchange);
+    }
+    @Bean
+    public Binding paymentBinding(){
+        return BindingBuilder
+                .bind(paymentQueue())
+                .to(paymentExchange())
+                .with(paymentRoutingJsonKey);
+    }
 
     @Bean
     public MessageConverter converter(){
