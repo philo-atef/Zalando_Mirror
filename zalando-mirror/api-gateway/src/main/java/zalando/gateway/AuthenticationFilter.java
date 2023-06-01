@@ -39,7 +39,6 @@ import java.io.IOException;
 @AllArgsConstructor
 @ServletComponentScan
 public class AuthenticationFilter  implements WebFilter {
-
     private final RedisUtility redisUtility;
     private final JwtUtil jwtUtil;
 
@@ -47,18 +46,18 @@ public class AuthenticationFilter  implements WebFilter {
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         String authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-        String authToken =null;
-        Session cachedToken=null;
+        String authToken = null;
+        Session cachedSession = null;
 
         String path = request.getPath().value();
-        if (path.startsWith("/api/auth/")&&! path.startsWith("/api/auth/logout")) {
+        if (path.startsWith("/api/auth/") && !path.startsWith("/api/auth/logout")) {
             return chain.filter(exchange);
         }
         if(authHeader != null){
             authToken = authHeader.substring(7);
-            String userId="";
+            String userID = "";
             try {
-                userId = jwtUtil.extractUsername(authToken);
+                userID = jwtUtil.extractUserID(authToken);
             } catch (MalformedJwtException e) {
                 exchange.getResponse().setStatusCode(HttpStatus.BAD_REQUEST);
                 return Mono.empty();
@@ -66,10 +65,10 @@ public class AuthenticationFilter  implements WebFilter {
                 exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
                 return Mono.empty();
             }
-            cachedToken = redisUtility.getValue(userId);
+            cachedSession = redisUtility.getValue(userID);
 
         }
-        if (authToken == null || (cachedToken != null && !authToken.equals(cachedToken.getToken()))){
+        if (authToken == null || (cachedSession != null && !authToken.equals(cachedSession.getToken()))){
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return Mono.empty();
         }
