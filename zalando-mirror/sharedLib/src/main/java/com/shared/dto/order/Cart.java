@@ -1,4 +1,4 @@
-package com.zalando.onp.dto;
+package com.shared.dto.order;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

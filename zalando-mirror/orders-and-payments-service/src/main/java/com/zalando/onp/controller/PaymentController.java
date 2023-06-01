@@ -6,10 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.shared.dto.order.*;
+
 import com.shared.dto.inventory.InventoryItemRequest;
 import com.shared.dto.inventory.InventoryItemResponse;
-import com.zalando.onp.dto.AuthResponse;
-import com.zalando.onp.dto.CartItem;
 import com.zalando.onp.model.Order;
 import com.zalando.onp.model.Payment;
 import com.zalando.onp.publisher.RabbitMQJsonProducer;
@@ -86,11 +86,11 @@ public class PaymentController {
         payment.setOrder_id(curOrderID);
 
 
-        var curCHN = payment.getCard_holder_name();
-        if(paymentDetails.getCard_holder_name()!=null){
-            curCHN = paymentDetails.getCard_holder_name();
-        }
-        payment.setCard_holder_name(curCHN);
+//        var curCHN = payment.getCard_holder_name();
+//        if(paymentDetails.getCard_holder_name()!=null){
+//            curCHN = paymentDetails.getCard_holder_name();
+//        }
+//        payment.setCard_holder_name(curCHN);
 
         var curCNU = payment.getCard_num_used();
         if(paymentDetails.getCard_num_used()!=null){
@@ -106,18 +106,18 @@ public class PaymentController {
         payment.setPayment_status(curPS);
 
 
-        var curED = payment.getExpiration_date();
-        if(paymentDetails.getExpiration_date()!=null){
-            curED = paymentDetails.getExpiration_date();
-        }
-        payment.setExpiration_date(curED);
+//        var curED = payment.getExpiration_date();
+//        if(paymentDetails.getExpiration_date()!=null){
+//            curED = paymentDetails.getExpiration_date();
+//        }
+//        payment.setExpiration_date(curED);
 
 
-        var curCVV = payment.getCvv();
-        if(paymentDetails.getCvv()!=null){
-            curCVV = paymentDetails.getCvv();
-        }
-        payment.setCvv(curCVV);
+//        var curCVV = payment.getCvv();
+//        if(paymentDetails.getCvv()!=null){
+//            curCVV = paymentDetails.getCvv();
+//        }
+//        payment.setCvv(curCVV);
 
 
         Payment updatedPayment = paymentRepository.save(payment);
@@ -141,7 +141,7 @@ public class PaymentController {
         payment.setPayment_status("confirmed");
         Long orderId= payment.getOrder_id();
         Payment updatedPayment = paymentRepository.save(payment);
-        jsonProducer.sendInvRequest(orderId);
+//        jsonProducer.sendInvRequest(orderId);
         System.out.println("payment confirmed");
 
     }
@@ -150,14 +150,19 @@ public class PaymentController {
         Payment payment = paymentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Payment does not exist with id :" + id));
         payment.setPayment_status("declined");
-
         Payment updatedPayment = paymentRepository.save(payment);
+
+        Long orderId = updatedPayment.getOrder_id();
+
+        jsonProducer.sendInvRequest(orderId, 1);
         System.out.println("payment declined");
     }
 
     public Payment createPayment(Long orderId, String name, String number, String status, Timestamp expiration_date, String cvv) {
         Payment payment = new Payment(orderId , name , number , status , expiration_date, cvv);
         System.out.println("payment declined");
+
+        jsonProducer.sendInvRequest(orderId, -1);
 
         return paymentRepository.save(payment);
     }

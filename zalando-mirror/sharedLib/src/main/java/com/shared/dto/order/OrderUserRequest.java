@@ -1,5 +1,6 @@
-package com.zalando.onp.dto;
+package com.shared.dto.order;
 
+import com.shared.dto.order.Cart;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OrderRequest {
+public class OrderUserRequest {
     private Cart cart;
     private String shipAdd ;
     private String creditNum;

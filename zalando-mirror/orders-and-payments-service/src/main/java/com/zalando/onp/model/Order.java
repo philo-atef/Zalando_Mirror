@@ -2,7 +2,7 @@ package com.zalando.onp.model;
 
 import java.util.*;
 
-import com.zalando.onp.dto.CartItem;
+import com.shared.dto.order.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;

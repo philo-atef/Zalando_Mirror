@@ -15,11 +15,6 @@ public class Payment {
     @Column(name = "order_id")
     private Long order_id;
 
-    @Column(name = "card_holder_name")
-    @Pattern(regexp = "^[A-Za-z ]+$", message = "Card holder name should only contain alphabetic characters")
-    private String card_holder_name;
-
-
     @Column(name = "card_num_used")
     @Pattern(regexp = "\\d{16}", message = "Card number used must be a 16-digit number")
     private String card_num_used;
@@ -27,12 +22,6 @@ public class Payment {
     @Column(name = "payment_status")
     private String payment_status;
 
-    @Column(name = "expiration_date")
-    private Timestamp expiration_date;
-
-    @Column(name = "cvv")
-    @Pattern(regexp = "\\d{3}", message = "CVV must be a 3-digit number")
-    private String cvv;
 
     public Payment() {
         super();
@@ -40,11 +29,8 @@ public class Payment {
 
     public Payment(Long order_id, String card_holder_name, String card_num_used, String payment_status, Timestamp expiration_date, String cvv) {
         this.order_id = order_id;
-        this.card_holder_name = card_holder_name;
         this.card_num_used = card_num_used;
         this.payment_status = payment_status;
-        this.expiration_date = expiration_date;
-        this.cvv = cvv;
     }
 
     public Long getPayment_id() {
@@ -63,14 +49,6 @@ public class Payment {
         this.order_id = order_id;
     }
 
-    public String getCard_holder_name() {
-        return card_holder_name;
-    }
-
-    public void setCard_holder_name(String card_holder_name) {
-        this.card_holder_name = card_holder_name;
-    }
-
     public String getCard_num_used() {
         return card_num_used;
     }
@@ -87,19 +65,4 @@ public class Payment {
         this.payment_status = payment_status;
     }
 
-    public Timestamp getExpiration_date() {
-        return expiration_date;
-    }
-
-    public void setExpiration_date(Timestamp expiration_date) {
-        this.expiration_date = expiration_date;
-    }
-
-    public String getCvv() {
-        return cvv;
-    }
-
-    public void setCvv(String cvv) {
-        this.cvv = cvv;
-    }
 }

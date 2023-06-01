@@ -67,10 +67,12 @@ public class CardController {
 //        return ResponseEntity.ok(response);
 //    }
 
-    public boolean checkPaymentValidity(String credit, Double amount, Long order_id, Long payment_id){
+    public boolean checkPaymentValidity(String credit, Double amount, Long order_id, Long payment_id, String card_holder_name,
+                                        String expiration_date, String cvv){
         Card card = cardRepository.findByCredit(credit);
 
-        if (amount <= card.getBalance()){ //COMPLETE ORDER
+        if (amount <= card.getBalance() && card.getCard_holder_name().equals(card_holder_name) && card.getCvv().equals(cvv) &&
+        card.getExpiration_date().equals(expiration_date)){ //COMPLETE ORDER
             return true;
         }
         return false;

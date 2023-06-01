@@ -7,13 +7,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.zalando.onp.dto.AuthResponse;
-import com.zalando.onp.dto.Cart;
-import com.zalando.onp.dto.OrderRequest;
-import com.zalando.onp.dto.ValidateCard;
+
+import com.shared.dto.order.*;
+
+import com.zalando.onp.consumerTest.RabbitMQJsonConsumer;
 import com.zalando.onp.model.Payment;
 import com.zalando.onp.publisher.RabbitMQJsonProducer;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +49,10 @@ public class OrderController {
 
     @Autowired
     private CardController cardController;
+
+
+    private static final Logger LOGGER= LoggerFactory.getLogger(OrderController.class);
+
 
     public OrderController(RabbitMQJsonProducer jsonProducer) {
         this.jsonProducer = jsonProducer;
@@ -165,18 +171,26 @@ public class OrderController {
         Order order = orderRepository.findById(validateCard.getOrder_id())
                 .orElseThrow(() -> new ResourceNotFoundException("Order does not exist with id :" + validateCard.getOrder_id()));
         System.out.println("Order: "+order.getOrder_id()+ order.getCard_num_used());
+
+
+        String card_holder_name = validateCard.getCard_holder_name();
+        String expiration_date = validateCard.getExpiration_date();
+        String cvv = validateCard.getCvv();
+
         boolean valid = cardController.checkPaymentValidity(order.getCard_num_used(), order.getTotal_amount(),
-                order.getOrder_id(), validateCard.getPayment_id());
+                order.getOrder_id(), validateCard.getPayment_id(), card_holder_name, expiration_date, cvv);
 
         System.out.println("Valid?: "+valid);
 
         if(valid){
+            LOGGER.info(String.format("Payment Confirmed!"));
             confirmOrder(order.getOrder_id());
             paymentController.confirmPayment(validateCard.getPayment_id());
             cardController.deductOrderAmount(order.getCard_num_used(), order.getTotal_amount());
             return ResponseEntity.status(HttpStatus.CREATED).body("Payment Confirmed!");
         }
         else{
+            LOGGER.info(String.format("Payment failed! Please try again."));
             declineOrder(order.getOrder_id());
             paymentController.declinePayment(validateCard.getPayment_id());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Payment failed...");
@@ -184,7 +198,7 @@ public class OrderController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Order> everythingOrderRelated (@RequestBody OrderRequest orderRequest){
+    public ResponseEntity<Order> everythingOrderRelated (@RequestBody OrderUserRequest orderRequest){
 
         Double total = orderRequest.getCart().getTotalPrice();
         LocalDate currentDate = LocalDate.now();
@@ -204,6 +218,9 @@ public class OrderController {
             Payment payment = paymentController.createPayment(order.getOrder_id(), "xxx" , orderRequest.getCreditNum(),
                     "pending" , timestamp , "123"); // CHANGE cvv, name ,expdate
         }
+
+        LOGGER.info(String.format("Order Created Successfully!"));
+
         return ResponseEntity.ok(order);
     }
 
