@@ -1,4 +1,4 @@
-package com.example.demo.user;
+package com.shared.dto.session;
 
 public enum Role {
     Customer,

@@ -29,7 +29,7 @@ public class SecurityConfiguration {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/auth/**")
+                .requestMatchers("/api/auth/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -40,7 +40,7 @@ public class SecurityConfiguration {
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout()
-                .logoutUrl("/api/v1/auth/logout")
+                .logoutUrl("/api/auth/logout")
                 .addLogoutHandler(logoutHandler)
                 .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext());
 

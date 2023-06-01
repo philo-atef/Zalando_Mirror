@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/v1/merchant")
+@RequestMapping(path = "api/merchant")
 public class MerchantController {
     private final MerchantService merchantService;
     @Autowired

@@ -1,6 +1,6 @@
-package com.example.demo.session;
+package com.shared.dto.session;
 
-import com.example.demo.user.Role;
+
 public class Session {
     private String token;
     private Role role;

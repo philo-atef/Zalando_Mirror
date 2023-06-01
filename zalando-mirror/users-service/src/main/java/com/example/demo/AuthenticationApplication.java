@@ -12,7 +12,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @SpringBootApplication
 
 
-@RequestMapping("/api/v1/demo-controller")
+
 @EnableDiscoveryClient
 public class AuthenticationApplication {
 	public static void main(String[] args) {
