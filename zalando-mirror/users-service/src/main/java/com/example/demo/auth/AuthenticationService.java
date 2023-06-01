@@ -11,12 +11,16 @@ import com.example.demo.redis.RedisService;
 import com.example.demo.token.Token;
 import com.example.demo.token.TokenRepository;
 import com.example.demo.token.TokenType;
-import com.example.demo.user.Role;
 import com.example.demo.user.User;
 import com.example.demo.user.UserRepository;
+import com.shared.dto.session.Role;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -169,6 +173,31 @@ public class AuthenticationService {
         validUserTokens.forEach(token -> {
             redisService.deleteSession(token);
         });
+    }
+    public LogoutResponse logout(HttpServletRequest request) {
+        final String authHeader = request.getHeader("Authorization");
+        final String jwt;
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return LogoutResponse.builder()
+                    .message("Logout not Successfully")
+                    .build();
+        }
+        jwt = authHeader.substring(7);
+        var storedToken = tokenRepository.findByToken(jwt)
+                .orElse(null);
+        if (storedToken != null && !storedToken.isExpired() && !storedToken.isRevoked()) {
+            storedToken.setExpired(true);
+            storedToken.setRevoked(true);
+            tokenRepository.save(storedToken);
+            redisService.deleteSession(storedToken);
+            SecurityContextHolder.clearContext();
+            return LogoutResponse.builder()
+                    .message("Logout Successfully")
+                    .build();
+        }
+        else{
+            throw new IllegalStateException("Invalid token");
+        }
     }
 
 

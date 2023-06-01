@@ -1,4 +1,9 @@
 package zalando.gateway;
+import com.shared.dto.session.Session;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,53 +32,47 @@ import zalando.gateway.utils.JwtUtil;
 
 import java.io.IOException;
 
+
 @Slf4j
 @Component
 @AllArgsConstructor
 @ServletComponentScan
-public class AuthenticationFilter extends OncePerRequestFilter implements WebFilter {
+public class AuthenticationFilter  implements WebFilter {
 
     private final RedisUtility redisUtility;
     private final JwtUtil jwtUtil;
-
-
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.info("Inside Authentication Filter originated by request {}", request.getRequestURI());
-
-        final String authToken = request.getHeader("Authorization");
-        String userId = jwtUtil.extractUsername(authToken);
-        System.out.print(userId+"---------------------------------------");
-        String cachedToken = redisUtility.getValue("sessions::3");
-
-        if (authToken == null || !authToken.equals(cachedToken)) {
-            response.sendError(HttpStatus.UNAUTHORIZED.value());
-            return;
-        }
-
-        filterChain.doFilter(request, response);
-    }
-
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         String authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         String authToken =null;
-        String cachedToken=null;
+        Session cachedToken=null;
+
+        String path = request.getPath().value();
+        if (path.startsWith("/api/auth/")&&! path.startsWith("/api/auth/logout")) {
+            return chain.filter(exchange);
+        }
         if(authHeader != null){
             authToken = authHeader.substring(7);
-            String userId = jwtUtil.extractUsername(authToken);
-            System.out.print(userId + "---------------------------------------");
-            cachedToken = redisUtility.getValue("sessions::"+userId);
-            System.out.print(cachedToken);
-        }
+            String userId="";
+            try {
+                userId = jwtUtil.extractUsername(authToken);
+            } catch (MalformedJwtException e) {
+                exchange.getResponse().setStatusCode(HttpStatus.BAD_REQUEST);
+                return Mono.empty();
+            } catch (Exception e) {
+                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+                return Mono.empty();
+            }
+            cachedToken = redisUtility.getValue(userId);
 
-        if (authToken == null || !authToken.equals(cachedToken)) {
+        }
+        if (authToken == null || (cachedToken != null && !authToken.equals(cachedToken.getToken()))){
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return Mono.empty();
         }
-           exchange.getResponse().setStatusCode(HttpStatus.OK);
-        return Mono.empty();
+        exchange.getResponse().setStatusCode(HttpStatus.OK);
+        return chain.filter(exchange);
     }
 }
