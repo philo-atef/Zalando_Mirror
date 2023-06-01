@@ -3,6 +3,7 @@ package com.example.demo.user;
 import com.example.demo.customer.Customer;
 import com.example.demo.merchant.Merchant;
 import com.example.demo.token.Token;
+import com.shared.dto.session.Role;
 import jakarta.persistence.*;
 
 import java.util.Collection;
@@ -49,7 +50,7 @@ public class User implements UserDetails {
     }
     @Override
     public String getUsername() {
-        return email;
+        return id+"";
     }
     @Override
     public boolean isAccountNonExpired() {

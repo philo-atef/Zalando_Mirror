@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 public class LogoutService implements LogoutHandler {
     private final TokenRepository tokenRepository;
     private final RedisService redisService;
+
     @Override
     public void logout(
             HttpServletRequest request,
