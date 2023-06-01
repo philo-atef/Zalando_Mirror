@@ -13,7 +13,7 @@ import lombok.*;
 @JsonSerialize
 @JsonDeserialize
 @Builder
-public class UnavailableItemDto {
+public class UnavailableItemResponse {
     private String productId;
     private String color;
     private String size;
