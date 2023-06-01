@@ -1,4 +1,4 @@
-package com.zalando.onp.dto;
+package com.shared.dto.order;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,10 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class ValidateCard {
-    private Long order_id;
-    private Long payment_id;
+public class UserDetails {
+    private Long id;
+    private String address;
+    private String creditCardNumber;
 }

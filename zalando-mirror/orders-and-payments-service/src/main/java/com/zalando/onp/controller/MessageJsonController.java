@@ -1,8 +1,7 @@
 package com.zalando.onp.controller;
 
-import com.zalando.onp.dto.Cart;
-import com.zalando.onp.dto.OrderResponse;
-import com.zalando.onp.dto.authUserId;
+import com.shared.dto.order.*;
+
 import com.zalando.onp.publisher.RabbitMQJsonProducer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

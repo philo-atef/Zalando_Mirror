@@ -1,11 +1,8 @@
 package com.zalando.onp.publisher;
 
+import com.shared.dto.order.*;
 import com.shared.dto.inventory.InventoryItemRequest;
 import com.shared.dto.inventory.InventoryItemResponse;
-import com.zalando.onp.dto.AuthResponse;
-import com.zalando.onp.dto.Cart;
-import com.zalando.onp.dto.CartItem;
-import com.zalando.onp.dto.OrderResponse;
 import com.zalando.onp.exception.ResourceNotFoundException;
 import com.zalando.onp.model.Order;
 import com.zalando.onp.model.Payment;
@@ -62,7 +59,7 @@ public class RabbitMQJsonProducer {
         return response;
     }
 
-    public Object sendInvRequest(Long orderId){
+    public Object sendInvRequest(Long orderId, int deduct){
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order does not exist with id :" + orderId));
         //Print here
@@ -70,7 +67,7 @@ public class RabbitMQJsonProducer {
         List<InventoryItemRequest> productsToInventory= new ArrayList<InventoryItemRequest>() ;
         for(int i =0;i<products.size();i++){
             CartItem currentItem = products.get(i);
-            InventoryItemRequest itemRequest = new InventoryItemRequest(currentItem.getColor(),currentItem.getSize(),currentItem.getProductID(),currentItem.getQuantity());
+            InventoryItemRequest itemRequest = new InventoryItemRequest(currentItem.getColor(),currentItem.getSize(),currentItem.getProductID(),currentItem.getQuantity()*deduct);
             productsToInventory.add(itemRequest);
         }
         List<InventoryItemResponse> response =  (List<InventoryItemResponse>) rabbitTemplate.convertSendAndReceive(exchange, invRoutingKey, productsToInventory);

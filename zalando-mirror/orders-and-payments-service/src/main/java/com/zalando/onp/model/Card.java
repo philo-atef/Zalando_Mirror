@@ -15,6 +15,17 @@ public class Card {
     @Column(name = "balance")
     private Double balance;
 
+    @Column(name = "card_holder_name")
+    @Pattern(regexp = "^[A-Za-z ]+$", message = "Card holder name should only contain alphabetic characters")
+    private String card_holder_name;
+
+    @Column(name = "expiration_date")
+    private String expiration_date;
+
+    @Column(name = "cvv")
+    @Pattern(regexp = "\\d{3}", message = "CVV must be a 3-digit number")
+    private String cvv;
+
     public Card(String credit, Double balance) {
         this.credit = credit;
         this.balance = balance;
@@ -39,5 +50,27 @@ public class Card {
     public void setBalance(Double balance) {
         this.balance = balance;
     }
+    public String getCard_holder_name() {
+        return card_holder_name;
+    }
 
+    public void setCard_holder_name(String card_holder_name) {
+        this.card_holder_name = card_holder_name;
+    }
+
+    public String getExpiration_date() {
+        return expiration_date;
+    }
+
+    public void setExpiration_date(String expiration_date) {
+        this.expiration_date = expiration_date;
+    }
+
+    public String getCvv() {
+        return cvv;
+    }
+
+    public void setCvv(String cvv) {
+        this.cvv = cvv;
+    }
 }

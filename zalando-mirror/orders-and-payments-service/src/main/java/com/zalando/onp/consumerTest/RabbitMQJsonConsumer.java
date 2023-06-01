@@ -1,7 +1,8 @@
 package com.zalando.onp.consumerTest;
 
+import com.shared.dto.order.Cart;
+import com.shared.dto.order.OrderResponse;
 import com.zalando.onp.controller.OrderController;
-import com.zalando.onp.dto.*;
 
 import com.zalando.onp.model.Order;
 import com.zalando.onp.publisher.RabbitMQJsonProducer;
