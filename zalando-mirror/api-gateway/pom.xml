@@ -105,7 +105,21 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.2.1</version>
+                <configuration>
+                    <to>
+                        <image>java-spring-${project.artifactId}:latest</image>
+                        <auth>
+                            <!--							<username>philopateer.badeer@gmail.com</username>-->
+                            <username>philoatef</username>
+                            <password>Lolalol.1</password>
+                        </auth>
+                    </to>
+                </configuration>
+            </plugin>
         </plugins>
 
     </build>
