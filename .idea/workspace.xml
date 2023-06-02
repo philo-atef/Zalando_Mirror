@@ -5,56 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1a0703c7-760d-4e91-841e-c3cce946b0ef" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/token/TokenType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/zalando-mirror/api-gateway/src/main/java/zalando/gateway/AuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/api-gateway/src/main/java/zalando/gateway/AuthenticationFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/api-gateway/src/main/java/zalando/gateway/SecurityConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/api-gateway/src/main/java/zalando/gateway/SecurityConfiguration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/api-gateway/src/main/java/zalando/gateway/redis/RedisConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/api-gateway/src/main/java/zalando/gateway/redis/RedisConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/api-gateway/src/main/java/zalando/gateway/redis/RedisUtility.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/api-gateway/src/main/java/zalando/gateway/redis/RedisUtility.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/api-gateway/src/main/java/zalando/gateway/utils/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/api-gateway/src/main/java/zalando/gateway/utils/JwtUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/orders-and-payments-service/src/main/java/com/zalando/onp/consumerTest/RabbitMQJsonConsumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/orders-and-payments-service/src/main/java/com/zalando/onp/consumerTest/RabbitMQJsonConsumer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/orders-and-payments-service/src/main/java/com/zalando/onp/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/orders-and-payments-service/src/main/java/com/zalando/onp/controller/OrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/orders-and-payments-service/src/main/java/com/zalando/onp/publisher/RabbitMQJsonProducer.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/orders-and-payments-service/src/main/java/com/zalando/onp/publisher/RabbitMQJsonProducer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/zalando-mirror/api-gateway/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/api-gateway/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/zalando-mirror/orders-and-payments-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/orders-and-payments-service/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/AuthenticationApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/AuthenticationApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/auth/AuthenticationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/auth/AuthenticationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/auth/AuthenticationRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/auth/AuthenticationRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/auth/AuthenticationResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/auth/AuthenticationResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/auth/AuthenticationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/auth/AuthenticationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/auth/LogoutResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/auth/LogoutResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/config/ApplicationConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/config/ApplicationConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/config/JwtAuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/config/JwtAuthenticationFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/config/JwtService.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/config/JwtService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/config/LogoutService.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/config/LogoutService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/config/SecurityConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/config/SecurityConfiguration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/customer/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/customer/Customer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/customer/CustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/customer/CustomerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/customer/CustomerEditRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/customer/CustomerEditRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/customer/CustomerRegisterRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/customer/CustomerRegisterRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/customer/CustomerRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/customer/CustomerRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/customer/CustomerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/customer/CustomerService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/dto/CustomerDetails.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/main/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/main/MainController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/merchant/Merchant.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/merchant/Merchant.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/merchant/MerchantController.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/merchant/MerchantController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/merchant/MerchantEditRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/merchant/MerchantEditRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/merchant/MerchantRegisterRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/merchant/MerchantRegisterRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/merchant/MerchantRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/merchant/MerchantRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/merchant/MerchantService.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/merchant/MerchantService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/rabbitMQ/RabbitMQConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/rabbitMQ/RabbitMQConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/rabbitMQ/RabbitMQConsumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/rabbitMQ/RabbitMQConsumer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/redis/RedisCacheConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/redis/RedisCacheConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/redis/RedisService.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/redis/RedisService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/token/Token.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/token/Token.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/token/TokenRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/token/TokenRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/token/TokenType.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/user/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/user/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/com/example/demo/user/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/user/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/config/JwtAuthenticationFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/config/JwtService.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/config/JwtService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/config/LogoutService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/config/SecurityConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/config/SecurityConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/customer/CustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/customer/CustomerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/customer/CustomerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/customer/CustomerService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/merchant/MerchantController.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/merchant/MerchantController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/merchant/MerchantService.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/merchant/MerchantService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/user/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/java/zalando/authentication/user/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/zalando-mirror/users-service/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zalando-mirror/users-service/src/test/java/com/example/demo/DemoApplicationTests.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,7 +36,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="1_6_7pm" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -202,9 +167,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.ApiGatewayApplication" />
         <item itemvalue="Application.InventoryServiceApplication" />
         <item itemvalue="Application.SpringbootPostgresql" />
-        <item itemvalue="Application.ApiGatewayApplication" />
         <item itemvalue="Application.ServiceRegistryApplication" />
         <item itemvalue="Application.ProductsServiceApplication" />
       </list>
