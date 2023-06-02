@@ -30,7 +30,7 @@ public class ProductController {
 
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestPart CreateProductDto createProductDto, @RequestPart("file") MultipartFile file){
+    public ResponseEntity<Product> createProduct(@RequestPart CreateProductDto createProductDto, @RequestPart(value = "file", required = false) MultipartFile file){
         Product product = productService.createProduct(createProductDto, file);
         return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }

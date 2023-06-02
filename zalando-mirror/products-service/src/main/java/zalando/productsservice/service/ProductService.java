@@ -1,7 +1,12 @@
 package zalando.productsservice.service;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.transfer.TransferManager;
+import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
+import com.amazonaws.services.s3.transfer.Upload;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,10 +24,8 @@ import org.springframework.web.multipart.MultipartFile;
 import zalando.productsservice.dto.CreateProductDto;
 import zalando.productsservice.exception.ProductNotFoundException;
 import zalando.productsservice.model.Product;
-import zalando.productsservice.rabbitmq.MessageWrapper;
 import zalando.productsservice.rabbitmq.RabbitMQProducer;
 import zalando.productsservice.repository.ProductRepository;
-
 
 import java.io.IOException;
 import java.util.List;
@@ -39,6 +42,8 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final Validator validator;
+
+    @Autowired
     private final AmazonS3 amazonS3Client;
 
     @Autowired
@@ -67,13 +72,13 @@ public class ProductService {
 
         try{
             String fileUrl = uploadFileToS3(file);
+            product.setImageUrl(fileUrl);
             System.out.println(fileUrl);
-        }catch(IOException ex){
+        }catch(Exception ex){
             System.out.println(ex);
         }
 
         Product createdProduct = productRepository.save(product);
-
 
         for(CreateProductDto.ProductInventoryDto productInventoryDto : createProductDto.getInventory()){
             productInventoryDto.setProductId(createdProduct.getId());
@@ -123,7 +128,6 @@ public class ProductService {
     public void deleteProduct(String id) {
         productRepository.deleteById(id);
     }
-
 
     private String uploadFileToS3(MultipartFile file) throws IOException {
         String fileName = UUID.randomUUID().toString(); // Generate a unique file name
