@@ -1,0 +1,167 @@
+version: '3'
+services:
+  postgres-inv:
+    container_name: postgres-inv
+    image: postgres
+    environment:
+      POSTGRES_DB: inventory-service
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      PGDATA: /data/postgres
+    volumes:
+      - ./postgres-inv:/data/postgres
+    expose:
+      - "5431"
+    ports:
+      - "5431:5431"
+    command: -p 5431
+    restart: unless-stopped
+
+  postgres-order:
+    container_name: postgres-order
+    image: postgres
+    environment:
+      POSTGRES_DB: orderspayments
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      PGDATA: /data/postgres
+    volumes:
+      - ./postgres-order:/data/postgres
+    expose:
+      - "5433"
+    ports:
+      - "5433:5433"
+    command: -p 5433
+    restart: unless-stopped
+
+
+  postgres-user:
+    container_name: postgres-user
+    image: postgres
+    environment:
+      POSTGRES_DB: Customer_Merchant
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      PGDATA: /data/postgres
+    volumes:
+      - ./postgres-user:/data/postgres
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432"
+    command: -p 5432
+    restart: unless-stopped
+
+
+  mongo:
+    container_name: mongodb
+    image: mongo:latest
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    expose:
+      - "27017"
+    volumes:
+      - ./mongo-data:/data/db
+
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+  redis:
+    hostname: redis
+    image: redis:7.2-rc1
+    restart: always
+    ports:
+      - "6379:6379"
+
+  discovery-server:
+    image: java-spring-service-registry:latest
+    container_name: discovery-server
+
+    ports:
+      - "8761:8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - zipkin
+
+  rabbitmq:
+    hostname: rabbitmq
+    image: rabbitmq:3.11.13-management
+    container_name: rabbitmq_final
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+
+
+
+  api-gateway:
+    image: java-spring-api-gateway:latest
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - zipkin
+      - discovery-server
+  search-service:
+    container_name: search-service
+    image: java-spring-search-service:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - mongo
+      - discovery-server
+      - api-gateway
+      - zipkin
+      - rabbitmq
+  user-service:
+    container_name: user-service
+    image: java-spring-users-service:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - postgres-user
+      - discovery-server
+      - api-gateway
+      - zipkin
+      - rabbitmq
+  cart-service:
+    container_name: cart-service
+    image: java-spring-cart-service:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - mongo
+      - discovery-server
+      - api-gateway
+      - zipkin
+      - rabbitmq
+  inv-service:
+    container_name: inventory-service
+    image: java-spring-inventory-service:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - discovery-server
+      - api-gateway
+      - zipkin
+      - rabbitmq
+      - postgres-inv
+  order-service:
+    container_name: order-service
+    image: java-spring-orders-and-payments-service:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - discovery-server
+      - api-gateway
+      - zipkin
+      - rabbitmq
+      - postgres-order
+
