@@ -5,10 +5,13 @@ rabbitmq.exchange.name=products_service_exchange
 rabbitmq.queue.name=bulkCreateInvItems
 rabbitmq.routing_key.name=products_service_bulkCreateInvItems_routing_key
 
-server.port=8000
+server.port=0
 
 # Eureka Client Configuration
 spring.application.name=products-service
 eureka.client.serviceUrl.defaultZone=http://localhost:8761/eureka
 eureka.instance.instance-id=${spring.application.name}-${random.value}
 
+# AWS Config
+aws.access_key=
+aws.secret_key=
