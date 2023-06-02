@@ -66,12 +66,18 @@ public class AuthenticationFilter  implements WebFilter {
                 return Mono.empty();
             }
             cachedSession = redisUtility.getValue(userID);
-
         }
-        if (authToken == null || (cachedSession != null && !authToken.equals(cachedSession.getToken()))){
+
+        if(cachedSession == null){
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return Mono.empty();
         }
+
+        else if (authToken == null || (cachedSession != null && !authToken.equals(cachedSession.getToken()))){
+            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+            return Mono.empty();
+        }
+
         exchange.getResponse().setStatusCode(HttpStatus.OK);
         return chain.filter(exchange);
     }

@@ -29,7 +29,7 @@ public class MerchantService {
         return merchantRepository.findAll();
     }
 
-    @Transactional
+
     public void editMerchantProfile(MerchantEditRequest merchantEditRequest, HttpServletRequest request) {
         final String authHeader = request.getHeader("Authorization");
         final String jwt;

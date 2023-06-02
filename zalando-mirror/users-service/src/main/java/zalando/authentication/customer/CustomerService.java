@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
@@ -29,7 +28,7 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
-    @Transactional
+
     public void editCustomerProfile(CustomerEditRequest customerEditRequest, HttpServletRequest request) {
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
