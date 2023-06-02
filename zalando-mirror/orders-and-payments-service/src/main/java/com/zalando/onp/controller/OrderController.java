@@ -231,8 +231,7 @@ public class OrderController {
         LocalDate currentDate = LocalDate.now();
         Date order_date = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-        List<AuthResponse> authResponses = (List<AuthResponse>) (jsonProducer.sendAuthRequest(cart.getUserID()));
-        AuthResponse userDetails = authResponses.get(0);
+        UserDetails userDetails = (UserDetails) (jsonProducer.sendAuthRequest(cart.getUserID()));
 
         String shipAdd = shipAddress;
         String creditNum = creditNumber;

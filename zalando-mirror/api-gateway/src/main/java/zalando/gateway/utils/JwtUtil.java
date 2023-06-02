@@ -14,7 +14,7 @@ import java.util.function.Function;
 public class JwtUtil {
     private final String SECRET_KEY = "614E645267556A586E3272357538782F413F4428472B4B6250655368566D5971";
 
-    public String extractUsername(String token) {
+    public String extractUserID(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -47,8 +47,8 @@ public class JwtUtil {
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
     }
 
-    public Boolean validateToken(String token, String userId) {
-        final String username = extractUsername(token);
-        return (username.equals(userId) && !isTokenExpired(token));
+    public Boolean validateToken(String token, String inputUserID) {
+        final String userID = extractUserID(token);
+        return (userID.equals(inputUserID) && !isTokenExpired(token));
     }
 }
