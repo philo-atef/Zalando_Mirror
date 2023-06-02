@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MultipartFile;
 import zalando.productsservice.dto.ErrorResponse;
 import zalando.productsservice.dto.CreateProductDto;
 import zalando.productsservice.exception.ProductNotFoundException;
@@ -29,8 +30,8 @@ public class ProductController {
 
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody CreateProductDto createProductDto){
-        Product product = productService.createProduct(createProductDto);
+    public ResponseEntity<Product> createProduct(@RequestPart CreateProductDto createProductDto, @RequestPart(value = "file", required = false) MultipartFile file){
+        Product product = productService.createProduct(createProductDto, file);
         return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
 

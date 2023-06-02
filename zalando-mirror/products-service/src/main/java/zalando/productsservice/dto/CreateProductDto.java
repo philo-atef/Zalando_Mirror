@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,6 +24,8 @@ public class CreateProductDto {
     private String gender;
     private String category;
     private String subcategory;
+
+    private MultipartFile file;
 
     private List<ProductInventoryDto> inventory;
 

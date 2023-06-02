@@ -1,5 +1,12 @@
 package zalando.productsservice.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.transfer.TransferManager;
+import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
+import com.amazonaws.services.s3.transfer.Upload;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,17 +20,18 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import zalando.productsservice.dto.CreateProductDto;
 import zalando.productsservice.exception.ProductNotFoundException;
 import zalando.productsservice.model.Product;
-import zalando.productsservice.rabbitmq.MessageWrapper;
 import zalando.productsservice.rabbitmq.RabbitMQProducer;
 import zalando.productsservice.repository.ProductRepository;
 
-
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -36,10 +44,14 @@ public class ProductService {
     private final Validator validator;
 
     @Autowired
+    private final AmazonS3 amazonS3Client;
+
+    @Autowired
     private RabbitMQProducer rabbitMQProducer;
 
 
-    public Product createProduct(CreateProductDto createProductDto){
+    public Product createProduct(CreateProductDto createProductDto, MultipartFile file){
+        System.out.println(file);
         Product product = Product.builder()
                 .brandId(createProductDto.getBrandId())
                 .brandName(createProductDto.getBrandName())
@@ -58,8 +70,15 @@ public class ProductService {
             throw new ConstraintViolationException(violations);
         }
 
-        Product createdProduct = productRepository.save(product);
+        try{
+            String fileUrl = uploadFileToS3(file);
+            product.setImageUrl(fileUrl);
+            System.out.println(fileUrl);
+        }catch(Exception ex){
+            System.out.println(ex);
+        }
 
+        Product createdProduct = productRepository.save(product);
 
         for(CreateProductDto.ProductInventoryDto productInventoryDto : createProductDto.getInventory()){
             productInventoryDto.setProductId(createdProduct.getId());
@@ -108,5 +127,17 @@ public class ProductService {
 
     public void deleteProduct(String id) {
         productRepository.deleteById(id);
+    }
+
+    private String uploadFileToS3(MultipartFile file) throws IOException {
+        String fileName = UUID.randomUUID().toString(); // Generate a unique file name
+
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(file.getSize());
+        metadata.setContentType(file.getContentType());
+
+        amazonS3Client.putObject("image-dump-app", fileName, file.getInputStream(), metadata);
+
+        return amazonS3Client.getUrl("image-dump-app", fileName).toString();
     }
 }

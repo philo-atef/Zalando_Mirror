@@ -46,6 +46,8 @@ public class Product {
     @NotNull
     private String subcategory;
 
+    private String imageUrl;
+
 
     // Validation rules
     @AssertTrue(message = "Invalid Gender: Gender can only be [Men's - Women's - Unisex]")
