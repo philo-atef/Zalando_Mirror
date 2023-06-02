@@ -164,4 +164,15 @@ services:
       - zipkin
       - rabbitmq
       - postgres-order
+  product-service:
+    container_name: product-service
+    image: java-spring-products-service:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - mongo
+      - discovery-server
+      - api-gateway
+      - zipkin
+      - rabbitmq
 
