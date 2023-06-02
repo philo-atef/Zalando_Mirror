@@ -70,6 +70,12 @@
            </dependency>
 
         <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk</artifactId>
+            <version>1.11.163</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.example</groupId>
             <artifactId>sharedLib</artifactId>
             <version>0.0.1-SNAPSHOT</version>
