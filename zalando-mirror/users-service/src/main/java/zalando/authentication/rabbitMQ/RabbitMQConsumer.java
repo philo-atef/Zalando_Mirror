@@ -1,6 +1,7 @@
 package zalando.authentication.rabbitMQ;
 
 import com.shared.dto.order.UserDetails;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import zalando.authentication.customer.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
