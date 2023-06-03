@@ -21,7 +21,8 @@ import java.time.Duration;
 public class RedisCacheConfig extends CachingConfigurerSupport {
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration("localhost", 6379);
+        //RedisStandaloneConfiguration config = new RedisStandaloneConfiguration("localhost", 6379);
+        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration("redis", 6379);
         return new LettuceConnectionFactory(config);
     }
     @Bean

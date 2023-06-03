@@ -5,7 +5,6 @@ import zalando.authentication.customer.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,4 +20,5 @@ public class RabbitMQConsumer {
         LOGGER.info(String.format("Received User Details -> %s", result.toString()));
         return (result);
     }
+
 }
