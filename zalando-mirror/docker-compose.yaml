@@ -69,12 +69,23 @@ services:
     container_name: zipkin
     ports:
       - "9411:9411"
+    expose:
+      - "9411"
   redis:
     hostname: redis
     image: redis:7.2-rc1
     restart: always
     ports:
       - "6379:6379"
+#  rediscache:
+#    container_name: rediscache
+#    hostname: rediscache
+#    image: redis:7.2-rc1
+#    restart: always
+#    ports:
+#      - "6378:6378"
+#    expose:
+#      - "6378"
 
   discovery-server:
     image: java-spring-service-registry:latest
