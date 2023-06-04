@@ -4,11 +4,13 @@ package net.example.Product;
 //}
 
 
-import com.shared.dto.search.*;
-import com.shared.dto.inventory.*;
-import net.example.rabbitmq.MessageWrapper;
+import com.shared.dto.inventory.InventoryItemResponse;
+import com.shared.dto.search.SearchRequest;
+import com.shared.dto.search.SearchResponse;
 import net.example.rabbitmq.RabbitMQProducer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@EnableCaching
 @RestController
 @RequestMapping("/api/search")
 public class ProductController {
@@ -34,7 +37,7 @@ public class ProductController {
     public ProductController(RabbitMQProducer rabbitMQProducer) {
         this.rabbitMQProducer = rabbitMQProducer;
     }
-
+    @Cacheable(value = "searchCache")
     @GetMapping("/getAllProducts")
     public List<Product> getAllUser(){
 
@@ -50,7 +53,7 @@ public class ProductController {
                 "cart_exchange","keySearchCart");
 
     }
-
+    @Cacheable(value = "searchCache")
     @GetMapping("/getProductInv")
     public List<InventoryItemResponse> getProductInv (@RequestParam(defaultValue = "") String productId){
         return (ArrayList<InventoryItemResponse>)rabbitMQProducer.sendToInventory(productId,
@@ -59,7 +62,7 @@ public class ProductController {
     }
 
 
-
+    @Cacheable(value = "searchCache")
     @GetMapping("/searchproducts")
     public List<Product> search (@RequestParam(defaultValue = "") String searchQuery,
                                  @RequestParam(defaultValue = "0") int page,
@@ -68,12 +71,13 @@ public class ProductController {
 if(searchQuery.length()==0)
     return new ArrayList<>();
         TextCriteria criteria = TextCriteria.forDefaultLanguage().matching(searchQuery);
-        TextQuery query = TextQuery.queryText(criteria);
+        TextQuery query = TextQuery.queryText(criteria).sortByScore();
         Pageable paging = PageRequest.of(page, size);
         query.with(paging);
         List<Product> results = mongoTemplate.find(query, Product.class);
         return results;
     }
+    @Cacheable(value = "searchCache")
     @GetMapping("/brandproducts/")
     public List<Product> getbrand(@RequestParam(defaultValue = "") String searchQuery,
                                   @RequestParam(defaultValue = "0") int page,
@@ -87,6 +91,7 @@ if(searchQuery.length()==0)
         List<Product> results = mongoTemplate.find(query,Product.class);
         return results;
     }
+    @Cacheable(value = "searchCache")
     @GetMapping("/categoryproducts")
     public List<Product> getcategory(@RequestParam(defaultValue = "") String searchQuery,
                                      @RequestParam(defaultValue = "0") int page,
@@ -101,7 +106,7 @@ if(searchQuery.length()==0)
         return results;
     }
 
-
+    @Cacheable(value = "searchCache")
     @GetMapping("/filterproducts")
     public List<Product> filterproducts(@RequestParam(defaultValue = "") String category,
                                      @RequestParam(defaultValue = "") String value,

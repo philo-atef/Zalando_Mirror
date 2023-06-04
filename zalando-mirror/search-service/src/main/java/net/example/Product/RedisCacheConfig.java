@@ -1,4 +1,4 @@
-package zalando.authentication.redis;
+package net.example.Product;
 
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;

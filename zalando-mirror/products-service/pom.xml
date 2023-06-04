@@ -69,7 +69,6 @@
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
            </dependency>
 
-
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk</artifactId>
@@ -102,11 +101,11 @@
             <version>2.3.2</version>
         </dependency>
 
-
         <dependency>
-            <groupId>org.example</groupId>
+            <groupId>com.shared</groupId>
             <artifactId>sharedLib</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+
 
         </dependency>
     </dependencies>

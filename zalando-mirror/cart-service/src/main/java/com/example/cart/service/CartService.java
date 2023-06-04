@@ -333,7 +333,8 @@ public class CartService  implements CartServiceInterface{
 
     @Override
     public Cart updateCart(Cart cart) {
-
+if(cart==null)
+    return null;
         List<InventoryItemRequest> requests =  formatInventoryRequest(cart);
 
 

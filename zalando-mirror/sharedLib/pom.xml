@@ -3,35 +3,28 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.example</groupId>
-        <artifactId>zalando-mirror</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
-    </parent>
 
-    <groupId>org.example</groupId>
+    <groupId>com.shared</groupId>
     <artifactId>sharedLib</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>sharedLib</name>
 
-
-
-
-    <name>Shared Library</name>
-    <description>common code library</description>
+    <description>Demo project for Spring Boot</description>
     <packaging>jar</packaging>
-
-
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
     <dependencies>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>1.18.26</version>
         </dependency>
+
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -41,6 +34,6 @@
 
 
 
-    </dependencies>
 
+    </dependencies>
 </project>

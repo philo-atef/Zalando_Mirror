@@ -13,5 +13,5 @@ eureka.client.serviceUrl.defaultZone=http://localhost:8761/eureka
 eureka.instance.instance-id=${spring.application.name}-${random.value}
 
 # AWS Config
-aws.access_key=
-aws.secret_key=
+aws.access_key=AKIAT7L6KHLAY4M6GWYC
+aws.secret_key=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
